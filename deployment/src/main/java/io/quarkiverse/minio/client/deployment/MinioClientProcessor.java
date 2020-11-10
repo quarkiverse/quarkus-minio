@@ -1,12 +1,5 @@
 package io.quarkiverse.minio.client.deployment;
 
-import io.quarkiverse.minio.client.MinioProducer;
-import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
-import io.quarkus.deployment.annotations.BuildProducer;
-import io.quarkus.deployment.annotations.BuildStep;
-import io.quarkus.deployment.builditem.FeatureBuildItem;
-import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -14,6 +7,13 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import io.quarkiverse.minio.client.MinioProducer;
+import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
+import io.quarkus.deployment.annotations.BuildProducer;
+import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 
 class MinioClientProcessor {
 
@@ -24,10 +24,9 @@ class MinioClientProcessor {
         return new FeatureBuildItem(FEATURE);
     }
 
-
     @BuildStep
     void build(BuildProducer<ReflectiveClassBuildItem> reflectionClasses,
-               BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+            BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
 
         List<Class> classes = getClasses("io.minio.messages");
         reflectionClasses.produce(new ReflectiveClassBuildItem(true, true, classes.toArray(new Class[classes.size()])));

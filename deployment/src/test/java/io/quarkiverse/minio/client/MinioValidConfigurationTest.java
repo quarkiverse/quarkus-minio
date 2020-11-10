@@ -2,8 +2,6 @@ package io.quarkus.minio;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.sql.SQLException;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
