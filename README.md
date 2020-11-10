@@ -3,27 +3,9 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Congratulations and thank you for creating a new Quarkus extension project in Quarkiverse!
-
-Feel free to replace this content with the proper description of your new project and necessary instructions how to use and contribute to it.
-
-You can find the basic info, Quarkiverse policies and conventions in [the Quarkiverse wiki](https://github.com/quarkiverse/quarkiverse/wiki).
-
-Need to quickly create a new Quarkus extension Maven project? Just execute the command below replacing the template values with your preferred ones:
-```
-mvn io.quarkus:quarkus-maven-plugin:<QUARKUS_VERSION>:create-extension -N \
-    -DgroupId=io.quarkiverse.<REPO_NAME> \ 
-    -DartifactId=<EXTENSION_ARTIFACT_ID> \  
-    -Dversion=<INITIAL_VERSION> \ 
-    -Dquarkus.nameBase="<EXTENSION_SIMPLE_NAME>"
-```
-**IMPORTANT:** make sure your project uses [io.quarkiverse:quarkiverse-parent](https://github.com/quarkiverse/quarkiverse-parent) as the parent POM. It will make sure the release and artifact publishing plugins are properly configured for your project.
-
-In case you are creating a Quarkus extension project for the first time, please follow [Building My First Extension](https://quarkus.io/guides/building-my-first-extension) guide.
-
-Other useful articles related to Quarkus extension development can be found under the [Writing Extensions](https://quarkus.io/guides/#writing-extensions) guide category on the [Quarkus.io](http://quarkus.io) website.
-
-Thanks again, good luck and have fun!
+[![Build](https://github.com/quarkiverse/quarkiverse-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkiverse-minio/actions?query=workflow%3ABuild)
+[![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkus-minio-client.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkus-minio-client)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Contributors ✨
 
@@ -43,3 +25,89 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## Configuration
+
+After configuring `quarkus BOM`:
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-bom</artifactId>
+            <version>${insert.newest.quarkus.version.here}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+You can just configure the `quarkus-minio` extension by adding the following dependency:
+
+```xml
+<dependency>
+    <groupId>io.quarkiverse.minio</groupId>
+    <artifactId>quarkus-minio-client</artifactId>
+    <version>${latest.release.version}</version>
+</dependency>
+```
+<!--
+***NOTE:*** You can bootstrap a new application quickly by using [code.quarkus.io](https://code.quarkus.io) and choosing `quarkus-minio`.
+-->
+
+## Usage
+
+An `io.minio.MinioClient` is made available to your application as a CDI bean.
+
+```java
+package com.acme.minio;
+
+import io.minio.MinioClient;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import javax.inject.Inject;
+
+@ApplicationScoped
+public class SampleService {
+
+    @Inject
+    MinioClient minioClient;
+
+    @ConfigProperty(name = "minio.bucket-name")
+    String bucketName;
+
+    public String getObject(String name) {
+        try (InputStream is = minio.getObject(
+                GetObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(objectName)
+                        .build());
+        ) {
+           // Do whatever you want...
+        } catch (MinioException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+}
+```
+
+## Configuration Reference
+
+Configuration is done through standard application.properties mechanism.
+
+```properties
+quarkus.minio.url=https://minio.acme
+quarkus.minio.access-key=DUMMY-ACCESS-KEY
+quarkus.minio.secret-key=DUMMY-SECRET-KEY
+```
+
+## WARNING
+
+This project is still in its early stage.
+
+Contributions are always welcome, but this repository is not really ready for external contributions yet, better create an issue
+to discuss them prior to any contributions.
