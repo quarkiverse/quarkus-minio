@@ -39,7 +39,7 @@ public class MinioResource {
 
     @POST
     public String addObject(@QueryParam("name") String fileName) throws IOException, MinioException, GeneralSecurityException {
-        if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build())){
+        if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build())) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
         }
         String dummyFile = "Dummy content";
