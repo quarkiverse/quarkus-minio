@@ -1,14 +1,13 @@
 package io.quarkiverse.minio.client;
 
-import java.util.function.Predicate;
+import io.minio.MinioClient;
+import io.quarkus.runtime.configuration.ConfigurationException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import io.minio.MinioClient;
-import io.quarkus.runtime.configuration.ConfigurationException;
+import java.util.function.Predicate;
 
 @Singleton
 public class MinioProducer {
@@ -16,8 +15,8 @@ public class MinioProducer {
     @Inject
     MinioConfiguration configuration;
 
-    private static final Predicate<String> IS_NOT_VALID_MINIO_URL = value -> !value.startsWith("http://")
-            || !value.startsWith("https://");
+    private static final Predicate<String> IS_NOT_VALID_MINIO_URL = value -> !(value.startsWith("http://")
+            || value.startsWith("https://"));
 
     @Produces
     @ApplicationScoped
