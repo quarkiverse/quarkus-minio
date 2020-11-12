@@ -16,8 +16,8 @@ public class MinioProducer {
     @Inject
     MinioConfiguration configuration;
 
-    private static final Predicate<String> IS_NOT_VALID_MINIO_URL = value -> !value.startsWith("http://")
-            || !value.startsWith("https://");
+    private static final Predicate<String> IS_NOT_VALID_MINIO_URL = value -> !(value.startsWith("http://")
+            || value.startsWith("https://"));
 
     @Produces
     @ApplicationScoped

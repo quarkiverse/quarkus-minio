@@ -29,6 +29,7 @@
 
     <modules>
         <module>deployment</module>
+        <module>integration-tests</module>
         <module>runtime</module>
     </modules>
     <dependencyManagement>
