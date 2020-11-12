@@ -1,13 +1,14 @@
 package io.quarkiverse.minio.client;
 
-import io.minio.MinioClient;
-import io.quarkus.runtime.configuration.ConfigurationException;
+import java.util.function.Predicate;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.function.Predicate;
+
+import io.minio.MinioClient;
+import io.quarkus.runtime.configuration.ConfigurationException;
 
 @Singleton
 public class MinioProducer {
