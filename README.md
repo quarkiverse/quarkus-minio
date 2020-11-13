@@ -4,7 +4,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Build](https://github.com/quarkiverse/quarkiverse-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkiverse-minio/actions?query=workflow%3ABuild)
-[![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkus-minio-client.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkus-minio-client)
+[![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/minio-client-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/minio-client-parent)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Integrate minio sdk for jdk and native build modes.
