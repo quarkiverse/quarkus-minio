@@ -35,4 +35,8 @@ public class MinioConfiguration {
      */
     @ConfigItem
     String secretKey;
+
+    public String getUrl() {
+        return url;
+    }
 }
