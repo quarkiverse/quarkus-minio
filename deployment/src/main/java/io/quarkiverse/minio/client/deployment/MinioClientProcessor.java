@@ -1,23 +1,33 @@
 package io.quarkiverse.minio.client.deployment;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.jboss.logging.Logger;
 
 import io.quarkiverse.minio.client.MinioProducer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
+import io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 
 class MinioClientProcessor {
 
     private static final String FEATURE = "minio-client";
+    private static final Logger LOGGER = Logger.getLogger(MinioClientProcessor.class.getName());
 
     @BuildStep
     FeatureBuildItem feature() {
@@ -25,64 +35,60 @@ class MinioClientProcessor {
     }
 
     @BuildStep
-    void build(BuildProducer<ReflectiveClassBuildItem> reflectionClasses,
-            BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
-
-        List<Class> classes = getClasses("io.minio.messages");
-        reflectionClasses.produce(new ReflectiveClassBuildItem(true, true, classes.toArray(new Class[classes.size()])));
-        additionalBeans.produce(new AdditionalBeanBuildItem(MinioProducer.class));
+    public void build(BuildProducer<ExtensionSslNativeSupportBuildItem> extensionSslNativeSupport) {
+        // Indicates that this extension would like the SSL support to be enabled
+        extensionSslNativeSupport.produce(new ExtensionSslNativeSupportBuildItem(FEATURE));
     }
 
-    /**
-     * Scans all classes accessible from the context class loader which belong to the given package and subpackages.
-     *
-     * @param packageName The base package
-     * @return The classes
-     * @throws ClassNotFoundException
-     * @throws IOException
-     */
-    private List<Class> getClasses(String packageName) {
+    @BuildStep
+    void addDependencies(BuildProducer<IndexDependencyBuildItem> indexDependency) {
+        indexDependency.produce(new IndexDependencyBuildItem("io.minio", "minio"));
+    }
+
+    @BuildStep
+    void registerForReflection(
+            CombinedIndexBuildItem index,
+            BuildProducer<ReflectiveClassBuildItem> reflectionClasses) {
+        List<Class> classes = getClasses("io.minio.messages", null);
+        classes.addAll(getClasses("io.minio", ".*Args$"));
+        classes.addAll(getClasses("org.simpleframework.xml.core", ".*Label$"));
+        reflectionClasses.produce(new ReflectiveClassBuildItem(true, true, classes.toArray(new Class[classes.size()])));
+        //        throw new NullPointerException("Classes registered" + classes.size());
+    }
+
+    @BuildStep
+    AdditionalBeanBuildItem produce() {
+        return AdditionalBeanBuildItem.unremovableOf(MinioProducer.class);
+    }
+
+    private List<Class> getClasses(String packageName, String regexp) {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             assert classLoader != null;
             String path = packageName.replace('.', '/');
-            Enumeration<URL> resources = null;
-            resources = classLoader.getResources(path);
-            List<File> dirs = new ArrayList<File>();
-            while (resources.hasMoreElements()) {
-                URL resource = resources.nextElement();
-                dirs.add(new File(resource.getFile()));
+            URI uri = Objects.requireNonNull(classLoader.getResource(path)).toURI();
+            try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object> emptyMap())) {
+                Path packagePath = fileSystem.getPath(path);
+                List<Path> dirs = Files.walk(packagePath, 1).collect(Collectors.toList());
+                return dirs.stream().map(item -> findClasses(item, packageName, regexp))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
             }
-            return dirs.stream().map(item -> findClasses(item, packageName)).flatMap(List::stream).collect(Collectors.toList());
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new IllegalStateException(e);
         }
     }
 
-    /**
-     * Recursive method used to find all classes in a given directory and subdirs.
-     *
-     * @param directory The base directory
-     * @param packageName The package name for classes found inside the base directory
-     * @return The classes
-     * @throws ClassNotFoundException
-     */
-    private static List<Class> findClasses(File directory, String packageName) {
+    private static Class findClasses(Path path, String packageName, String regexp) {
         try {
-            List<Class> classes = new ArrayList<>();
-            if (!directory.exists()) {
-                return classes;
-            }
-            File[] files = directory.listFiles();
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    assert !file.getName().contains(".");
-                    classes.addAll(findClasses(file, packageName + "." + file.getName()));
-                } else if (file.getName().endsWith(".class")) {
-                    classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+            String fileName = path.getFileName().toString();
+            if (fileName.endsWith(".class")) {
+                String className = fileName.substring(0, fileName.length() - 6);
+                if (regexp == null || className.matches(regexp)) {
+                    return Class.forName(packageName + '.' + className);
                 }
             }
-            return classes;
+            return null;
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e);
         }

@@ -23,15 +23,10 @@ public class MinioProducer {
     @ApplicationScoped
     public MinioClient produceMinioClient() {
         verifyUrl();
-        try {
-            return MinioClient.builder()
-                    .endpoint(configuration.url)
-                    .credentials(configuration.accessKey, configuration.secretKey)
-                    .build();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw e;
-        }
+        return MinioClient.builder()
+                .endpoint(configuration.url)
+                .credentials(configuration.accessKey, configuration.secretKey)
+                .build();
     }
 
     private void verifyUrl() {

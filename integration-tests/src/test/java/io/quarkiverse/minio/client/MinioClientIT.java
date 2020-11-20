@@ -13,9 +13,9 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.NativeImageTest;
 
-@QuarkusTest
+@NativeImageTest
 public class MinioClientIT {
 
     private static GenericContainer<?> MINIO_CONTAINER;

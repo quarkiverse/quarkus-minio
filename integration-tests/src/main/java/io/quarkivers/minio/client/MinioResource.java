@@ -11,6 +11,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import io.minio.BucketExistsArgs;
+import io.minio.GetObjectArgs;
+import io.minio.GetObjectResponse;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
@@ -41,7 +43,8 @@ public class MinioResource {
                             .contentType("text/xml") // TODO : Parametrize
                             .stream(is, -1, PART_SIZE)
                             .build());
-            return response.bucket() + "/" + response.object();
+            GetObjectResponse test = minioClient.getObject(GetObjectArgs.builder().bucket("test").object(fileName).build());
+            return test.bucket() + "/" + test.object();
         } catch (MinioException | GeneralSecurityException | IOException e) {
             throw new IllegalStateException(e);
         }

@@ -1,0 +1,11 @@
+name: "Minio Client extension"
+metadata:
+  keywords:
+    - "minio"
+    - "storage"
+    - "kubernetes"
+  guide: "https://quarkus.io/guides/datasource"
+  categories:
+    - "kubernetes"
+    - "data"
+  status: "experimental"
