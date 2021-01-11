@@ -4,6 +4,8 @@ import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 
+import java.util.Optional;
+
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public class MinioConfiguration {
 
@@ -18,7 +20,7 @@ public class MinioConfiguration {
      * @asciidoclet
      */
     @ConfigItem
-    String url;
+    Optional<String> url;
 
     /**
      * The minio server access key
@@ -26,7 +28,7 @@ public class MinioConfiguration {
      * @asciidoclet
      */
     @ConfigItem
-    String accessKey;
+    Optional<String> accessKey;
 
     /**
      * The minio server secret key
@@ -34,9 +36,17 @@ public class MinioConfiguration {
      * @asciidoclet
      */
     @ConfigItem
-    String secretKey;
+    Optional<String> secretKey;
 
     public String getUrl() {
-        return url;
+        return url.orElse("");
+    }
+
+    String getAccessKey() {
+        return accessKey.orElse("");
+    }
+
+    String getSecretKey() {
+        return secretKey.orElse("");
     }
 }

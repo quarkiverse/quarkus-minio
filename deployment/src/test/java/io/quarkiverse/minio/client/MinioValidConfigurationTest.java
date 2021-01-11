@@ -1,6 +1,6 @@
-package io.quarkus.minio;
+package io.quarkiverse.minio.client;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import javax.inject.Inject;
 
@@ -21,6 +21,6 @@ class MinioValidConfigurationTest {
 
     @Test
     public void testDefaultDataSourceInjection() {
-        assertThat(minioClient).isNotNull();
+        assertThatCode(() -> minioClient.toString()).doesNotThrowAnyException();
     }
 }
