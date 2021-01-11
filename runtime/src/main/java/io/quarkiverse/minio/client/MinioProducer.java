@@ -24,14 +24,14 @@ public class MinioProducer {
     public MinioClient produceMinioClient() {
         verifyUrl();
         return MinioClient.builder()
-                .endpoint(configuration.url)
-                .credentials(configuration.accessKey, configuration.secretKey)
+                .endpoint(configuration.getUrl())
+                .credentials(configuration.getAccessKey(), configuration.getSecretKey())
                 .build();
     }
 
     private void verifyUrl() {
         //Not validating other configuration keys as quarkus already does it for us.
-        if (IS_NOT_VALID_MINIO_URL.test(configuration.url)) {
+        if (IS_NOT_VALID_MINIO_URL.test(configuration.getUrl())) {
             throw new ConfigurationException("\"quarkus.minio.url\" is mandatory and must be a valid url");
         }
     }
