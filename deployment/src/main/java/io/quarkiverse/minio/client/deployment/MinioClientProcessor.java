@@ -12,8 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.jboss.jandex.ClassInfo;
+import org.jboss.jandex.DotName;
 import org.jboss.logging.Logger;
 
+import io.minio.BaseArgs;
 import io.quarkiverse.minio.client.MinioProducer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -49,11 +52,13 @@ class MinioClientProcessor {
     void registerForReflection(
             CombinedIndexBuildItem index,
             BuildProducer<ReflectiveClassBuildItem> reflectionClasses) {
-        List<Class> classes = getClasses("io.minio.messages", null);
-        classes.addAll(getClasses("io.minio", ".*Args$"));
+        List<String> classes = getClasses("io.minio.messages", null);
         classes.addAll(getClasses("org.simpleframework.xml.core", ".*Label$"));
-        reflectionClasses.produce(new ReflectiveClassBuildItem(true, true, classes.toArray(new Class[classes.size()])));
-        //        throw new NullPointerException("Classes registered" + classes.size());
+        classes.addAll(index.getIndex().getAllKnownSubclasses(DotName.createSimple(BaseArgs.class.getName())).stream()
+                .map(ClassInfo::name)
+                .map(DotName::toString)
+                .collect(Collectors.toList()));
+        reflectionClasses.produce(new ReflectiveClassBuildItem(true, true, classes.toArray(new String[0])));
     }
 
     @BuildStep
@@ -61,7 +66,7 @@ class MinioClientProcessor {
         return AdditionalBeanBuildItem.unremovableOf(MinioProducer.class);
     }
 
-    private List<Class> getClasses(String packageName, String regexp) {
+    private List<String> getClasses(String packageName, String regexp) {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
             assert classLoader != null;
@@ -79,19 +84,15 @@ class MinioClientProcessor {
         }
     }
 
-    private static Class findClasses(Path path, String packageName, String regexp) {
-        try {
-            String fileName = path.getFileName().toString();
-            if (fileName.endsWith(".class")) {
-                String className = fileName.substring(0, fileName.length() - 6);
-                if (regexp == null || className.matches(regexp)) {
-                    return Class.forName(packageName + '.' + className);
-                }
+    private String findClasses(Path path, String packageName, String regexp) {
+        String fileName = path.getFileName().toString();
+        if (fileName.endsWith(".class")) {
+            String className = fileName.substring(0, fileName.length() - 6);
+            if (regexp == null || className.matches(regexp)) {
+                return packageName + '.' + className;
             }
-            return null;
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e);
         }
+        return null;
     }
 
 }
