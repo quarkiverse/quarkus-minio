@@ -35,9 +35,6 @@ You can just configure the `quarkiverse-minio` extension by adding the following
     <version>${latest.release.version}</version>
 </dependency>
 ```
-<!--
-***NOTE:*** You can bootstrap a new application quickly by using [code.quarkus.io](https://code.quarkus.io) and choosing `quark-minio`.
--->
 
 ## Usage
 
