@@ -4,8 +4,9 @@
 
     <parent>
         <groupId>io.quarkiverse.minio</groupId>
-        <artifactId>minio-client-parent</artifactId>
+        <artifactId>quarkiverse-minio-parent</artifactId>
         <version>0.2.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>integration-tests</artifactId>
@@ -26,7 +27,7 @@
 
         <dependency>
             <groupId>io.quarkiverse.minio</groupId>
-            <artifactId>minio-client</artifactId>
+            <artifactId>quarkiverse-minio</artifactId>
             <version>${project.version}</version>
         </dependency>
 

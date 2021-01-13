@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.quarkiverse.minio</groupId>
-        <artifactId>minio-client-parent</artifactId>
+        <artifactId>quarkiverse-minio-parent</artifactId>
         <version>0.2.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>minio-client</artifactId>
-    <name>Minio - Runtime</name>
+    <artifactId>quarkiverse-minio</artifactId>
+    <name>Quarkiverse Minio - Runtime</name>
 
     <dependencies>
         <dependency>
@@ -26,6 +26,16 @@
                     <artifactId>checker-qual</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
