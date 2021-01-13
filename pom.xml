@@ -8,9 +8,9 @@
     </parent>
 
     <groupId>io.quarkiverse.minio</groupId>
-    <artifactId>minio-client-parent</artifactId>
+    <artifactId>quarkiverse-minio-parent</artifactId>
     <version>0.2.1-SNAPSHOT</version>
-    <name>Quarkus Minio client Extension - Parent</name>
+    <name>Quarkiverse Minio Extension - Parent</name>
 
     <packaging>pom</packaging>
 

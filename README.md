@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-green.svg?style=flat-square)](#contributors-)
 [![Build](https://github.com/quarkiverse/quarkiverse-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkiverse-minio/actions?query=workflow%3ABuild)
-[![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/minio-client-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/minio-client-parent)
+[![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkiverse-minio-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkiverse-minio-parent)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -26,22 +26,19 @@ After configuring `quarkus BOM`:
 </dependencyManagement>
 ```
 
-You can just configure the `quarkus-minio` extension by adding the following dependency:
+You can just configure the `quarkiverse-minio` extension by adding the following dependency:
 
 ```xml
 <dependency>
     <groupId>io.quarkiverse.minio</groupId>
-    <artifactId>quarkus-minio-client</artifactId>
+    <artifactId>quarkiverse-minio</artifactId>
     <version>${latest.release.version}</version>
 </dependency>
 ```
-<!--
-***NOTE:*** You can bootstrap a new application quickly by using [code.quarkus.io](https://code.quarkus.io) and choosing `quarkus-minio`.
--->
 
 ## Usage
 
-An `io.minio.MinioClient` is made available to your application as a CDI bean.
+An `io.minio.MinioClient` is made available to your application as a CDI bean if configuration is found.
 
 ```java
 package com.acme.minio;
@@ -79,7 +76,8 @@ public class SampleService {
 
 ## Configuration Reference
 
-Configuration is done through standard application.properties mechanism.
+Configuration is done through standard application.properties mechanism. 
+Configuration is optional, but if present url has to be a valid http url.
 
 ```properties
 quarkus.minio.url=https://minio.acme
