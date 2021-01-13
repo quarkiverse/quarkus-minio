@@ -80,7 +80,7 @@ public class SampleService {
 ## Configuration Reference
 
 Configuration is done through standard application.properties mechanism. 
-Configuration is optional, but if present url has to be a valide http url.
+Configuration is optional, but if present url has to be a valid http url.
 
 ```properties
 quarkus.minio.url=https://minio.acme
