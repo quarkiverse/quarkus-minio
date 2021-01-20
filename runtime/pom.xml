@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.quarkiverse.minio</groupId>
-        <artifactId>quarkiverse-minio-parent</artifactId>
+        <artifactId>quarkus-minio-parent</artifactId>
         <version>0.2.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>quarkiverse-minio</artifactId>
-    <name>Quarkiverse Minio - Runtime</name>
+    <artifactId>quarkus-minio</artifactId>
+    <name>Quarkus Minio - Runtime</name>
 
     <dependencies>
         <dependency>
