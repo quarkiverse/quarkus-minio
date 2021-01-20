@@ -1,8 +1,8 @@
 # Quarkus Minio Extension
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-green.svg?style=flat-square)](#contributors-)
-[![Build](https://github.com/quarkiverse/quarkiverse-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkiverse-minio/actions?query=workflow%3ABuild)
-[![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkiverse-minio-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkiverse-minio-parent)
+[![Build](https://github.com/quarkiverse/quarkus-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkus-minio/actions?query=workflow%3ABuild)
+[![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkus-minio-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkus-minio-parent)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -26,12 +26,12 @@ After configuring `quarkus BOM`:
 </dependencyManagement>
 ```
 
-You can just configure the `quarkiverse-minio` extension by adding the following dependency:
+You can just configure the `quarkus-minio` extension by adding the following dependency:
 
 ```xml
 <dependency>
     <groupId>io.quarkiverse.minio</groupId>
-    <artifactId>quarkiverse-minio</artifactId>
+    <artifactId>quarkus-minio</artifactId>
     <version>${latest.release.version}</version>
 </dependency>
 ```
@@ -94,7 +94,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/jtama-op"><img src="https://avatars0.githubusercontent.com/u/39991688?v=4" width="100px;" alt=""/><br /><sub><b>jtama-op</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkiverse-minio/commits?author=jtama-op" title="Code">💻</a> <a href="#maintenance-jtama-op" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/jtama-op"><img src="https://avatars0.githubusercontent.com/u/39991688?v=4" width="100px;" alt=""/><br /><sub><b>jtama-op</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=jtama-op" title="Code">💻</a> <a href="#maintenance-jtama-op" title="Maintenance">🚧</a></td>
   </tr>
 </table>
 
