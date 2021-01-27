@@ -1,5 +1,6 @@
 name: "Quarkus ecosystem CI"
 on:
+  workflow_dispatch:
   watch:
     types: [started]
 
@@ -15,13 +16,13 @@ env:
   # Repo specific setting #
   #########################
 
-  ECOSYSTEM_CI_REPO_PATH: quarkus-minio
+  ECOSYSTEM_CI_REPO_PATH: quarkiverse-minio
 
 jobs:
   build:
     name: "Build against latest Quarkus snapshot"
     runs-on: ubuntu-latest
-    if: github.actor == 'quarkusbot' || github.actor == 'quarkiversebot'
+    if: github.actor == 'quarkusbot' || github.actor == 'quarkiversebot' || github.actor == 'jtama-op'
 
     steps:
       - name: Install yq
