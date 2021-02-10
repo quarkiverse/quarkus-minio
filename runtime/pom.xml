@@ -10,6 +10,7 @@
 
     <artifactId>quarkus-minio</artifactId>
     <name>Quarkus Minio - Runtime</name>
+    <description>Integrates MinIO Java SDK for Amazon S3 Compatible Cloud Storage</description>
 
     <dependencies>
         <dependency>
