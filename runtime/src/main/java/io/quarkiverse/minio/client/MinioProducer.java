@@ -2,7 +2,6 @@ package io.quarkiverse.minio.client;
 
 import java.util.function.Predicate;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,7 +19,7 @@ public class MinioProducer {
             || value.startsWith("https://"));
 
     @Produces
-    @ApplicationScoped
+    @Singleton
     public MinioClient produceMinioClient() {
         verifyUrl();
         return MinioClient.builder()

@@ -1,5 +1,6 @@
 package io.quarkiverse.minio.client;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
@@ -13,7 +14,7 @@ import io.quarkus.test.QuarkusUnitTest;
 class MinioInvalidUrlTest {
 
     @Inject
-    MinioClient minioClient;
+    Instance<MinioClient> minioClient;
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
@@ -23,7 +24,7 @@ class MinioInvalidUrlTest {
     public void invalidUrlThrowsException() {
         //Not validating other configuration keys as quarkus already does it for us.
         // toString method only here to trigger client instanciation
-        Assertions.assertThatThrownBy(() -> minioClient.toString())
+        Assertions.assertThatThrownBy(() -> minioClient.get().toString())
                 .isInstanceOf(ConfigurationException.class)
                 .hasMessageStartingWith("\"quarkus.minio.url\" is mandatory");
     }
