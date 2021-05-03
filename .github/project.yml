@@ -1,5 +1,5 @@
 name: Quarkus Minio
 release:
-  current-version: 0.2.2
-  next-version: 0.2.3-SNAPSHOT
+  current-version: 0.2.3
+  next-version: 0.2.4-SNAPSHOT
 
