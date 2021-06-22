@@ -78,11 +78,13 @@ public class SampleService {
 
 Configuration is done through standard application.properties mechanism. 
 Configuration is optional, but if present url has to be a valid http url.
+If allow-empty is set to `true` and all other configuration options are empty, `null` is produced instead of the minio client.
 
 ```properties
 quarkus.minio.url=https://minio.acme
 quarkus.minio.access-key=DUMMY-ACCESS-KEY
 quarkus.minio.secret-key=DUMMY-SECRET-KEY
+quarkus.minio.allow-empty=true/false (Boolean type, default value is false)
 ```
 
 ## Contributors ✨

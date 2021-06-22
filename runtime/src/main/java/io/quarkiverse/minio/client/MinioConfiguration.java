@@ -38,6 +38,15 @@ public class MinioConfiguration {
     @ConfigItem
     Optional<String> secretKey;
 
+    /**
+     * If value is false (default) or some of other properties is present, then producer behaves as this option is not set.
+     * If value is true and and all other configuration options are empty, producer returns null as a client.
+     *
+     * @asciidoclet
+     */
+    @ConfigItem
+    Optional<Boolean> allowEmpty;
+
     public String getUrl() {
         return url.orElse("");
     }
@@ -48,5 +57,9 @@ public class MinioConfiguration {
 
     String getSecretKey() {
         return secretKey.orElse("");
+    }
+
+    boolean returnEmptyClient() {
+        return allowEmpty.orElse(false) && !url.isPresent() && !accessKey.isPresent() && !secretKey.isPresent();
     }
 }
