@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.version>2.5.0.Final</quarkus.version>
-        <minio.version>8.2.2</minio.version>
+        <minio.version>8.3.3</minio.version>
     </properties>
 
     <modules>
