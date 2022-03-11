@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <compiler-plugin.version>3.10.0</compiler-plugin.version>
+        <compiler-plugin.version>3.10.1</compiler-plugin.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>11</maven.compiler.source>
