@@ -1,8 +1,8 @@
 package io.quarkiverse.minio.client;
 
-import io.quarkus.test.junit.NativeImageTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-@NativeImageTest
+@QuarkusIntegrationTest
 public class MinioClientIT extends MinioClientTest {
 
 }
