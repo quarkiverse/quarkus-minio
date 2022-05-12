@@ -8,5 +8,5 @@ metadata:
   categories:
     - "kubernetes"
     - "data"
-  status: "experimental"
+  status: "stable"
   description: "Integrates MinIO Java SDK for Amazon S3 Compatible Cloud Storage"
