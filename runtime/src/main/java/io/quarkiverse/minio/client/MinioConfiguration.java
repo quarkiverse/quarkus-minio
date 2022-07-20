@@ -11,12 +11,12 @@ public class MinioConfiguration {
 
     /**
      * The minio server URL.
-     * 
+     *
      * [NOTE]
      * ====
      * Value must start with `http://` or `https://`
      * ====
-     * 
+     *
      * @asciidoclet
      */
     @ConfigItem
@@ -24,7 +24,7 @@ public class MinioConfiguration {
 
     /**
      * The minio server access key
-     * 
+     *
      * @asciidoclet
      */
     @ConfigItem
@@ -32,7 +32,7 @@ public class MinioConfiguration {
 
     /**
      * The minio server secret key
-     * 
+     *
      * @asciidoclet
      */
     @ConfigItem
