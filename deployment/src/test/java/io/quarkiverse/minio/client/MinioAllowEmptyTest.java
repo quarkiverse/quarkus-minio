@@ -20,8 +20,8 @@ class MinioAllowEmptyTest {
             .withConfigurationResource("application-allow-empty.properties");
 
     @Test
-    public void testDefaultDataSourceInjection() {
+    public void instanceShouldNotBeProvided() {
         MinioClient mc = minioClient.get();
-        Assertions.assertThat(mc == null);
+        Assertions.assertThat(mc).isNull();
     }
 }

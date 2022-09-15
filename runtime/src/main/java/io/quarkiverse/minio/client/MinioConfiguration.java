@@ -39,8 +39,16 @@ public class MinioConfiguration {
     Optional<String> secretKey;
 
     /**
+     * An optional bucket region
+     *
+     * @asciidoclet
+     */
+    @ConfigItem
+    Optional<String> region;
+
+    /**
      * If value is false (default) or some of other properties is present, then producer behaves as this option is not set.
-     * If value is true and and all other configuration options are empty, producer returns null as a client.
+     * If value is true and all other configuration options are empty, producer returns null as a client.
      *
      * @asciidoclet
      */
@@ -60,6 +68,6 @@ public class MinioConfiguration {
     }
 
     boolean returnEmptyClient() {
-        return allowEmpty.orElse(false) && !url.isPresent() && !accessKey.isPresent() && !secretKey.isPresent();
+        return allowEmpty.orElse(false) && region.isEmpty() && url.isEmpty() && accessKey.isEmpty() && secretKey.isEmpty();
     }
 }

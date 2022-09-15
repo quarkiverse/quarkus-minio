@@ -20,7 +20,7 @@ class MinioAllowEmptyAndValidTest {
             .withConfigurationResource("application-allow-empty-and-valid.properties");
 
     @Test
-    public void testDefaultDataSourceInjection() {
+    public void allowEmptyShouldBeIgnored() {
         assertThatCode(() -> minioClient.toString()).doesNotThrowAnyException();
     }
 }

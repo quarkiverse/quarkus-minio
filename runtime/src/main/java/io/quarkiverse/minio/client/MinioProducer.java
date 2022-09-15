@@ -26,10 +26,11 @@ public class MinioProducer {
             return null;
         }
         verifyUrl();
-        return MinioClient.builder()
+        MinioClient.Builder builder = MinioClient.builder()
                 .endpoint(configuration.getUrl())
-                .credentials(configuration.getAccessKey(), configuration.getSecretKey())
-                .build();
+                .credentials(configuration.getAccessKey(), configuration.getSecretKey());
+        configuration.region.ifPresent(builder::region);
+        return builder.build();
     }
 
     private void verifyUrl() {

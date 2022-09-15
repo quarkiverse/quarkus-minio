@@ -20,7 +20,7 @@ class MinioValidConfigurationTest {
             .withConfigurationResource("application-valid.properties");
 
     @Test
-    public void testDefaultDataSourceInjection() {
+    public void testDefaultMinioClientInjection() {
         assertThatCode(() -> minioClient.toString()).doesNotThrowAnyException();
     }
 }
