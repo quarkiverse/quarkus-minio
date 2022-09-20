@@ -3,6 +3,7 @@ package io.quarkiverse.minio.client;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -18,6 +19,20 @@ public class MinioClientTest {
                 .statusCode(200)
                 .extract().body().asString();
         assertThat(response).isEqualTo("test/dummy.txt");
+    }
+
+    @Test
+    public void testMetricsProduction() throws InterruptedException {
+        // Trigger metrics count
+        given()
+                .when().get("/minio?name=dummy.txt")
+                .then()
+                .statusCode(500);
+        given()
+                .when().post("/q/metrics")
+                .then()
+                .statusCode(200)
+                .body(CoreMatchers.containsString("minio_client_seconds"));
     }
 
 }

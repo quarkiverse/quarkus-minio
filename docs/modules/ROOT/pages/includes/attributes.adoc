@@ -1,1 +1,1 @@
-:quarkus-minio-version: 2.9.2
+:quarkus-minio-version: 2.9.3
