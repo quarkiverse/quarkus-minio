@@ -77,3 +77,84 @@ quarkus.minio.secret-key=DUMMY-SECRET-KEY
 quarkus.minio.region=beyond
 quarkus.minio.allow-empty=true/false (Boolean type, default value is false)
 ----
+
+[[dev-services]]
+== Dev Services
+
+Quarkus supports a feature called Dev Services that allows you to create various containers without any config.
+What that means in practice is that if you have Docker running and have not configured `quarkus.minio.url`,
+Quarkus will automatically start a Minio container when running tests or in dev mode, and automatically
+configure the connection.
+
+When running the production version of the application, the Minio connection needs to be configured as normal.
+
+=== Shared server
+
+Most of the time you need to share the server between applications.
+Dev Services for Minio implements a _service discovery_ mechanism for your multiple Quarkus applications running in _dev_ mode to share a single server.
+
+NOTE: Dev Services for Minio starts the container with the `quarkus-dev-service-minio` label which is used to identify the container.
+
+If you need multiple (shared) servers, you can configure the `quarkus.minio.devservices.service-name` attribute and indicate the server name.
+It looks for a container with the same value, or starts a new one if none can be found.
+The default service name is `minio`.
+
+Sharing is enabled by default in dev mode, but disabled in test mode.
+You can disable the sharing with `quarkus.minio.devservices.shared=false`.
+
+=== Configuration
+
+icon:lock[title=Fixed at build time] Configuration property fixed at build time - All other configuration properties are overridable at runtime
+[.configuration-reference, cols="80,.^10,.^10"]
+|===
+
+h|Configuration property
+h|Type
+h|Default
+
+a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.enabled`
+--
+If DevServices has been explicitly enabled or disabled. DevServices is generally enabled by default, unless there is an existing configuration present. When DevServices is enabled Quarkus will attempt to automatically configure and start a Minio container when running in Dev or Test mode.
+--
+|boolean
+|
+
+a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.image-name`
+--
+The container image name to use, for container based DevServices providers.
+--
+|String
+|`minio/minio:RELEASE.2020-11-10T21-02-24Z`
+
+a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.shared`
+--
+Indicates if the Minio server managed by Quarkus Dev Services is shared. When shared, Quarkus looks for running containers using label-based service discovery. If a matching container is found, it is used, and so a second one is not started. Otherwise, Dev Services for Minio starts a new container.
+The discovery uses the `quarkus-dev-service-minio` label. The value is configured using the `service-name` property.
+Container sharing is only used in dev mode.
+--
+|boolean
+|`true`
+
+a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.service-name`
+--
+The value of the `quarkus-dev-service-minio` label attached to the started container. This property is used when `shared` is set to `true`. In this case, before starting a container, Dev Services for Minio looks for a container with the `quarkus-dev-service-minio` label set to the configured value. If found, it will use this container instead of starting a new one. Otherwise, it starts a new container with the `quarkus-dev-service-minio` label set to the specified value.
+This property is used when you need multiple shared Minio servers.
+--
+|String
+|`minio`
+
+a|`quarkus.minio.devservices.access-key`
+--
+Minio root username access key.
+--
+|String
+|`minioaccess`
+
+a|`quarkus.minio.devservices.secret-key`
+--
+Minio root username secret key.
+--
+|String
+|`miniosecret`
+
+|===
