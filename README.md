@@ -1,6 +1,6 @@
 # Quarkus Minio Extension
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build](https://github.com/quarkiverse/quarkus-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkus-minio/actions?query=workflow%3ABuild)
 [![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkus-minio-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkus-minio-parent)
@@ -95,11 +95,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/jtama-op"><img src="https://avatars0.githubusercontent.com/u/39991688?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jtama-op</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=jtama-op" title="Code">💻</a> <a href="#maintenance-jtama-op" title="Maintenance">🚧</a></td>
-    <td align="center"><a href="https://twitter.com/ppalaga"><img src="https://avatars.githubusercontent.com/u/1826249?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Peter Palaga</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=ppalaga" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/JiriOndrusek"><img src="https://avatars.githubusercontent.com/u/26897889?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JiriOndrusek</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=JiriOndrusek" title="Code">💻</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/jtama-op"><img src="https://avatars0.githubusercontent.com/u/39991688?v=4?s=100" width="100px;" alt="jtama-op"/><br /><sub><b>jtama-op</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=jtama-op" title="Code">💻</a> <a href="#maintenance-jtama-op" title="Maintenance">🚧</a></td>
+      <td align="center"><a href="https://twitter.com/ppalaga"><img src="https://avatars.githubusercontent.com/u/1826249?v=4?s=100" width="100px;" alt="Peter Palaga"/><br /><sub><b>Peter Palaga</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=ppalaga" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/JiriOndrusek"><img src="https://avatars.githubusercontent.com/u/26897889?v=4?s=100" width="100px;" alt="JiriOndrusek"/><br /><sub><b>JiriOndrusek</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=JiriOndrusek" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/dlucasd"><img src="https://avatars.githubusercontent.com/u/8418431?v=4?s=100" width="100px;" alt="dlucasd"/><br /><sub><b>dlucasd</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=dlucasd" title="Code">💻</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
