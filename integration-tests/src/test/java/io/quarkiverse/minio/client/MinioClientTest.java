@@ -4,16 +4,11 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
 
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-@QuarkusTestResource(MinioResource.class)
 public class MinioClientTest {
-
-    private static GenericContainer<?> MINIO_CONTAINER;
 
     @Test
     public void testInsert() {
