@@ -1,7 +1,6 @@
 package io.quarkiverse.minio.client;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
-
+import javax.enterprise.inject.UnsatisfiedResolutionException;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -10,17 +9,19 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import io.minio.MinioClient;
 import io.quarkus.test.QuarkusUnitTest;
 
-class MinioAllowEmptyAndValidTest {
+class NamedMinioUnexpectedlTest {
 
     @Inject
+    @MinioQualifier("acme")
     MinioClient minioClient;
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
-            .withConfigurationResource("application-allow-empty-and-valid.properties");
+            .withConfigurationResource("application-valid.properties")
+            .setExpectedException(UnsatisfiedResolutionException.class);
 
     @Test
-    public void allowEmptyShouldBeIgnored() {
-        assertThatCode(() -> minioClient.toString()).doesNotThrowAnyException();
+    public void unexpected() {
+        // Just trigger test
     }
 }

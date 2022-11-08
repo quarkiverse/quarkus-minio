@@ -1,6 +1,7 @@
 package io.quarkiverse.minio.client.deployment.devservices;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
+import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
 import io.quarkus.deployment.IsNormal;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CuratedApplicationShutdownBuildItem;
@@ -31,10 +33,10 @@ import io.quarkus.runtime.configuration.ConfigUtils;
 
 public class DevServicesMinioProcessor {
     private static final Logger LOGGER = Logger.getLogger(DevServicesMinioProcessor.class);
-    private static final String MINIO_URL = "quarkus.minio.url";
-    private static final String MINIO_ALLOW_EMPTY = "quarkus.minio.allow-empty";
-    private static final String MINIO_ACCESS_KEY = "quarkus.minio.access-key";
-    private static final String MINIO_SECRET_KEY = "quarkus.minio.secret-key";
+    private static final String MINIO_URL = "quarkus.minio%s.url";
+    private static final String MINIO_ALLOW_EMPTY = "quarkus.minio%s.allow-empty";
+    private static final String MINIO_ACCESS_KEY = "quarkus.minio%s.access-key";
+    private static final String MINIO_SECRET_KEY = "quarkus.minio%s.secret-key";
 
     /**
      * Label to add to shared Dev Service for Minio running in containers.
@@ -54,7 +56,9 @@ public class DevServicesMinioProcessor {
             MinioBuildTimeConfig minioBuildTimeConfig,
             Optional<ConsoleInstalledBuildItem> consoleInstalledBuildItem,
             CuratedApplicationShutdownBuildItem closeBuildItem,
-            LoggingSetupBuildItem loggingSetupBuildItem, GlobalDevServicesConfig devServicesConfig) {
+            LoggingSetupBuildItem loggingSetupBuildItem,
+            GlobalDevServicesConfig devServicesConfig,
+            MiniosBuildTimeConfiguration buildTimeConfiguration) {
 
         MinioDevServiceCfg configuration = getConfiguration(minioBuildTimeConfig);
 
@@ -71,7 +75,8 @@ public class DevServicesMinioProcessor {
                 (launchMode.isTest() ? "(test) " : "") + "Minio Dev Services Starting:",
                 consoleInstalledBuildItem, loggingSetupBuildItem);
         try {
-            devService = startMinio(dockerStatusBuildItem, configuration, launchMode, devServicesConfig.timeout);
+            devService = startMinio(dockerStatusBuildItem, configuration, launchMode, devServicesConfig.timeout,
+                    buildTimeConfiguration);
             if (devService == null) {
                 compressor.closeAndDumpCaptured();
             } else {
@@ -137,8 +142,12 @@ public class DevServicesMinioProcessor {
         }
     }
 
-    private RunningDevService startMinio(DockerStatusBuildItem dockerStatusBuildItem, MinioDevServiceCfg config,
-            LaunchModeBuildItem launchMode, Optional<Duration> timeout) {
+    private RunningDevService startMinio(
+            DockerStatusBuildItem dockerStatusBuildItem,
+            MinioDevServiceCfg config,
+            LaunchModeBuildItem launchMode,
+            Optional<Duration> timeout,
+            MiniosBuildTimeConfiguration buildTimeConfiguration) {
         if (!config.devServicesEnabled) {
             // explicitly disabled
             LOGGER.debug("Not starting dev services for Minio, as it has been disabled in the config.");
@@ -159,7 +168,8 @@ public class DevServicesMinioProcessor {
         }
 
         if (!dockerStatusBuildItem.isDockerAvailable()) {
-            LOGGER.warn(String.format("Docker isn't working, please configure the Minio Url property (%s).", MINIO_URL));
+            LOGGER.warn(String.format("Docker isn't working, please configure the Minio Url property (%s).",
+                    String.format(MINIO_URL, "")));
             return null;
         }
 
@@ -187,21 +197,35 @@ public class DevServicesMinioProcessor {
             return new RunningDevService(config.serviceName,
                     container.getContainerId(),
                     container::close,
-                    getRunningDevServicesConfig(config, container.getHost(), container.getPort()));
+                    getRunningDevServicesConfig(config, container.getHost(), container.getPort(), buildTimeConfiguration));
         };
 
         return maybeContainerAddress
                 .map(containerAddress -> new RunningDevService(config.serviceName,
                         containerAddress.getId(),
                         null,
-                        getRunningDevServicesConfig(config, containerAddress.getHost(), containerAddress.getPort())))
+                        getRunningDevServicesConfig(config, containerAddress.getHost(), containerAddress.getPort(),
+                                buildTimeConfiguration)))
                 .orElseGet(defaultMinioBrokerSupplier);
     }
 
-    private Map<String, String> getRunningDevServicesConfig(MinioDevServiceCfg config, String host, int port) {
-        return Map.of(MINIO_URL, String.format("http://%s:%d", host, port),
-                MINIO_ACCESS_KEY, config.accessKey,
-                MINIO_SECRET_KEY, config.secretKey);
+    private Map<String, String> getRunningDevServicesConfig(MinioDevServiceCfg config, String host, int port,
+            MiniosBuildTimeConfiguration buildTimeConfiguration) {
+        var result = new HashMap<String, String>();
+        buildTimeConfiguration.getMinioClients().entrySet().stream()
+                .map(entry -> Map.of(formatPropertyName(MINIO_URL, entry.getKey()), String.format("http://%s:%d", host, port),
+                        formatPropertyName(MINIO_ACCESS_KEY, entry.getKey()), config.accessKey,
+                        formatPropertyName(MINIO_SECRET_KEY, entry.getKey()), config.secretKey))
+                .forEach(result::putAll);
+        return result;
+    }
+
+    private String formatPropertyName(String property, String minoClientName) {
+        var key = "";
+        if (!MiniosBuildTimeConfiguration.isDefault(minoClientName)) {
+            key = "." + minoClientName;
+        }
+        return String.format(property, key);
     }
 
     private MinioDevServiceCfg getConfiguration(MinioBuildTimeConfig cfg) {

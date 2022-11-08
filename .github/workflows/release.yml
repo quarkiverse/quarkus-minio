@@ -13,7 +13,7 @@ jobs:
     if: ${{github.event.pull_request.merged == true}}
 
     steps:
-      - uses: radcortez/project-metadata-action@master
+      - uses: radcortez/project-metadata-action@main
         name: retrieve project metadata
         id: metadata
         with:
@@ -31,6 +31,7 @@ jobs:
 
       - uses: actions/setup-java@v1.4.3
         with:
+          distribution: temurin
           java-version: 11
 
       - name: Cache local Maven repository

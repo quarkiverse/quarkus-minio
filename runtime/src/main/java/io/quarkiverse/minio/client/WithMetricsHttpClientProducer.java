@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.Produces;
+import javax.inject.Singleton;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -26,28 +25,30 @@ import io.micrometer.core.instrument.binder.okhttp3.OkHttpMetricsEventListener;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
-public class HttpClientRecorderWithMetrics {
+@Singleton
+public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer {
 
     protected static final long DEFAULT_CONNECTION_TIMEOUT = 5;
 
-    private Instance<MeterRegistry> meterRegistry;
+    private MeterRegistry meterRegistry;
 
-    private MinioConfiguration configuration;
+    private MiniosRuntimeConfiguration configuration;
 
-    public HttpClientRecorderWithMetrics(Instance<MeterRegistry> meterRegistry, MinioConfiguration configuration) {
+    public WithMetricsHttpClientProducer(MeterRegistry meterRegistry, MiniosRuntimeConfiguration configuration) {
         this.meterRegistry = meterRegistry;
         this.configuration = configuration;
     }
 
-    @Produces
-    public Optional<OkHttpClient> httpClient() {
+    public Optional<OkHttpClient> apply(String minioClientName) {
         if (!configuration.produceMetrics()) {
             return Optional.empty();
         }
-        return Optional.of(getHttpClientWithInterceptor(meterRegistry.get()));
+        return Optional.of(getHttpClientWithInterceptor(meterRegistry, minioClientName));
     }
 
-    private OkHttpClient getHttpClientWithInterceptor(MeterRegistry meterRegistry) {
+    private OkHttpClient getHttpClientWithInterceptor(MeterRegistry meterRegistry, String minioClientName) {
+        var metricKey = MiniosBuildTimeConfiguration.isDefault(minioClientName) ? "minio.client"
+                : "minio." + minioClientName + ".client";
         //Copy from io.minio.MinioClient#2860
         var httpClient = new OkHttpClient()
                 .newBuilder()
@@ -56,7 +57,7 @@ public class HttpClientRecorderWithMetrics {
                 .readTimeout(DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MINUTES)
                 .protocols(List.of(Protocol.HTTP_1_1))
                 .eventListener(
-                        OkHttpMetricsEventListener.builder(meterRegistry, "minio.client")
+                        OkHttpMetricsEventListener.builder(meterRegistry, metricKey)
                                 .uriMapper(request -> String.join("/", request.url().pathSegments()))
                                 .build())
                 .build();
