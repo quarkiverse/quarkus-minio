@@ -55,6 +55,15 @@ public class MinioConfiguration {
     @ConfigItem
     Optional<Boolean> allowEmpty;
 
+    /**
+     * If value is true (default) and the <code>io.quarkus.quarkus-micrometer</code> is present in the class path, then
+     * the minio client will produce metrics.
+     *
+     * @asciidoclet
+     */
+    @ConfigItem
+    Optional<Boolean> produceMetrics;
+
     public String getUrl() {
         return url.orElse("");
     }
@@ -69,5 +78,9 @@ public class MinioConfiguration {
 
     boolean returnEmptyClient() {
         return allowEmpty.orElse(false) && region.isEmpty() && url.isEmpty() && accessKey.isEmpty() && secretKey.isEmpty();
+    }
+
+    boolean produceMetrics() {
+        return produceMetrics.orElse(true);
     }
 }

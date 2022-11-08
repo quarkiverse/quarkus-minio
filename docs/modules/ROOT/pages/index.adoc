@@ -1,9 +1,8 @@
-= Quarkus Minio
 include::./includes/attributes.adoc[]
 
 Integrate Min.io sdk compatible with all S3 Api complient vendors. Available for jdk and native runtime.
 
-=== Configuration
+== Configuration
 
 Once you have your Quarkus project configured you can add the `minio` extension
 to your project by running the following command in your project base directory:
@@ -63,20 +62,61 @@ public class SampleService {
 }
 ----
 
-=== Configuration Reference
+== Configuration Reference
 
-Configuration is done through standard application.properties mechanism.
-Configuration is optional, but if present url has to be a valid http url.
+[.configuration-reference, cols="80,.^10,.^10"]
+|===
+
+h|Configuration property
+h|Type
+h|Default
+
+a|`quarkus.minio.url`
+--
+The minio server URL.
+[NOTE]
+====
+Value must start with `http://` or `https://`
+====
+--
+|string
+|
+
+a|`quarkus.minio.access-key`
+--
+The minio server access key
+--
+|string
+|
+
+a|`quarkus.minio.secret-key`
+--
+The minio server secret key
+--
+|string
+|
+
+a|`quarkus.minio.region`
+--
+An optional bucket region
+--
+|string
+|
+
+a|`quarkus.minio.allow-empty`
+--
 If allow-empty is set to `true` and all other configuration options are empty, `null` is produced instead of the minio client.
+--
+|string
+|
 
-[source,properties]
-----
-quarkus.minio.url=https://minio.acme
-quarkus.minio.access-key=DUMMY-ACCESS-KEY
-quarkus.minio.secret-key=DUMMY-SECRET-KEY
-quarkus.minio.region=beyond
-quarkus.minio.allow-empty=true/false (Boolean type, default value is false)
-----
+a|`quarkus.minio.produceMetrics`
+--
+If `true` and the <code>io.quarkus.quarkus-micrometer</code> is present in the class path, then the minio client will produce metrics.
+--
+|boolean
+a|`true`
+|===
 
 [[dev-services]]
 == Dev Services
@@ -117,7 +157,7 @@ a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.enabled`
 If DevServices has been explicitly enabled or disabled. DevServices is generally enabled by default, unless there is an existing configuration present. When DevServices is enabled Quarkus will attempt to automatically configure and start a Minio container when running in Dev or Test mode.
 --
 |boolean
-|
+|true
 
 a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.image-name`
 --

@@ -10,13 +10,14 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
-import org.jboss.logging.Logger;
 
 import io.minio.BaseArgs;
+import io.quarkiverse.minio.client.HttpClientRecorderWithMetrics;
 import io.quarkiverse.minio.client.MinioProducer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -26,11 +27,12 @@ import io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.metrics.MetricsCapabilityBuildItem;
+import io.quarkus.runtime.metrics.MetricsFactory;
 
 class MinioClientProcessor {
 
     private static final String FEATURE = "minio-client";
-    private static final Logger LOGGER = Logger.getLogger(MinioClientProcessor.class.getName());
 
     @BuildStep
     FeatureBuildItem feature() {
@@ -46,6 +48,15 @@ class MinioClientProcessor {
     @BuildStep
     void addDependencies(BuildProducer<IndexDependencyBuildItem> indexDependency) {
         indexDependency.produce(new IndexDependencyBuildItem("io.minio", "minio"));
+    }
+
+    @BuildStep
+    void ifMetricsAreEnabeld(Optional<MetricsCapabilityBuildItem> metricsCapabilityBuildItem,
+            BuildProducer<AdditionalBeanBuildItem> additionalBeanBuildItemBuildProducer) {
+        if (metricsCapabilityBuildItem.map(item -> item.metricsSupported(MetricsFactory.MICROMETER)).orElse(false)) {
+            additionalBeanBuildItemBuildProducer
+                    .produce(AdditionalBeanBuildItem.unremovableOf(HttpClientRecorderWithMetrics.class));
+        }
     }
 
     @BuildStep
@@ -94,5 +105,4 @@ class MinioClientProcessor {
         }
         return null;
     }
-
 }
