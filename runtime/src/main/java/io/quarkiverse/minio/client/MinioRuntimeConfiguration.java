@@ -19,7 +19,7 @@ public class MinioRuntimeConfiguration {
      * @asciidoclet
      */
     @ConfigItem
-    Optional<String> url;
+    Optional<String> url = Optional.empty();
 
     /**
      * The minio server access key
@@ -27,7 +27,7 @@ public class MinioRuntimeConfiguration {
      * @asciidoclet
      */
     @ConfigItem
-    Optional<String> accessKey;
+    Optional<String> accessKey = Optional.empty();
 
     /**
      * The minio server secret key
@@ -35,7 +35,7 @@ public class MinioRuntimeConfiguration {
      * @asciidoclet
      */
     @ConfigItem
-    Optional<String> secretKey;
+    Optional<String> secretKey = Optional.empty();
 
     /**
      * An optional bucket region
@@ -43,7 +43,7 @@ public class MinioRuntimeConfiguration {
      * @asciidoclet
      */
     @ConfigItem
-    Optional<String> region;
+    Optional<String> region = Optional.empty();
 
     public String getUrl() {
         return url.orElse("");
