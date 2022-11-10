@@ -19,20 +19,26 @@ public class MinioClientTest {
                 .statusCode(200)
                 .extract().body().asString();
         assertThat(response).isEqualTo("test/dummy.txt");
-    }
-
-    @Test
-    public void testMetricsProduction() throws InterruptedException {
-        // Trigger metrics count
-        given()
-                .when().get("/minio?name=dummy.txt")
-                .then()
-                .statusCode(500);
         given()
                 .when().post("/q/metrics")
                 .then()
                 .statusCode(200)
                 .body(CoreMatchers.containsString("minio_client_seconds"));
+    }
+
+    @Test
+    public void testInsertToAnother() {
+        String response = given()
+                .when().post("/another-minio?name=dummy.txt")
+                .then()
+                .statusCode(200)
+                .extract().body().asString();
+        assertThat(response).isEqualTo("another-test/dummy.txt");
+        given()
+                .when().post("/q/metrics")
+                .then()
+                .statusCode(200)
+                .body(CoreMatchers.containsString("minio_another_client_seconds"));
     }
 
 }

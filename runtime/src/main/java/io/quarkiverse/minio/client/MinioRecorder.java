@@ -1,0 +1,15 @@
+package io.quarkiverse.minio.client;
+
+import java.util.function.Supplier;
+
+import io.minio.MinioClient;
+import io.quarkus.runtime.annotations.Recorder;
+
+@Recorder
+public class MinioRecorder {
+
+    public Supplier<MinioClient> minioClientSupplier(String minioClientName,
+            @SuppressWarnings("unused") MiniosRuntimeConfiguration minioRuntimeConfig) {
+        return () -> MinioClients.fromName(minioClientName);
+    }
+}

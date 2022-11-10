@@ -17,11 +17,6 @@
             <artifactId>quarkus-arc-deployment</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-micrometer-deployment</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>io.quarkiverse.minio</groupId>
             <artifactId>quarkus-minio</artifactId>
             <version>${project.version}</version>

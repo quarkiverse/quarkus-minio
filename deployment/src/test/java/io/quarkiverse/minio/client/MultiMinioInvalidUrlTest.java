@@ -1,10 +1,12 @@
 package io.quarkiverse.minio.client;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -12,22 +14,26 @@ import io.minio.MinioClient;
 import io.quarkus.runtime.configuration.ConfigurationException;
 import io.quarkus.test.QuarkusUnitTest;
 
-class MinioAllowEmptyAndInvalidUrlTest {
+class MultiMinioInvalidUrlTest {
 
     @Inject
     Instance<MinioClient> minioClient;
 
+    @Inject
+    @Named("another")
+    Instance<MinioClient> anotherValidMinioClient;
+
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
-            .withConfigurationResource("application-allow-empty-and-invalid-url.properties");
+            .withConfigurationResource("application-one-invalid-url-the-other-valid.properties");
 
     @Test
-    @Disabled
-    public void invalidUrlThrowsException() {
+    public void oneInvalidUrlTheOtherValidThrowsException() {
         //Not validating other configuration keys as quarkus already does it for us.
         // toString method only here to trigger client instanciation
-        Assertions.assertThatThrownBy(() -> minioClient.get().toString())
+        assertThatThrownBy(() -> minioClient.get())
                 .isInstanceOf(ConfigurationException.class)
                 .hasMessageStartingWith("\"quarkus.minio.url\" is mandatory");
+        assertThatCode(() -> anotherValidMinioClient.toString()).doesNotThrowAnyException();
     }
 }

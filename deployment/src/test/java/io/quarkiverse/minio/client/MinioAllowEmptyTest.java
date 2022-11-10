@@ -1,6 +1,7 @@
 package io.quarkiverse.minio.client;
 
 import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.UnsatisfiedResolutionException;
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
@@ -21,7 +22,9 @@ class MinioAllowEmptyTest {
 
     @Test
     public void instanceShouldNotBeProvided() {
-        MinioClient mc = minioClient.get();
-        Assertions.assertThat(mc).isNull();
+        Assertions.assertThatThrownBy(() -> minioClient.get())
+                .isInstanceOf(UnsatisfiedResolutionException.class)
+                .hasMessage(
+                        "No bean found for required type [class io.minio.MinioClient] and qualifiers [[@javax.enterprise.inject.Default()]]");
     }
 }

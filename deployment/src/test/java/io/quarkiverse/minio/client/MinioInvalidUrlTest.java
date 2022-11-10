@@ -24,7 +24,7 @@ class MinioInvalidUrlTest {
     public void invalidUrlThrowsException() {
         //Not validating other configuration keys as quarkus already does it for us.
         // toString method only here to trigger client instanciation
-        Assertions.assertThatThrownBy(() -> minioClient.get().toString())
+        Assertions.assertThatThrownBy(() -> minioClient.get())
                 .isInstanceOf(ConfigurationException.class)
                 .hasMessageStartingWith("\"quarkus.minio.url\" is mandatory");
     }
