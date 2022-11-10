@@ -162,12 +162,12 @@ Notice there is an extra bit in the key.
 The syntax is as follows: `quarkus.minio.[optional name.][datasource property]`.
 
 [NOTE]
-===
+----
 Named databases need to specify at least one build time property so that Quarkus knows they exist.
 Generally this will be the `enabled` property.
 
 Also note that `quarkus.minio.produceMetrics` is configured for all minio clients.
-====
+----
 
 
 === Named MinioClient injection

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import io.minio.MinioClient;
 import io.quarkus.test.QuarkusUnitTest;
 
-class NamedMinioUnexpectedlTest {
+class NamedMinioUnexpectedTest {
 
     @Inject
     @MinioQualifier("acme")

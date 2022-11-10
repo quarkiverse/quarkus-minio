@@ -11,7 +11,7 @@ import io.minio.MinioClient;
 import io.quarkus.runtime.configuration.ConfigurationException;
 import io.quarkus.test.QuarkusUnitTest;
 
-class NamedMinioInvalidUrlTest {
+class MissingNamedRuntimeConfigTest {
 
     @Inject
     @MinioQualifier("acme")
@@ -19,10 +19,10 @@ class NamedMinioInvalidUrlTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
-            .withConfigurationResource("application-named-invalid-url.properties");
+            .withConfigurationResource("missing-named-runtime-conf.properties");
 
     @Test
-    public void invalidUrlThrowsException() {
+    public void unexpected() {
         Assertions.assertThatThrownBy(() -> minioClient.get())
                 .isInstanceOf(ConfigurationException.class)
                 .hasMessageStartingWith("\"quarkus.minio.acme.url\" is mandatory");
