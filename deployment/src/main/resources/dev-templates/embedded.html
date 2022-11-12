@@ -1,5 +1,5 @@
-{#if config:property('quarkus.minio.devservices.enabled') != 'false' && config:property('quarkus.minio.url')}
-<a href="{config:property('quarkus.minio.url')}" class="badge badge-light">
+{#if config:property('quarkus.minio.devservices.enabled') != 'false' && config:property('quarkus.minio.console')}
+<a href="{config:property('quarkus.minio.console')}" class="badge badge-light">
     <i class="fa fa-map-signs fa-fw"></i>
     Min.io console
 </a>
