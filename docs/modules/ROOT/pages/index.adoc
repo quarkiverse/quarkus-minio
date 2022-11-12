@@ -142,20 +142,19 @@ each with its own configuration.
 
 [source,properties]
 ----
-quarkus.minio.db-kind=h2
-quarkus.minio.username=username-default
-quarkus.minio.jdbc.url=jdbc:h2:mem:default
-quarkus.minio.jdbc.max-size=13
+quarkus.minio.url=http://localhost:9000
+quarkus.minio.access-key=minioaccess
+quarkus.minio.secret-key=miniosecret
 
-quarkus.minio.users.db-kind=h2
-quarkus.minio.users.username=username1
-quarkus.minio.users.jdbc.url=jdbc:h2:mem:users
-quarkus.minio.users.jdbc.max-size=11
+quarkus.minio.other.enabled=true
+quarkus.minio.other.url=http://acme:9000
+quarkus.minio.other.access-key=minioaccess
+quarkus.minio.other.secret-key=miniosecret
 
-quarkus.minio.inventory.db-kind=h2
-quarkus.minio.inventory.username=username2
-quarkus.minio.inventory.jdbc.url=jdbc:h2:mem:inventory
-quarkus.minio.inventory.jdbc.max-size=12
+quarkus.minio.public.enabled=true
+quarkus.minio.public.url=http://public:9000
+quarkus.minio.public.access-key=minioaccess
+quarkus.minio.public.secret-key=miniosecret
 ----
 
 Notice there is an extra bit in the key.

@@ -40,6 +40,6 @@ public class MiniosBuildTimeConfiguration {
     }
 
     public static boolean isDefault(String minioClientName) {
-        return minioClientName.equals(MiniosBuildTimeConfiguration.DEFAULT_MINIOCLIENT_NAME);
+        return MiniosBuildTimeConfiguration.DEFAULT_MINIOCLIENT_NAME.equals(minioClientName);
     }
 }
