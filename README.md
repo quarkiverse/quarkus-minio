@@ -97,10 +97,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/jtama-op"><img src="https://avatars0.githubusercontent.com/u/39991688?v=4?s=100" width="100px;" alt="jtama-op"/><br /><sub><b>jtama-op</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=jtama-op" title="Code">💻</a> <a href="#maintenance-jtama-op" title="Maintenance">🚧</a></td>
+      <td align="center"><a href="https://github.com/jtama"><img src="https://avatars0.githubusercontent.com/u/39991688?v=4?s=100" width="100px;" alt="jtama"/><br /><sub><b>jtama</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=jtama" title="Code">💻</a> <a href="#maintenance-jtama" title="Maintenance">🚧</a></td>
       <td align="center"><a href="https://twitter.com/ppalaga"><img src="https://avatars.githubusercontent.com/u/1826249?v=4?s=100" width="100px;" alt="Peter Palaga"/><br /><sub><b>Peter Palaga</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=ppalaga" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/JiriOndrusek"><img src="https://avatars.githubusercontent.com/u/26897889?v=4?s=100" width="100px;" alt="JiriOndrusek"/><br /><sub><b>JiriOndrusek</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=JiriOndrusek" title="Code">💻</a></td>
-      <td align="center"><a href="https://github.com/dlucasd"><img src="https://avatars.githubusercontent.com/u/8418431?v=4?s=100" width="100px;" alt="dlucasd"/><br /><sub><b>dlucasd</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=dlucasd" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/dlucasd"><img src="https://avatars.githubusercontent.com/u/8418431?v=4?s=100" width="100px;" alt="dlucasd"/><br /><sub><b>dlucasd</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=dlucasd" title="Code">💻</a> <a href="https://github.com/quarkiverse/quarkus-minio/commits?author=dlucasd" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
