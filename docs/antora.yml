@@ -1,5 +1,5 @@
 name: quarkus-minio
 title: Quarkus Min.io
-version: dev
+version: v2.9.x
 nav:
   - modules/ROOT/nav.adoc
