@@ -10,8 +10,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Qualifier;
+import jakarta.enterprise.util.AnnotationLiteral;
+import jakarta.inject.Qualifier;
 
 /**
  * Qualifier used to specify which minio client will be injected.
@@ -25,7 +25,7 @@ public @interface MinioQualifier {
 
     String value();
 
-    public class MinioQualifierLiteral extends AnnotationLiteral<MinioQualifier> implements MinioQualifier {
+    class MinioQualifierLiteral extends AnnotationLiteral<MinioQualifier> implements MinioQualifier {
 
         private String name;
 

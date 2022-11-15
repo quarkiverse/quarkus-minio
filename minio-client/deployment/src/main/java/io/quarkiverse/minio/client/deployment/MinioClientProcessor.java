@@ -3,7 +3,7 @@ package io.quarkiverse.minio.client.deployment;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import io.minio.MinioClient;
 import io.quarkiverse.minio.client.EmptyHttpClientProducer;

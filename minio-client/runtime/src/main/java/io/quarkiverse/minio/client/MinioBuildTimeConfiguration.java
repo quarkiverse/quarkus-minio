@@ -7,7 +7,9 @@ import io.quarkus.runtime.annotations.ConfigItem;
 public class MinioBuildTimeConfiguration {
 
     /**
-     * If we create minio client for this bucket
+     * Should the extension provide a `MinioClient`.
+     * If set to `false`, you will have to create the clients yourself,
+     * but will still benefit the native compatibility work.
      */
     @ConfigItem(defaultValue = "true")
     public boolean enabled;

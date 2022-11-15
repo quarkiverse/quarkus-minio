@@ -11,8 +11,10 @@ import io.quarkus.runtime.annotations.ConfigRoot;
 public class MiniosRuntimeConfiguration {
 
     /**
-     * If value is true (default) and the <code>io.quarkus.quarkus-micrometer</code> is present in the class path, then
-     * the minio client will produce metrics.
+     * If value is `true` (default) and the `io.quarkus.quarkus-micrometer` is present in the class path,
+     * then the minio client will produce metrics.
+     *
+     * Value is set for minio clients produced.
      *
      * @asciidoclet
      */

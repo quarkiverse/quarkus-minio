@@ -22,6 +22,7 @@
             <artifactId>quarkus-minio-native-deployment</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.quarkiverse.minio</groupId>
             <artifactId>quarkus-minio</artifactId>
@@ -38,6 +39,7 @@
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5-internal</artifactId>

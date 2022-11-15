@@ -1,7 +1,7 @@
 package io.quarkiverse.minio.client;
 
-import javax.enterprise.inject.UnsatisfiedResolutionException;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.UnsatisfiedResolutionException;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
