@@ -2,50 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.quarkiverse</groupId>
-        <artifactId>quarkiverse-parent</artifactId>
-        <version>11</version>
+        <groupId>io.quarkiverse.minio</groupId>
+        <artifactId>quarkus-minio-parent</artifactId>
+        <version>2.10.3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>io.quarkiverse.minio</groupId>
-    <artifactId>quarkus-minio-parent</artifactId>
+    <artifactId>quarkus-minio-native-parent</artifactId>
     <version>2.10.3-SNAPSHOT</version>
-    <name>Quarkus Minio - Parent</name>
+    <name>Quarkus Minio - Native - Parent</name>
 
     <packaging>pom</packaging>
 
-    <properties>
-        <compiler-plugin.version>3.10.1</compiler-plugin.version>
-        <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
-        <maven.compiler.parameters>true</maven.compiler.parameters>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus.version>2.14.3.Final</quarkus.version>
-        <minio.version>8.2.2</minio.version>
-        <assertj.version>3.23.1</assertj.version>
-    </properties>
-
     <modules>
-        <module>minio-native</module>
-        <module>minio-client</module>
+        <module>runtime</module>
+        <module>deployment</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>it</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>!true</value>
-                </property>
-            </activation>
-            <modules>
-                <module>integration-tests</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <dependencyManagement>
         <dependencies>

@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient;
 @Singleton
 public class EmptyHttpClientProducer implements OptionalHttpClientProducer {
 
+    @Override
     public Optional<OkHttpClient> apply(String minioClientName) {
         return Optional.empty();
     }

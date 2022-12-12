@@ -1,0 +1,12 @@
+name: "Minio Client Native extension"
+metadata:
+  keywords:
+    - "minio"
+    - "storage"
+    - "kubernetes"
+  guide: "https://quarkiverse.github.io/quarkiverse-docs/quarkus-minio/dev/index.html"
+  categories:
+    - "kubernetes"
+    - "data"
+  status: "stable"
+  description: "Handler minio java sdk native compatibility"
