@@ -23,6 +23,22 @@ This will add the following to your `pom.xml`:
 </dependency>
 ----
 
+== Native support only
+
+If you need configless programmatic only creation of MinioClient, then your project should be configured as followed  :
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>io.quarkiverse.minio</groupId>
+    <artifactId>quarkus-minio-native</artifactId>
+    <version>{quarkus-minio-version}</version>
+</dependency>
+----
+
+`quarkus-minio-version` must be greated than 2.10.2.
+
+
 == Usage
 
 An `io.minio.MinioClient` is made available to your application as a CDI bean if configuration is found.
