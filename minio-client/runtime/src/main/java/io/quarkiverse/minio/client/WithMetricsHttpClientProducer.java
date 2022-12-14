@@ -39,6 +39,7 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
         this.configuration = configuration;
     }
 
+    @Override
     public Optional<OkHttpClient> apply(String minioClientName) {
         if (!configuration.produceMetrics()) {
             return Optional.empty();

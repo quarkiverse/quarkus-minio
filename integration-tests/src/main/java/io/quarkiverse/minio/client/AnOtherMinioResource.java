@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -26,7 +25,7 @@ public class AnOtherMinioResource {
     public static final String BUCKET_NAME = "another-test";
 
     @Inject
-    @Named("another")
+    @MinioQualifier("another")
     MinioClient minioClient;
 
     @POST
