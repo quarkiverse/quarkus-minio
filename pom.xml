@@ -22,8 +22,12 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus.version>2.15.0.Final</quarkus.version>
-        <minio.version>8.2.2</minio.version>
+        <quarkus.version>3.0.0.Alpha4</quarkus.version>
+        <minio.version>8.5.2</minio.version>
+        <okhttp.version>4.10.0</okhttp.version>
+        <!-- According to the bom we need matching version of okhttp and okio -->
+        <!-- https://github.com/quarkusio/quarkus/blob/main/bom/application/pom.xml -->
+        <okio.version>3.2.0</okio.version>
         <assertj.version>3.23.1</assertj.version>
     </properties>
 
@@ -61,6 +65,19 @@
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
             </dependency>
+            <!-- According to issue #12680, okhttp was hold back until quarkus-kubernetes-client is updated to 6.x. -->
+            <!-- That was performed in commit f1a50bfe683ea075f67e29321d84508433ed7c63, so since 2.13.0.CR1 -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <!-- Do we actually need this? AFAIK only okhttp on android dependency on okio! -->
+            <!--dependency>
+                <groupId>com.squareup.okio</groupId>
+                <artifactId>okio</artifactId>
+                <version>${okio.version}</version>
+            </dependency-->
         </dependencies>
     </dependencyManagement>
     <build>

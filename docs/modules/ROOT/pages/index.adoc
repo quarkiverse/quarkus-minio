@@ -49,9 +49,9 @@ package com.acme.minio;
 
 import io.minio.MinioClient;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class SampleService {
