@@ -22,7 +22,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus.version>2.15.1.Final</quarkus.version>
+        <quarkus.version>2.15.2.Final</quarkus.version>
         <minio.version>8.2.2</minio.version>
         <assertj.version>3.23.1</assertj.version>
     </properties>
