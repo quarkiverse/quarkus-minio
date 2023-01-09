@@ -24,7 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.version>2.15.1.Final</quarkus.version>
         <minio.version>8.2.2</minio.version>
-        <assertj.version>3.23.1</assertj.version>
+        <assertj.version>3.24.1</assertj.version>
     </properties>
 
     <modules>
