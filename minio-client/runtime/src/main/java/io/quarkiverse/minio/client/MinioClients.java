@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import io.minio.MinioClient;
 import io.quarkus.arc.Arc;

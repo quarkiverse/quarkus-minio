@@ -2,7 +2,7 @@ package io.quarkiverse.minio.client;
 
 import java.util.Optional;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import okhttp3.OkHttpClient;
 

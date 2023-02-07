@@ -1,6 +1,6 @@
 include::./includes/attributes.adoc[]
 
-Integrate Min.io sdk compatible with all S3 Api complient vendors. Available for jdk and native runtime.
+Integrate Min.io sdk compatible with all S3 Api compliant vendors. Available for jdk and native runtime.
 
 == Project configuration
 
@@ -36,9 +36,6 @@ If you need configless programmatic only creation of MinioClient, then your proj
 </dependency>
 ----
 
-`quarkus-minio-version` must be greated than 2.10.2.
-
-
 == Usage
 
 An `io.minio.MinioClient` is made available to your application as a CDI bean if configuration is found.
@@ -49,9 +46,9 @@ package com.acme.minio;
 
 import io.minio.MinioClient;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class SampleService {
@@ -77,69 +74,6 @@ public class SampleService {
 
 }
 ----
-
-== Configuration Reference
-
-[.configuration-reference, cols="80,.^10,.^10"]
-|===
-
-h|Configuration property
-h|Type
-h|Default
-
-a|icon:lock[title=Fixed at build time] `quarkus.minio.enabled`
---
-Should the extension provide a `MinioClient`. If set to `false`, you will have to create the clients yourself, but will still benefit the native compatibility work.
---
-|boolean
-|`true`
-
-a|`quarkus.minio.url`
---
-The minio server URL.
-[NOTE]
-====
-Value must start with `http://` or `https://`
-====
---
-|string
-|
-
-a|`quarkus.minio.access-key`
---
-The minio server access key
---
-|string
-|
-
-a|`quarkus.minio.secret-key`
---
-The minio server secret key
---
-|string
-|
-
-a|`quarkus.minio.region`
---
-An optional bucket region
---
-|string
-|
-
-a|`quarkus.minio.allow-empty`
---
-If allow-empty is set to `true` and all other configuration options are empty, `null` is produced instead of the minio client.
---
-|string
-|
-
-a|`quarkus.minio.produceMetrics`
---
-If `true` and the `io.quarkus.quarkus-micrometer` is present in the class path, then the minio client will produce metrics.
---
-|boolean
-a|`true`
-|===
 
 == Multiple Minio clients
 
@@ -174,14 +108,12 @@ quarkus.minio.public.secret-key=miniosecret
 ----
 
 Notice there is an extra bit in the key.
-The syntax is as follows: `quarkus.minio.[optional name.][datasource property]`.
+The syntax is as follows: `quarkus.minio.[optional name.][bucket property]`.
 
 [NOTE]
 ----
-Named databases need to specify at least one build time property so that Quarkus knows they exist.
+Named minio clients need to specify at least one build time property so that Quarkus knows they exist.
 Generally this will be the `enabled` property.
-
-Also note that `quarkus.minio.produceMetrics` is configured for all minio clients.
 ----
 
 
@@ -233,59 +165,7 @@ The default service name is `minio`.
 Sharing is enabled by default in dev mode, but disabled in test mode.
 You can disable the sharing with `quarkus.minio.devservices.shared=false`.
 
-=== Configuration
+== Configuration Reference
 
-icon:lock[title=Fixed at build time] Configuration property fixed at build time - All other configuration properties are overridable at runtime
-[.configuration-reference, cols="80,.^10,.^10"]
-|===
+include::includes/quarkus-minio.adoc[]
 
-h|Configuration property
-h|Type
-h|Default
-
-a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.enabled`
---
-If DevServices has been explicitly enabled or disabled. DevServices is generally enabled by default, unless there is an existing configuration present. When DevServices is enabled Quarkus will attempt to automatically configure and start a Minio container when running in Dev or Test mode.
---
-|boolean
-|true
-
-a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.image-name`
---
-The container image name to use, for container based DevServices providers.
---
-|String
-|`minio/minio:RELEASE.2020-11-10T21-02-24Z`
-
-a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.shared`
---
-Indicates if the Minio server managed by Quarkus Dev Services is shared. When shared, Quarkus looks for running containers using label-based service discovery. If a matching container is found, it is used, and so a second one is not started. Otherwise, Dev Services for Minio starts a new container.
-The discovery uses the `quarkus-dev-service-minio` label. The value is configured using the `service-name` property.
-Container sharing is only used in dev mode.
---
-|boolean
-|`true`
-
-a|icon:lock[title=Fixed at build time] `quarkus.minio.devservices.service-name`
---
-The value of the `quarkus-dev-service-minio` label attached to the started container. This property is used when `shared` is set to `true`. In this case, before starting a container, Dev Services for Minio looks for a container with the `quarkus-dev-service-minio` label set to the configured value. If found, it will use this container instead of starting a new one. Otherwise, it starts a new container with the `quarkus-dev-service-minio` label set to the specified value.
-This property is used when you need multiple shared Minio servers.
---
-|String
-|`minio`
-
-a|`quarkus.minio.devservices.access-key`
---
-Minio root username access key.
---
-|String
-|`minioaccess`
-
-a|`quarkus.minio.devservices.secret-key`
---
-Minio root username secret key.
---
-|String
-|`miniosecret`
-
-|===
