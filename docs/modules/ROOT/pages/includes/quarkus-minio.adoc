@@ -1,0 +1,317 @@
+
+:summaryTableId: quarkus-minio
+[.configuration-legend]
+icon:lock[title=Fixed at build time] Configuration property fixed at build time - All other configuration properties are overridable at runtime
+[.configuration-reference.searchable, cols="80,.^10,.^10"]
+|===
+
+h|[[quarkus-minio_configuration]]link:#quarkus-minio_configuration[Configuration property]
+
+h|Type
+h|Default
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.enabled]]`link:#quarkus-minio_quarkus.minio.devservices.enabled[quarkus.minio.devservices.enabled]`
+
+[.description]
+--
+Enable or disable Dev Services explicitly. Dev Services are automatically enabled unless `quarkus.minio.url` is set.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_ENABLED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_ENABLED+++`
+endif::add-copy-button-to-env-var[]
+--|boolean 
+|
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.port]]`link:#quarkus-minio_quarkus.minio.devservices.port[quarkus.minio.devservices.port]`
+
+[.description]
+--
+Optional fixed port the dev service will listen to. 
+If not defined, the port will be chosen randomly.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_PORT+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_PORT+++`
+endif::add-copy-button-to-env-var[]
+--|int 
+|
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.image-name]]`link:#quarkus-minio_quarkus.minio.devservices.image-name[quarkus.minio.devservices.image-name]`
+
+[.description]
+--
+The Minio container image to use.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_IMAGE_NAME+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_IMAGE_NAME+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|`minio/minio:RELEASE.2022-10-08T20-11-00Z`
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.shared]]`link:#quarkus-minio_quarkus.minio.devservices.shared[quarkus.minio.devservices.shared]`
+
+[.description]
+--
+Indicates if the Minio server managed by Quarkus Dev Services is shared. When shared, Quarkus looks for running containers using label-based service discovery. If a matching container is found, it is used, and so a second one is not started. Otherwise, Dev Services for Minio starts a new container. 
+The discovery uses the `quarkus-dev-service-minio` label. The value is configured using the `service-name` property. 
+Container sharing is only used in dev mode.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_SHARED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_SHARED+++`
+endif::add-copy-button-to-env-var[]
+--|boolean 
+|`true`
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.service-name]]`link:#quarkus-minio_quarkus.minio.devservices.service-name[quarkus.minio.devservices.service-name]`
+
+[.description]
+--
+The value of the `quarkus-dev-service-minio` label attached to the started container. This property is used when `shared` is set to `true`. In this case, before starting a container, Dev Services for Minio looks for a container with the `quarkus-dev-service-minio` label set to the configured value. If found, it will use this container instead of starting a new one. Otherwise, it starts a new container with the `quarkus-dev-service-minio` label set to the specified value. 
+This property is used when you need multiple shared Minio servers.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_SERVICE_NAME+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_SERVICE_NAME+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|`minio`
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.access-key]]`link:#quarkus-minio_quarkus.minio.devservices.access-key[quarkus.minio.devservices.access-key]`
+
+[.description]
+--
+Minio root username access key.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_ACCESS_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_ACCESS_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|`minioaccess`
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.secret-key]]`link:#quarkus-minio_quarkus.minio.devservices.secret-key[quarkus.minio.devservices.secret-key]`
+
+[.description]
+--
+Minio root username secret key.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_SECRET_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_SECRET_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|`miniosecret`
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.enabled]]`link:#quarkus-minio_quarkus.minio.enabled[quarkus.minio.enabled]`
+
+[.description]
+--
+Should the extension provide a `MinioClient`. If set to `false`, you will have to create the clients yourself, but will still benefit the native compatibility work.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_ENABLED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_ENABLED+++`
+endif::add-copy-button-to-env-var[]
+--|boolean 
+|`true`
+
+
+a| [[quarkus-minio_quarkus.minio.produce-metrics]]`link:#quarkus-minio_quarkus.minio.produce-metrics[quarkus.minio.produce-metrics]`
+
+[.description]
+--
+If value is `true` (default) and the `io.quarkus.quarkus-micrometer` is present in the class path,
+then the minio client will produce metrics.
+
+Value is set for minio clients produced.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_PRODUCE_METRICS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_PRODUCE_METRICS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean 
+|
+
+
+a| [[quarkus-minio_quarkus.minio.url]]`link:#quarkus-minio_quarkus.minio.url[quarkus.minio.url]`
+
+[.description]
+--
+The minio server URL.
+
+[NOTE]
+====
+Value must start with `http://` or `https://`
+====
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_URL+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_URL+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+
+a| [[quarkus-minio_quarkus.minio.access-key]]`link:#quarkus-minio_quarkus.minio.access-key[quarkus.minio.access-key]`
+
+[.description]
+--
+The minio server access key
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_ACCESS_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_ACCESS_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+
+a| [[quarkus-minio_quarkus.minio.secret-key]]`link:#quarkus-minio_quarkus.minio.secret-key[quarkus.minio.secret-key]`
+
+[.description]
+--
+The minio server secret key
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_SECRET_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_SECRET_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+
+a| [[quarkus-minio_quarkus.minio.region]]`link:#quarkus-minio_quarkus.minio.region[quarkus.minio.region]`
+
+[.description]
+--
+An optional bucket region
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_REGION+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_REGION+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.-named-minio-clients-.enabled]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.enabled[quarkus.minio."named-minio-clients".enabled]`
+
+[.description]
+--
+Should the extension provide a `MinioClient`. If set to `false`, you will have to create the clients yourself, but will still benefit the native compatibility work.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__ENABLED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__ENABLED+++`
+endif::add-copy-button-to-env-var[]
+--|boolean 
+|`true`
+
+
+a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.url]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.url[quarkus.minio."named-minio-clients".url]`
+
+[.description]
+--
+The minio server URL.
+
+[NOTE]
+====
+Value must start with `http://` or `https://`
+====
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__URL+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__URL+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+
+a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.access-key]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.access-key[quarkus.minio."named-minio-clients".access-key]`
+
+[.description]
+--
+The minio server access key
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__ACCESS_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__ACCESS_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+
+a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.secret-key]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.secret-key[quarkus.minio."named-minio-clients".secret-key]`
+
+[.description]
+--
+The minio server secret key
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__SECRET_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__SECRET_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+
+a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.region]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.region[quarkus.minio."named-minio-clients".region]`
+
+[.description]
+--
+An optional bucket region
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__REGION+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__REGION+++`
+endif::add-copy-button-to-env-var[]
+--|string 
+|
+
+|===
