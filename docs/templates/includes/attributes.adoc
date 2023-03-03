@@ -1,0 +1,2 @@
+:quarkus-version: ${quarkus.version}
+:quarkus-minio-version: ${release.current-version}

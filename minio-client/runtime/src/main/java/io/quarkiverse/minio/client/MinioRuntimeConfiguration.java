@@ -10,7 +10,7 @@ public class MinioRuntimeConfiguration {
 
     /**
      * The minio server URL.
-     * <p>
+     *
      * [NOTE]
      * ====
      * Value must start with `http://` or `https://`

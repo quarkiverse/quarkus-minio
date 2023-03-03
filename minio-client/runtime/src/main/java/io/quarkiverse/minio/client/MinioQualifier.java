@@ -25,7 +25,7 @@ public @interface MinioQualifier {
 
     String value();
 
-    public class MinioQualifierLiteral extends AnnotationLiteral<MinioQualifier> implements MinioQualifier {
+    class MinioQualifierLiteral extends AnnotationLiteral<MinioQualifier> implements MinioQualifier {
 
         private String name;
 

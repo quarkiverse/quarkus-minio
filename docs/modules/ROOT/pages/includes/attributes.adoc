@@ -1,1 +1,2 @@
+:quarkus-version: 3.0.0.Alpha3
 :quarkus-minio-version: 2.10.3
