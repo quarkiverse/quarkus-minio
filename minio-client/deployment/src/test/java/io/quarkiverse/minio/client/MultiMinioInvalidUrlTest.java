@@ -3,6 +3,7 @@ package io.quarkiverse.minio.client;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import jakarta.enterprise.inject.CreationException;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -32,8 +33,9 @@ class MultiMinioInvalidUrlTest {
         //Not validating other configuration keys as quarkus already does it for us.
         // toString method only here to trigger client instanciation
         assertThatThrownBy(() -> minioClient.get())
-                .isInstanceOf(ConfigurationException.class)
-                .hasMessageStartingWith("\"quarkus.minio.url\" is mandatory");
+                .isInstanceOf(CreationException.class)
+                .hasMessageContaining("\"quarkus.minio.url\" is mandatory")
+                .hasCauseInstanceOf(ConfigurationException.class);
         assertThatCode(() -> anotherValidMinioClient.toString()).doesNotThrowAnyException();
     }
 }

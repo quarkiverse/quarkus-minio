@@ -20,7 +20,7 @@
         <surefire-plugin.version>3.0.0-M8</surefire-plugin.version>
         <failsafe-plugin.version>${version.surefire.plugin}</failsafe-plugin.version>
 
-        <quarkus.version>3.0.0.Alpha4</quarkus.version>
+        <quarkus.version>3.0.0.Alpha6</quarkus.version>
         <minio.version>8.5.2</minio.version>
         <okhttp.version>4.10.0</okhttp.version>
         <!-- According to the bom we need matching version of okhttp and okio -->
