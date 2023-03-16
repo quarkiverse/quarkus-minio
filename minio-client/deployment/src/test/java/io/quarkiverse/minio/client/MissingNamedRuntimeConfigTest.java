@@ -1,5 +1,6 @@
 package io.quarkiverse.minio.client;
 
+import jakarta.enterprise.inject.CreationException;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import io.minio.MinioClient;
 import io.quarkus.runtime.configuration.ConfigurationException;
 import io.quarkus.test.QuarkusUnitTest;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MissingNamedRuntimeConfigTest {
 
@@ -24,7 +27,8 @@ class MissingNamedRuntimeConfigTest {
     @Test
     public void unexpected() {
         Assertions.assertThatThrownBy(() -> minioClient.get())
-                .isInstanceOf(ConfigurationException.class)
-                .hasMessageStartingWith("\"quarkus.minio.acme.url\" is mandatory");
+                .isInstanceOf(CreationException.class)
+                .hasMessageContaining("\"quarkus.minio.acme.url\" is mandatory")
+                .hasCauseInstanceOf(ConfigurationException.class);
     }
 }
