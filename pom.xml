@@ -22,7 +22,7 @@
 
         <quarkus.version>3.0.0.Final</quarkus.version>
         <minio.version>8.5.2</minio.version>
-        <okhttp.version>4.10.0</okhttp.version>
+        <okhttp.version>4.11.0</okhttp.version>
         <!-- According to the bom we need matching version of okhttp and okio -->
         <!-- https://github.com/quarkusio/quarkus/blob/main/bom/application/pom.xml -->
         <okio.version>3.2.0</okio.version>
