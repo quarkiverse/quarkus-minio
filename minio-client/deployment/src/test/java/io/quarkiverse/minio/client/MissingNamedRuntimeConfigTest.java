@@ -1,5 +1,7 @@
 package io.quarkiverse.minio.client;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import jakarta.enterprise.inject.CreationException;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import io.minio.MinioClient;
 import io.quarkus.runtime.configuration.ConfigurationException;
 import io.quarkus.test.QuarkusUnitTest;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MissingNamedRuntimeConfigTest {
 
