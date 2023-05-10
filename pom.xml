@@ -9,7 +9,7 @@
 
     <groupId>io.quarkiverse.minio</groupId>
     <artifactId>quarkus-minio-parent</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.2</version>
     <name>Quarkus Minio - Parent</name>
 
     <packaging>pom</packaging>
@@ -73,4 +73,8 @@
             </plugins>
         </pluginManagement>
     </build>
+
+  <scm>
+    <tag>3.0.2</tag>
+  </scm>
 </project>
