@@ -34,13 +34,13 @@ public class MinioClients {
     }
 
     /**
-     * Meant to be used from recorders that create synthetic beans that need access to {@code Datasource}.
-     * In such using {@code Arc.container.instance(DataSource.class)} is not possible because
-     * {@code Datasource} is itself a synthetic bean.
+     * Meant to be used from recorders that create synthetic beans that need access to {@code MinioClient}.
+     * In such using {@code Arc.container.instance(MinioClient.class)} is not possible because
+     * {@code MinioClient} is itself a synthetic bean.
      * <p>
-     * This method relies on the fact that {@code DataSources} should - given the same input -
-     * always return the same {@code AgroalDataSource} no matter how many times it is invoked
-     * (which makes sense because {@code DataSource} is a {@code Singleton} bean).
+     * This method relies on the fact that {@code MinioClients} should - given the same input -
+     * always return the same {@code MinioClient} no matter how many times it is invoked
+     * (which makes sense because {@code MinioClient} is a {@code Singleton} bean).
      * <p>
      * This method is thread-safe
      */
