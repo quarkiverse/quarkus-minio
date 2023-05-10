@@ -16,7 +16,6 @@ import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
 
 import io.minio.BaseArgs;
-import io.minio.UploadSnowballObjectsArgs;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
@@ -50,7 +49,8 @@ class MinioNativeProcessor {
                 .map(ClassInfo::name)
                 .map(DotName::toString)
                 .collect(Collectors.toList()));
-        reflectionClasses.produce(new ReflectiveClassBuildItem(true, true, classes.toArray(new String[0])));
+        reflectionClasses
+                .produce(ReflectiveClassBuildItem.builder(classes.toArray(new String[0])).fields(true).methods(true).build());
     }
 
     private List<String> getClasses(String packageName, String regexp) {
@@ -80,10 +80,5 @@ class MinioNativeProcessor {
             }
         }
         return null;
-    }
-
-    @BuildStep
-    RuntimeInitializedClassBuildItem randomConfiguration() {
-        return new RuntimeInitializedClassBuildItem(UploadSnowballObjectsArgs.class.getCanonicalName());
     }
 }
