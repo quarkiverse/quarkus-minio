@@ -162,6 +162,9 @@ If you need multiple (shared) servers, you can configure the `quarkus.minio.devs
 It looks for a container with the same value, or starts a new one if none can be found.
 The default service name is `minio`.
 
+Containers are started using Testcontainers and support reusable instances. If you add the property `testcontainers.reuse.enable=true` in your
+Testcontainers configuration file, then the container will not be stopped after each run, and can be reused.
+
 Sharing is enabled by default in dev mode, but disabled in test mode.
 You can disable the sharing with `quarkus.minio.devservices.shared=false`.
 
