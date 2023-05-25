@@ -1,6 +1,6 @@
 # Quarkus Minio Extension
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build](https://github.com/quarkiverse/quarkus-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkus-minio/actions?query=workflow%3ABuild)
 [![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkus-minio-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkus-minio-parent)
@@ -30,6 +30,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dlucasd"><img src="https://avatars.githubusercontent.com/u/8418431?v=4?s=100" width="100px;" alt="dlucasd"/><br /><sub><b>dlucasd</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=dlucasd" title="Code">💻</a> <a href="https://github.com/quarkiverse/quarkus-minio/commits?author=dlucasd" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://schlothauer.de"><img src="https://avatars.githubusercontent.com/u/38556808?v=4?s=100" width="100px;" alt="Stefan Gürtler"/><br /><sub><b>Stefan Gürtler</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=SpeedsterF2" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://lesincroyableslivres.fr/"><img src="https://avatars.githubusercontent.com/u/1279749?v=4?s=100" width="100px;" alt="Guillaume Smet"/><br /><sub><b>Guillaume Smet</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=gsmet" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.inulogic.fr"><img src="https://avatars.githubusercontent.com/u/88554524?v=4?s=100" width="100px;" alt="Sébastien Crocquesel"/><br /><sub><b>Sébastien Crocquesel</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=scrocquesel" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
