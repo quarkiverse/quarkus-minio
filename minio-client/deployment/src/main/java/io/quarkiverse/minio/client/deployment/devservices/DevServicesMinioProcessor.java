@@ -29,6 +29,7 @@ import io.quarkus.deployment.logging.LoggingSetupBuildItem;
 import io.quarkus.devservices.common.ConfigureUtil;
 import io.quarkus.devservices.common.ContainerAddress;
 import io.quarkus.devservices.common.ContainerLocator;
+import io.quarkus.devservices.common.ContainerShutdownCloseable;
 import io.quarkus.runtime.configuration.ConfigUtils;
 
 public class DevServicesMinioProcessor {
@@ -200,10 +201,12 @@ public class DevServicesMinioProcessor {
 
             timeout.ifPresent(container::withStartupTimeout);
 
+            container.withReuse(true);
+
             container.start();
             return new RunningDevService(config.serviceName,
                     container.getContainerId(),
-                    container::close,
+                    new ContainerShutdownCloseable(container, config.serviceName),
                     getRunningDevServicesConfig(config, container.getHost(), container.getPort(), container.getConsolePort(),
                             buildTimeConfiguration));
         };
