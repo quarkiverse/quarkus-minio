@@ -20,6 +20,7 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CuratedApplicationShutdownBuildItem;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem.RunningDevService;
+import io.quarkus.deployment.builditem.DevServicesSharedNetworkBuildItem;
 import io.quarkus.deployment.builditem.DockerStatusBuildItem;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 import io.quarkus.deployment.console.ConsoleInstalledBuildItem;
@@ -62,7 +63,8 @@ public class DevServicesMinioProcessor {
             CuratedApplicationShutdownBuildItem closeBuildItem,
             LoggingSetupBuildItem loggingSetupBuildItem,
             GlobalDevServicesConfig devServicesConfig,
-            MiniosBuildTimeConfiguration buildTimeConfiguration) {
+            MiniosBuildTimeConfiguration buildTimeConfiguration,
+            List<DevServicesSharedNetworkBuildItem> devServicesSharedNetworkBuildItem) {
 
         MinioDevServiceCfg configuration = getConfiguration(minioBuildTimeConfig);
 
@@ -80,7 +82,7 @@ public class DevServicesMinioProcessor {
                 consoleInstalledBuildItem, loggingSetupBuildItem);
         try {
             devService = startMinio(dockerStatusBuildItem, configuration, launchMode, devServicesConfig.timeout,
-                    buildTimeConfiguration);
+                    buildTimeConfiguration, !devServicesSharedNetworkBuildItem.isEmpty());
             if (devService == null) {
                 compressor.closeAndDumpCaptured();
             } else {
@@ -151,7 +153,8 @@ public class DevServicesMinioProcessor {
             MinioDevServiceCfg config,
             LaunchModeBuildItem launchMode,
             Optional<Duration> timeout,
-            MiniosBuildTimeConfiguration buildTimeConfiguration) {
+            MiniosBuildTimeConfiguration buildTimeConfiguration,
+            boolean useSharedNetwork) {
         if (!config.devServicesEnabled) {
             // explicitly disabled
             LOGGER.debug("Not starting dev services for Minio, as it has been disabled in the config.");
@@ -191,9 +194,8 @@ public class DevServicesMinioProcessor {
                     DockerImageName.parse(config.imageName),
                     config.fixedExposedPort,
                     config.accessKey,
-                    config.secretKey);
-
-            ConfigureUtil.configureSharedNetwork(container, "minio");
+                    config.secretKey,
+                    useSharedNetwork);
 
             if (config.serviceName != null) {
                 container.withLabel(DevServicesMinioProcessor.DEV_SERVICE_LABEL, config.serviceName);
@@ -207,7 +209,8 @@ public class DevServicesMinioProcessor {
             return new RunningDevService(config.serviceName,
                     container.getContainerId(),
                     new ContainerShutdownCloseable(container, config.serviceName),
-                    getRunningDevServicesConfig(config, container.getHost(), container.getPort(), container.getConsolePort(),
+                    getRunningDevServicesConfig(config, container.getEffectiveHost(), container.getPort(), container.getHost(),
+                            Optional.of(container.getConsolePort()),
                             buildTimeConfiguration));
         };
 
@@ -216,14 +219,18 @@ public class DevServicesMinioProcessor {
                         containerAddress.getId(),
                         null,
                         getRunningDevServicesConfig(config, containerAddress.getHost(), containerAddress.getPort(),
-                                maybeConsolePort.orElse(0), buildTimeConfiguration)))
+                                containerAddress.getHost(),
+                                maybeConsolePort, buildTimeConfiguration)))
                 .orElseGet(defaultMinioBrokerSupplier);
     }
 
     private Map<String, String> getRunningDevServicesConfig(MinioDevServiceCfg config, String host, int port,
-            int consolePort, MiniosBuildTimeConfiguration buildTimeConfiguration) {
+            String consoleHost,
+            Optional<Integer> maybeConsolePort, MiniosBuildTimeConfiguration buildTimeConfiguration) {
         var result = new HashMap<String, String>();
-        result.put(MINIO_CONSOLE, String.format("http://%s:%d", host, consolePort));
+        maybeConsolePort
+                .ifPresent(consolePort -> result.put(MINIO_CONSOLE, String.format("http://%s:%d", consoleHost, consolePort)));
+
         buildTimeConfiguration.getMinioClients().entrySet().stream()
                 .map(entry -> Map.of(formatPropertyName(MINIO_URL, entry.getKey()), String.format("http://%s:%d", host, port),
                         formatPropertyName(MINIO_ACCESS_KEY, entry.getKey()), config.accessKey,
@@ -293,11 +300,15 @@ public class DevServicesMinioProcessor {
     private static final class MinioContainer extends GenericContainer<MinioContainer> {
 
         private final int port;
+        private final boolean useSharedNetwork;
 
-        private MinioContainer(DockerImageName dockerImageName, int fixedExposedPort, String accessKey, String secretKey) {
+        private String hostName = null;
+
+        private MinioContainer(DockerImageName dockerImageName, int fixedExposedPort, String accessKey, String secretKey,
+                boolean useSharedNetwork) {
             super(dockerImageName);
             this.port = fixedExposedPort;
-            withNetwork(Network.SHARED);
+            this.useSharedNetwork = useSharedNetwork;
             withExposedPorts(MINIO_PORT, MINIO_CONSOLE_PORT);
             withEnv("MINIO_ACCESS_KEY", accessKey);
             withEnv("MINIO_SECRET_KEY", secretKey);
@@ -308,16 +319,36 @@ public class DevServicesMinioProcessor {
         @Override
         protected void configure() {
             super.configure();
+
+            if (useSharedNetwork) {
+                hostName = ConfigureUtil.configureSharedNetwork(this, "minio");
+            } else {
+                withNetwork(Network.SHARED);
+            }
+
             if (port > 0) {
                 addFixedExposedPort(port, MINIO_PORT);
             }
         }
 
+        public String getEffectiveHost() {
+            if (useSharedNetwork) {
+                return hostName;
+            }
+
+            return getHost();
+        }
+
         public int getPort() {
+            if (useSharedNetwork) {
+                return MINIO_PORT;
+            }
+
             return getMappedPort(MINIO_PORT);
         }
 
         public int getConsolePort() {
+            // console port is meant to be exposed only
             return getMappedPort(MINIO_CONSOLE_PORT);
         }
     }

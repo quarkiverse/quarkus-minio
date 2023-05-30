@@ -1,9 +1,11 @@
-{#if config:property('quarkus.minio.devservices.enabled') != 'false' && config:property('quarkus.minio.console')}
+{#if config:property('quarkus.minio.devservices.enabled') != 'false'}
+{#if config:property('quarkus.minio.console')}
 <a href="{config:property('quarkus.minio.console')}" class="badge badge-light">
     <i class="fa fa-map-signs fa-fw"></i>
     Min.io console
 </a>
 <br>
+{/if}
 <span class="badge badge-light">AccessKey : {config:property('quarkus.minio.access-key')}</span><br>
 <span class="badge badge-light">SecretKey : {config:property('quarkus.minio.secret-key')}</span><br>
 {/if}
