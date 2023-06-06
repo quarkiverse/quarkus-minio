@@ -21,7 +21,7 @@
     <assertj.version>3.24.2</assertj.version>
   </properties>
   <scm>
-    <connection>:git:git@github.com:quarkiverse/quarkus-minio.git</connection>
+    <connection>scm:git:git@github.com:quarkiverse/quarkus-minio.git</connection>
     <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-minio.git</developerConnection>
     <url>https://github.com/quarkiverse/quarkus-minio</url>
   </scm>
