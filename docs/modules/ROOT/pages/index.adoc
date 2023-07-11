@@ -46,8 +46,8 @@ public class SampleService {
     @ConfigProperty(name = "minio.bucket-name")
     String bucketName;
 
-    public String getObject(String name) {
-        try (InputStream is = minio.getObject(
+    public String getObject(String objectName) {
+        try (InputStream is = minioClient.getObject(
                 GetObjectArgs.builder()
                         .bucket(bucketName)
                         .object(objectName)
