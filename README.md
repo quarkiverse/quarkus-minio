@@ -1,6 +1,6 @@
 # Quarkus Minio Extension
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build](https://github.com/quarkiverse/quarkus-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkus-minio/actions?query=workflow%3ABuild)
 [![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkus-minio-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkus-minio-parent)
@@ -35,6 +35,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://www.phillip-kruger.com"><img src="https://avatars.githubusercontent.com/u/6836179?v=4?s=100" width="100px;" alt="Phillip Krüger"/><br /><sub><b>Phillip Krüger</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=phillip-kruger" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sylvain.dev"><img src="https://avatars.githubusercontent.com/u/8873695?v=4?s=100" width="100px;" alt="Sylvain METAYER"/><br /><sub><b>Sylvain METAYER</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=sylvainmetayer" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://gastaldi.wordpress.com"><img src="https://avatars.githubusercontent.com/u/54133?v=4?s=100" width="100px;" alt="George Gastaldi"/><br /><sub><b>George Gastaldi</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=gastaldi" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
