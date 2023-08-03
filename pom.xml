@@ -16,7 +16,7 @@
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <surefire-plugin.version>3.1.2</surefire-plugin.version>
     <failsafe-plugin.version>${version.surefire.plugin}</failsafe-plugin.version>
-    <quarkus.version>3.2.2.Final</quarkus.version>
+    <quarkus.version>3.2.3.Final</quarkus.version>
     <minio.version>8.2.2</minio.version>
     <assertj.version>3.24.2</assertj.version>
   </properties>
