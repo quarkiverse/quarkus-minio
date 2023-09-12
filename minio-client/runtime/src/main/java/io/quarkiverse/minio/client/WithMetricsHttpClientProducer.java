@@ -23,6 +23,8 @@ import jakarta.inject.Singleton;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.okhttp3.OkHttpMetricsEventListener;
+import io.micrometer.core.instrument.config.MeterFilter;
+import io.micrometer.core.instrument.internal.OnlyOnceLoggingDenyMeterFilter;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
@@ -42,7 +44,7 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
 
     @Override
     public Optional<OkHttpClient> apply(String minioClientName) {
-        if (!configuration.produceMetrics()) {
+        if (!configuration.produceMetrics) {
             return Optional.empty();
         }
         return Optional.of(getHttpClientWithInterceptor(meterRegistry, minioClientName));
@@ -51,6 +53,7 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
     private OkHttpClient getHttpClientWithInterceptor(MeterRegistry meterRegistry, String minioClientName) {
         var metricKey = MiniosBuildTimeConfiguration.isDefault(minioClientName) ? "minio.client"
                 : "minio." + minioClientName + ".client";
+        meterRegistry.config().meterFilter(maximumAllowedTag(metricKey));
         //Copy from io.minio.MinioClient#2860
         var httpClient = new OkHttpClient()
                 .newBuilder()
@@ -72,6 +75,14 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
             }
         }
         return httpClient;
+    }
+
+    private MeterFilter maximumAllowedTag(String metricName) {
+        MeterFilter denyFilter = new OnlyOnceLoggingDenyMeterFilter(() -> String
+                .format("Reached the maximum number (%s) of URI tags for '%s'. Are you using path parameters?",
+                        configuration.maximumAllowedTag, metricName));
+
+        return MeterFilter.maximumAllowableTags(metricName, "uri", configuration.maximumAllowedTag, denyFilter);
     }
 
     /**

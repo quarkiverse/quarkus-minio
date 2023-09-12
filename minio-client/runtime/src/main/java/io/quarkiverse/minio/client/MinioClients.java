@@ -71,7 +71,7 @@ public class MinioClients {
                 .endpoint(configuration.getUrl())
                 .credentials(configuration.getAccessKey(), configuration.getSecretKey());
         configuration.region.ifPresent(builder::region);
-        if (miniosRuntimeConfiguration.produceMetrics()) {
+        if (miniosRuntimeConfiguration.produceMetrics) {
             httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         }
         return builder.build();
