@@ -1,7 +1,6 @@
 package io.quarkiverse.minio.client;
 
 import java.util.Map;
-import java.util.Optional;
 
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
@@ -14,12 +13,18 @@ public class MiniosRuntimeConfiguration {
      * If value is `true` (default) and the `io.quarkus.quarkus-micrometer` is present in the class path,
      * then the minio client will produce metrics.
      *
-     * Value is set for minio clients produced.
+     * Only true for clients produced by the extension
      *
      * @asciidoclet
      */
-    @ConfigItem
-    public Optional<Boolean> produceMetrics;
+    @ConfigItem(defaultValue = "true")
+    public boolean produceMetrics;
+
+    /**
+     * If minio clients are to produce metrics, then the uri tag will have a max of 100 values
+     */
+    @ConfigItem(defaultValue = "100")
+    public Integer maximumAllowedTag;
 
     /**
      * The default client
@@ -39,9 +44,5 @@ public class MiniosRuntimeConfiguration {
 
     public Map<String, MinioRuntimeConfiguration> namedMinioClients() {
         return namedMinioClients;
-    }
-
-    boolean produceMetrics() {
-        return produceMetrics.orElse(true);
     }
 }
