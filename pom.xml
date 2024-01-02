@@ -13,7 +13,7 @@
   <packaging>pom</packaging>
   <properties>
     <!-- version.* properties are defined in jboss-parent and are overridden/updated here: -->
-    <compiler-plugin.version>3.12.0</compiler-plugin.version>
+    <compiler-plugin.version>3.12.1</compiler-plugin.version>
     <surefire-plugin.version>3.2.3</surefire-plugin.version>
     <failsafe-plugin.version>${version.surefire.plugin}</failsafe-plugin.version>
     <quarkus.version>3.6.3</quarkus.version>
