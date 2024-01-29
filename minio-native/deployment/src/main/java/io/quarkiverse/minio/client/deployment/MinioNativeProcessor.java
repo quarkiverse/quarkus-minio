@@ -16,12 +16,14 @@ import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
 
 import io.minio.BaseArgs;
+import io.minio.UploadSnowballObjectsArgs;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem;
 import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 
 class MinioNativeProcessor {
 
@@ -36,6 +38,11 @@ class MinioNativeProcessor {
     @BuildStep
     void addDependencies(BuildProducer<IndexDependencyBuildItem> indexDependency) {
         indexDependency.produce(new IndexDependencyBuildItem("io.minio", "minio"));
+    }
+
+    @BuildStep
+    RuntimeInitializedClassBuildItem randomConfiguration() {
+        return new RuntimeInitializedClassBuildItem(UploadSnowballObjectsArgs.class.getCanonicalName());
     }
 
     @BuildStep
