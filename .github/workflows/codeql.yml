@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: "27 3 * * 6"
 
+env:
+  JAVA_VERSION: 17
+
 jobs:
   analyze:
     name: Analyze
@@ -24,13 +27,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 11
+          java-version: {{ env.JAVA_VERSION }}
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
