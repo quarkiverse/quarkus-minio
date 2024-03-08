@@ -232,7 +232,8 @@ public class DevServicesMinioProcessor {
                 .ifPresent(consolePort -> result.put(MINIO_CONSOLE, String.format("http://%s:%d", consoleHost, consolePort)));
 
         buildTimeConfiguration.getMinioClients().entrySet().stream()
-                .map(entry -> Map.of(formatPropertyName(MINIO_URL, entry.getKey()), String.format("http://%s:%d", host, port),
+                .map(entry -> Map.of(formatPropertyName(MINIO_URL, entry.getKey()), String.format("http://%s", host),
+                        formatPropertyName(String.valueOf(MINIO_PORT), entry.getKey()), config.port.toString(),
                         formatPropertyName(MINIO_ACCESS_KEY, entry.getKey()), config.accessKey,
                         formatPropertyName(MINIO_SECRET_KEY, entry.getKey()), config.secretKey))
                 .forEach(result::putAll);
@@ -264,6 +265,8 @@ public class DevServicesMinioProcessor {
         private final String serviceName;
         private final String accessKey;
         private final String secretKey;
+        private final boolean tls = false;
+        private final Integer port;
 
         public MinioDevServiceCfg(MinioDevServicesBuildTimeConfig config) {
             this.devServicesEnabled = config.enabled.orElse(true);
@@ -273,6 +276,7 @@ public class DevServicesMinioProcessor {
             this.serviceName = config.serviceName;
             this.accessKey = config.accessKey;
             this.secretKey = config.secretKey;
+            this.port = config.port.orElse(9000);
         }
 
         @Override
