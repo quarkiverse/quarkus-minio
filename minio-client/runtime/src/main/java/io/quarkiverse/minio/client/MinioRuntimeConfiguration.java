@@ -11,11 +11,6 @@ public class MinioRuntimeConfiguration {
     /**
      * The minio server URL.
      *
-     * [NOTE]
-     * ====
-     * Value must start with `http://` or `https://`
-     * ====
-     *
      * @asciidoclet
      */
     @ConfigItem
@@ -45,6 +40,22 @@ public class MinioRuntimeConfiguration {
     @ConfigItem
     Optional<String> region = Optional.empty();
 
+    /**
+     * An optional port number
+     *
+     * @asciidoclet
+     */
+    @ConfigItem
+    Optional<Integer> port = Optional.empty();
+
+    /**
+     * An optional boolean to enable secure connection
+     *
+     * @asciidoclet
+     */
+    @ConfigItem
+    Optional<Boolean> secure = Optional.empty();
+
     public String getUrl() {
         return url.orElse("");
     }
@@ -55,5 +66,13 @@ public class MinioRuntimeConfiguration {
 
     String getSecretKey() {
         return secretKey.orElse("");
+    }
+
+    Integer getPort() {
+        return port.orElse(9000);
+    }
+
+    Boolean isTls() {
+        return secure.orElse(true);
     }
 }

@@ -21,8 +21,7 @@ public class MinioClients {
 
     private final OptionalHttpClientProducer httpClientProducer;
 
-    private static final Predicate<String> IS_NOT_VALID_MINIO_URL = value -> !(value.startsWith("http://")
-            || value.startsWith("https://"));
+    private static final Predicate<String> IS_MANDATORY_URL = value -> value == null || value.isBlank();
 
     public MinioClients(
             MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
@@ -57,18 +56,21 @@ public class MinioClients {
         if (!miniosBuildTimeConfiguration.getMinioClients().containsKey(minioClientName)) {
             throw new IllegalArgumentException("No Minioclient named '" + minioClientName + "' exists");
         }
+
         MinioRuntimeConfiguration configuration = getConfiguration(minioClientName);
-        if (IS_NOT_VALID_MINIO_URL.test(configuration.getUrl())) {
+
+        if (IS_MANDATORY_URL.test(configuration.getUrl())) {
             String errorMessage;
             if (MiniosBuildTimeConfiguration.isDefault(minioClientName)) {
                 errorMessage = "\"quarkus.minio.url\" is mandatory and must be a valid url";
             } else {
-                errorMessage = "\"quarkus.minio." + minioClientName + ".url\" is mandatory and must be a valid url";
+                errorMessage = "\"quarkus.minio." + minioClientName + ".url\" is mandatory";
             }
             throw new ConfigurationException(errorMessage);
         }
+
         MinioClient.Builder builder = MinioClient.builder()
-                .endpoint(configuration.getUrl())
+                .endpoint(configuration.getUrl(), configuration.getPort(), configuration.isTls())
                 .credentials(configuration.getAccessKey(), configuration.getSecretKey());
         configuration.region.ifPresent(builder::region);
         if (miniosRuntimeConfiguration.produceMetrics) {
