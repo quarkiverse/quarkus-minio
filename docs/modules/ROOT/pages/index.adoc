@@ -92,17 +92,20 @@ each with its own configuration.
 
 [source,properties]
 ----
-quarkus.minio.url=http://localhost:9000
+quarkus.minio.url=http://localhost
+quarkus.minio.port=9000
+quarkus.minio.secure=false
 quarkus.minio.access-key=minioaccess
 quarkus.minio.secret-key=miniosecret
 
 quarkus.minio.other.enabled=true
-quarkus.minio.other.url=http://acme:9000
+quarkus.minio.other.url=acme
 quarkus.minio.other.access-key=minioaccess
 quarkus.minio.other.secret-key=miniosecret
 
 quarkus.minio.public.enabled=true
 quarkus.minio.public.url=http://public:9000
+quarkus.minio.public.secure=false
 quarkus.minio.public.access-key=minioaccess
 quarkus.minio.public.secret-key=miniosecret
 ----
