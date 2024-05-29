@@ -36,6 +36,8 @@ import io.quarkus.runtime.configuration.ConfigUtils;
 public class DevServicesMinioProcessor {
     private static final Logger LOGGER = Logger.getLogger(DevServicesMinioProcessor.class);
     private static final String MINIO_URL = "quarkus.minio%s.url";
+    private static final String MINIO_PORT = "quarkus.minio%s.port";
+    private static final String MINIO_SECURE = "quarkus.minio%s.secure";
     private static final String MINIO_CONSOLE = "quarkus.minio.console";
     private static final String MINIO_ALLOW_EMPTY = "quarkus.minio%s.allow-empty";
     private static final String MINIO_ACCESS_KEY = "quarkus.minio%s.access-key";
@@ -46,10 +48,11 @@ public class DevServicesMinioProcessor {
      * This allows other applications to discover the running service and use it instead of starting a new instance.
      */
     static final String DEV_SERVICE_LABEL = "quarkus-dev-service-minio";
-    static final int MINIO_PORT = 9000;
+    static final int DEVSERVICE_MINIO_PORT = 9000;
 
-    static final int MINIO_CONSOLE_PORT = 9001;
-    private static final ContainerLocator minioContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL, MINIO_PORT);
+    static final int DEVSERVICE_MINIO_CONSOLE_PORT = 9001;
+    private static final ContainerLocator minioContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL,
+            DEVSERVICE_MINIO_PORT);
     static volatile RunningDevService devService;
     static volatile MinioDevServiceCfg cfg;
     static volatile boolean first = true;
@@ -117,6 +120,8 @@ public class DevServicesMinioProcessor {
                     + "instance automatically. For Quarkus applications in production mode, you can connect to"
                     + " this by starting your application with -D%s=%s -D%s=%s -D%s=%s",
                     formatPropertyName(MINIO_URL), getMinioUrl(),
+                    formatPropertyName(MINIO_SECURE), false,
+                    formatPropertyName(MINIO_PORT), DEVSERVICE_MINIO_PORT,
                     formatPropertyName(MINIO_ACCESS_KEY), getMinioAccessKey(),
                     formatPropertyName(MINIO_SECRET_KEY), getMinioSecretKey());
         }
@@ -232,7 +237,9 @@ public class DevServicesMinioProcessor {
                 .ifPresent(consolePort -> result.put(MINIO_CONSOLE, String.format("http://%s:%d", consoleHost, consolePort)));
 
         buildTimeConfiguration.getMinioClients().entrySet().stream()
-                .map(entry -> Map.of(formatPropertyName(MINIO_URL, entry.getKey()), String.format("http://%s:%d", host, port),
+                .map(entry -> Map.of(formatPropertyName(MINIO_URL, entry.getKey()), host,
+                        formatPropertyName(MINIO_PORT, entry.getKey()), String.valueOf(port),
+                        formatPropertyName(MINIO_SECURE, entry.getKey()), "false",
                         formatPropertyName(MINIO_ACCESS_KEY, entry.getKey()), config.accessKey,
                         formatPropertyName(MINIO_SECRET_KEY, entry.getKey()), config.secretKey))
                 .forEach(result::putAll);
@@ -309,7 +316,7 @@ public class DevServicesMinioProcessor {
             super(dockerImageName);
             this.port = fixedExposedPort;
             this.useSharedNetwork = useSharedNetwork;
-            withExposedPorts(MINIO_PORT, MINIO_CONSOLE_PORT);
+            withExposedPorts(DEVSERVICE_MINIO_PORT, DEVSERVICE_MINIO_CONSOLE_PORT);
             withEnv("MINIO_ACCESS_KEY", accessKey);
             withEnv("MINIO_SECRET_KEY", secretKey);
             withCommand("server", "/data", "--console-address", ":9001");
@@ -327,7 +334,7 @@ public class DevServicesMinioProcessor {
             }
 
             if (port > 0) {
-                addFixedExposedPort(port, MINIO_PORT);
+                addFixedExposedPort(port, DEVSERVICE_MINIO_PORT);
             }
         }
 
@@ -341,15 +348,15 @@ public class DevServicesMinioProcessor {
 
         public int getPort() {
             if (useSharedNetwork) {
-                return MINIO_PORT;
+                return DEVSERVICE_MINIO_PORT;
             }
 
-            return getMappedPort(MINIO_PORT);
+            return getMappedPort(DEVSERVICE_MINIO_PORT);
         }
 
         public int getConsolePort() {
             // console port is meant to be exposed only
-            return getMappedPort(MINIO_CONSOLE_PORT);
+            return getMappedPort(DEVSERVICE_MINIO_CONSOLE_PORT);
         }
     }
 }

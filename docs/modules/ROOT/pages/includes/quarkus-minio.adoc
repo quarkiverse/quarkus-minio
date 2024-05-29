@@ -10,7 +10,7 @@ h|[[quarkus-minio_configuration]]link:#quarkus-minio_configuration[Configuration
 h|Type
 h|Default
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.enabled]]`link:#quarkus-minio_quarkus.minio.devservices.enabled[quarkus.minio.devservices.enabled]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-enabled]]`link:#quarkus-minio_quarkus-minio-devservices-enabled[quarkus.minio.devservices.enabled]`
 
 
 [.description]
@@ -27,7 +27,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.port]]`link:#quarkus-minio_quarkus.minio.devservices.port[quarkus.minio.devservices.port]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-port]]`link:#quarkus-minio_quarkus-minio-devservices-port[quarkus.minio.devservices.port]`
 
 
 [.description]
@@ -46,7 +46,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.image-name]]`link:#quarkus-minio_quarkus.minio.devservices.image-name[quarkus.minio.devservices.image-name]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-image-name]]`link:#quarkus-minio_quarkus-minio-devservices-image-name[quarkus.minio.devservices.image-name]`
 
 
 [.description]
@@ -63,7 +63,7 @@ endif::add-copy-button-to-env-var[]
 |`minio/minio:RELEASE.2022-10-08T20-11-00Z`
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.shared]]`link:#quarkus-minio_quarkus.minio.devservices.shared[quarkus.minio.devservices.shared]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-shared]]`link:#quarkus-minio_quarkus-minio-devservices-shared[quarkus.minio.devservices.shared]`
 
 
 [.description]
@@ -84,7 +84,7 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.service-name]]`link:#quarkus-minio_quarkus.minio.devservices.service-name[quarkus.minio.devservices.service-name]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-service-name]]`link:#quarkus-minio_quarkus-minio-devservices-service-name[quarkus.minio.devservices.service-name]`
 
 
 [.description]
@@ -103,7 +103,7 @@ endif::add-copy-button-to-env-var[]
 |`minio`
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.access-key]]`link:#quarkus-minio_quarkus.minio.devservices.access-key[quarkus.minio.devservices.access-key]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-access-key]]`link:#quarkus-minio_quarkus-minio-devservices-access-key[quarkus.minio.devservices.access-key]`
 
 
 [.description]
@@ -120,7 +120,7 @@ endif::add-copy-button-to-env-var[]
 |`minioaccess`
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.devservices.secret-key]]`link:#quarkus-minio_quarkus.minio.devservices.secret-key[quarkus.minio.devservices.secret-key]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-secret-key]]`link:#quarkus-minio_quarkus-minio-devservices-secret-key[quarkus.minio.devservices.secret-key]`
 
 
 [.description]
@@ -137,7 +137,7 @@ endif::add-copy-button-to-env-var[]
 |`miniosecret`
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.enabled]]`link:#quarkus-minio_quarkus.minio.enabled[quarkus.minio.enabled]`
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-enabled]]`link:#quarkus-minio_quarkus-minio-enabled[quarkus.minio.enabled]`
 
 
 [.description]
@@ -154,7 +154,7 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 
-a| [[quarkus-minio_quarkus.minio.produce-metrics]]`link:#quarkus-minio_quarkus.minio.produce-metrics[quarkus.minio.produce-metrics]`
+a| [[quarkus-minio_quarkus-minio-produce-metrics]]`link:#quarkus-minio_quarkus-minio-produce-metrics[quarkus.minio.produce-metrics]`
 
 
 [.description]
@@ -174,7 +174,7 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 
-a| [[quarkus-minio_quarkus.minio.maximum-allowed-tag]]`link:#quarkus-minio_quarkus.minio.maximum-allowed-tag[quarkus.minio.maximum-allowed-tag]`
+a| [[quarkus-minio_quarkus-minio-maximum-allowed-tag]]`link:#quarkus-minio_quarkus-minio-maximum-allowed-tag[quarkus.minio.maximum-allowed-tag]`
 
 
 [.description]
@@ -191,13 +191,15 @@ endif::add-copy-button-to-env-var[]
 |`100`
 
 
-a| [[quarkus-minio_quarkus.minio.url]]`link:#quarkus-minio_quarkus.minio.url[quarkus.minio.url]`
+a| [[quarkus-minio_quarkus-minio-url]]`link:#quarkus-minio_quarkus-minio-url[quarkus.minio.url]`
 
 
 [.description]
 --
 The minio server URL.
-
+The url _may_ contains the port, though it's not recommended. If a specific port is needed, `quakus.minio.port` is a
+better fit.
+<p>
 [NOTE]
 ====
 Value must start with `http://` or `https://`
@@ -213,7 +215,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a| [[quarkus-minio_quarkus.minio.access-key]]`link:#quarkus-minio_quarkus.minio.access-key[quarkus.minio.access-key]`
+a| [[quarkus-minio_quarkus-minio-access-key]]`link:#quarkus-minio_quarkus-minio-access-key[quarkus.minio.access-key]`
 
 
 [.description]
@@ -230,7 +232,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a| [[quarkus-minio_quarkus.minio.secret-key]]`link:#quarkus-minio_quarkus.minio.secret-key[quarkus.minio.secret-key]`
+a| [[quarkus-minio_quarkus-minio-secret-key]]`link:#quarkus-minio_quarkus-minio-secret-key[quarkus.minio.secret-key]`
 
 
 [.description]
@@ -247,7 +249,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a| [[quarkus-minio_quarkus.minio.region]]`link:#quarkus-minio_quarkus.minio.region[quarkus.minio.region]`
+a| [[quarkus-minio_quarkus-minio-region]]`link:#quarkus-minio_quarkus-minio-region[quarkus.minio.region]`
 
 
 [.description]
@@ -264,7 +266,40 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus.minio.-named-minio-clients-.enabled]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.enabled[quarkus.minio."named-minio-clients".enabled]`
+a| [[quarkus-minio_quarkus-minio-port]]`link:#quarkus-minio_quarkus-minio-port[quarkus.minio.port]`
+
+
+[.description]
+--
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_PORT+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_PORT+++`
+endif::add-copy-button-to-env-var[]
+--|int 
+|
+
+
+a| [[quarkus-minio_quarkus-minio-secure]]`link:#quarkus-minio_quarkus-minio-secure[quarkus.minio.secure]`
+
+
+[.description]
+--
+An optional boolean to enable secure connection.
+Defaults to `true`
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_SECURE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_SECURE+++`
+endif::add-copy-button-to-env-var[]
+--|boolean 
+|`true`
+
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-named-minio-clients-enabled]]`link:#quarkus-minio_quarkus-minio-named-minio-clients-enabled[quarkus.minio."named-minio-clients".enabled]`
 
 
 [.description]
@@ -281,13 +316,15 @@ endif::add-copy-button-to-env-var[]
 |`true`
 
 
-a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.url]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.url[quarkus.minio."named-minio-clients".url]`
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-url]]`link:#quarkus-minio_quarkus-minio-named-minio-clients-url[quarkus.minio."named-minio-clients".url]`
 
 
 [.description]
 --
 The minio server URL.
-
+The url _may_ contains the port, though it's not recommended. If a specific port is needed, `quakus.minio.port` is a
+better fit.
+<p>
 [NOTE]
 ====
 Value must start with `http://` or `https://`
@@ -303,7 +340,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.access-key]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.access-key[quarkus.minio."named-minio-clients".access-key]`
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-access-key]]`link:#quarkus-minio_quarkus-minio-named-minio-clients-access-key[quarkus.minio."named-minio-clients".access-key]`
 
 
 [.description]
@@ -320,7 +357,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.secret-key]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.secret-key[quarkus.minio."named-minio-clients".secret-key]`
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-secret-key]]`link:#quarkus-minio_quarkus-minio-named-minio-clients-secret-key[quarkus.minio."named-minio-clients".secret-key]`
 
 
 [.description]
@@ -337,7 +374,7 @@ endif::add-copy-button-to-env-var[]
 |
 
 
-a| [[quarkus-minio_quarkus.minio.-named-minio-clients-.region]]`link:#quarkus-minio_quarkus.minio.-named-minio-clients-.region[quarkus.minio."named-minio-clients".region]`
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-region]]`link:#quarkus-minio_quarkus-minio-named-minio-clients-region[quarkus.minio."named-minio-clients".region]`
 
 
 [.description]
@@ -352,5 +389,38 @@ Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__REGION+++`
 endif::add-copy-button-to-env-var[]
 --|string 
 |
+
+
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-port]]`link:#quarkus-minio_quarkus-minio-named-minio-clients-port[quarkus.minio."named-minio-clients".port]`
+
+
+[.description]
+--
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__PORT+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__PORT+++`
+endif::add-copy-button-to-env-var[]
+--|int 
+|
+
+
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-secure]]`link:#quarkus-minio_quarkus-minio-named-minio-clients-secure[quarkus.minio."named-minio-clients".secure]`
+
+
+[.description]
+--
+An optional boolean to enable secure connection.
+Defaults to `true`
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__SECURE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__SECURE+++`
+endif::add-copy-button-to-env-var[]
+--|boolean 
+|`true`
 
 |===
