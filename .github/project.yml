@@ -1,4 +1,4 @@
 name: Quarkus Minio
 release:
-  current-version: 3.7.1
-  next-version: 3.7.2-SNAPSHOT
+  current-version: 3.7.2
+  next-version: 3.7.3-SNAPSHOT
