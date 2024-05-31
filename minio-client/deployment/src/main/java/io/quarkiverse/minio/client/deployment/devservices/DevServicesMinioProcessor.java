@@ -200,6 +200,7 @@ public class DevServicesMinioProcessor {
                     config.fixedExposedPort,
                     config.accessKey,
                     config.secretKey,
+                    config.containerEnv,
                     useSharedNetwork);
 
             if (config.serviceName != null) {
@@ -271,6 +272,7 @@ public class DevServicesMinioProcessor {
         private final String serviceName;
         private final String accessKey;
         private final String secretKey;
+        private final Map<String, String> containerEnv;
 
         public MinioDevServiceCfg(MinioDevServicesBuildTimeConfig config) {
             this.devServicesEnabled = config.enabled.orElse(true);
@@ -280,6 +282,7 @@ public class DevServicesMinioProcessor {
             this.serviceName = config.serviceName;
             this.accessKey = config.accessKey;
             this.secretKey = config.secretKey;
+            this.containerEnv = config.containerEnv;
         }
 
         @Override
@@ -312,13 +315,14 @@ public class DevServicesMinioProcessor {
         private String hostName = null;
 
         private MinioContainer(DockerImageName dockerImageName, int fixedExposedPort, String accessKey, String secretKey,
-                boolean useSharedNetwork) {
+                Map<String, String> containerEnv, boolean useSharedNetwork) {
             super(dockerImageName);
             this.port = fixedExposedPort;
             this.useSharedNetwork = useSharedNetwork;
             withExposedPorts(DEVSERVICE_MINIO_PORT, DEVSERVICE_MINIO_CONSOLE_PORT);
             withEnv("MINIO_ACCESS_KEY", accessKey);
             withEnv("MINIO_SECRET_KEY", secretKey);
+            withEnv(containerEnv);
             withCommand("server", "/data", "--console-address", ":9001");
             waitingFor(new HttpWaitStrategy().forPort(9000).forPath("/minio/health/live"));
         }

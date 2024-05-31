@@ -1,7 +1,9 @@
 package io.quarkiverse.minio.client.deployment.devservices;
 
+import java.util.Map;
 import java.util.Optional;
 
+import io.quarkus.runtime.annotations.ConfigDocMapKey;
 import io.quarkus.runtime.annotations.ConfigGroup;
 import io.quarkus.runtime.annotations.ConfigItem;
 
@@ -67,4 +69,11 @@ public class MinioDevServicesBuildTimeConfig {
      */
     @ConfigItem(defaultValue = "miniosecret")
     public String secretKey;
+
+    /**
+     * Extra environment variables that will be passed to the devservice.
+     */
+    @ConfigItem
+    @ConfigDocMapKey("environment-variable-name")
+    public Map<String, String> containerEnv;
 }
