@@ -1,11 +1,11 @@
 include::./includes/attributes.adoc[]
 
-Integrate Min.io sdk compatible with all S3 Api compliant vendors. Available for jdk and native runtime.
+Integrate Min.io sdk compatible with all S3 Api compliant vendors.
+Available for jdk and native runtime.
 
 == Project configuration
 
-Once you have your Quarkus project configured you can add the `minio` extension
-to your project by running the following command in your project base directory:
+Once you have your Quarkus project configured you can add the `minio` extension to your project by running the following command in your project base directory:
 
 [source,bash]
 ----
@@ -119,7 +119,6 @@ Named minio clients need to specify at least one build time property so that Qua
 Generally this will be the `enabled` property.
 ----
 
-
 === Named MinioClient injection
 
 When using multiple minio clients, each `MinioClient` also has the `io.quarkiverse.minio.client.MinioQualifier` qualifier with the name of the minio client as the value.
@@ -143,15 +142,14 @@ MinioClient otherMinioClient;
 == Dev Services
 
 Quarkus supports a feature called Dev Services that allows you to create various containers without any config.
-What that means in practice is that if you have Docker running and have not configured `quarkus.minio.url`,
-Quarkus will automatically start a Minio container when running tests or in dev mode, and automatically
-configure the connection.
+What that means in practice is that if you have Docker running and have not configured `quarkus.minio.url`, Quarkus will automatically start a Minio container when running tests or in dev mode, and automatically configure the connection.
 
 When running the production version of the application, the Minio connection needs to be configured as normal.
 
 [NOTE]
 ====
-If using multiple minio client, all will target the same container. At the moment it's also not possible to configure devservices individually for each minio client.
+If using multiple minio client, all will target the same container.
+At the moment it's also not possible to configure devservices individually for each minio client.
 ====
 
 === Shared server
@@ -165,12 +163,29 @@ If you need multiple (shared) servers, you can configure the `quarkus.minio.devs
 It looks for a container with the same value, or starts a new one if none can be found.
 The default service name is `minio`.
 
-Containers are started using Testcontainers and support reusable instances. If you add the property `testcontainers.reuse.enable=true` in your
-Testcontainers configuration file, then the container will not be stopped after each run, and can be reused. See <https://www.testcontainers.org/features/reuse/#how-to-use-it>
+Containers are started using Testcontainers and support reusable instances.
+If you add the property `testcontainers.reuse.enable=true` in your Testcontainers configuration file, then the container will not be stopped after each run, and can be reused.
+See <https://www.testcontainers.org/features/reuse/#how-to-use-it>
 for more information.
 
 Sharing is enabled by default in dev mode, but disabled in test mode.
 You can disable the sharing with `quarkus.minio.devservices.shared=false`.
+
+=== Additional environment variables
+
+You can enhance the container's functionality by injecting additional environment variables.
+These variables might be used, for instance, to configure
+https://min.io/docs/minio/linux/administration/monitoring/bucket-notifications.html[Bucket Notifications] or
+https://min.io/docs/minio/linux/administration/identity-access-management.html[Identity and Access Management]. You can
+achieve this by including `quarkus.minio.devservices.container-env.ENV_VAR_NAME=value` in your configuration settings.
+
+[source,properties,indent=0]
+----
+quarkus.minio.devservices.container-env.MINIO_NOTIFY_KAFKA_ENABLE_LOCAL=on
+quarkus.minio.devservices.container-env.MINIO_NOTIFY_KAFKA_TOPIC_LOCAL=example.topic
+
+quarkus.minio.devservices.container-env.MINIO_IDENTITY_OPENID_CLAIM_NAME=policy
+----
 
 == Configuration Reference
 
