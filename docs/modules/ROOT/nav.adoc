@@ -1,1 +1,2 @@
 * xref:index.adoc[Quarkus - Minio]
+* xref:dev-services.adoc[Dev Services]
