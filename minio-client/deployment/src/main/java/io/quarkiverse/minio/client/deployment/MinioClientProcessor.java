@@ -2,10 +2,8 @@ package io.quarkiverse.minio.client.deployment;
 
 import java.util.Map;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
-import jakarta.inject.Singleton;
-
-import io.minio.MinioClient;
 import io.quarkiverse.minio.client.EmptyHttpClientProducer;
 import io.quarkiverse.minio.client.MinioBuildTimeConfiguration;
 import io.quarkiverse.minio.client.MinioClients;
@@ -14,6 +12,10 @@ import io.quarkiverse.minio.client.MinioRecorder;
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
 import io.quarkiverse.minio.client.MiniosRuntimeConfiguration;
 import io.quarkiverse.minio.client.WithMetricsHttpClientProducer;
+import jakarta.inject.Singleton;
+
+import io.minio.MinioAsyncClient;
+import io.minio.MinioClient;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
@@ -73,21 +75,36 @@ class MinioClientProcessor {
                 .setDefaultScope(DotNames.SINGLETON).build());
         for (Map.Entry<String, MinioBuildTimeConfiguration> entry : miniosBuildTimeConfiguration.getMinioClients().entrySet()) {
             var minioClientName = entry.getKey();
-            SyntheticBeanBuildItem.ExtendedBeanConfigurator configurator = SyntheticBeanBuildItem
-                    .configure(MinioClient.class)
-                    .scope(Singleton.class)
-                    .setRuntimeInit()
-                    .unremovable()
-                    // Pass runtime configuration to ensure initialization order
-                    .supplier(minioRecorder.minioClientSupplier(minioClientName, miniosRuntimeConfiguration));
-            if (MiniosBuildTimeConfiguration.isDefault(minioClientName)) {
-                configurator.addQualifier(DotNames.DEFAULT);
-            } else {
-                configurator.addQualifier().annotation(DotNames.NAMED).addValue("value", minioClientName).done();
-                configurator.addQualifier().annotation(MinioQualifier.class)
-                        .addValue("value", minioClientName).done();
-            }
-            syntheticBeanBuildItemBuildProducer.produce(configurator.done());
+            syntheticBeanBuildItemBuildProducer.produce(
+                    createMinioBeanBuildItem(minioClientName,
+                            MinioClient.class,
+                            // Pass runtime configuration to ensure initialization order
+                            minioRecorder.minioClientSupplier(minioClientName, miniosRuntimeConfiguration)));
+
+            syntheticBeanBuildItemBuildProducer.produce(
+                    createMinioBeanBuildItem(minioClientName,
+                            MinioAsyncClient.class,
+                            // Pass runtime configuration to ensure initialization order
+                            minioRecorder.minioAsyncClientSupplier(minioClientName, miniosRuntimeConfiguration)));
         }
+    }
+
+    private static <T> SyntheticBeanBuildItem createMinioBeanBuildItem(String minioClientName, Class<T> clientClass,
+            Supplier<T> clientSupplier) {
+        SyntheticBeanBuildItem.ExtendedBeanConfigurator configurator = SyntheticBeanBuildItem
+                .configure(clientClass)
+                .scope(Singleton.class)
+                .setRuntimeInit()
+                .supplier(clientSupplier);
+
+        if (MiniosBuildTimeConfiguration.isDefault(minioClientName)) {
+            configurator.addQualifier(DotNames.DEFAULT);
+        } else {
+            configurator.addQualifier().annotation(DotNames.NAMED).addValue("value", minioClientName).done();
+            configurator.addQualifier().annotation(MinioQualifier.class)
+                    .addValue("value", minioClientName).done();
+        }
+
+        return configurator.done();
     }
 }

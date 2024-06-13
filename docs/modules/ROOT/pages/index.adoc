@@ -64,11 +64,51 @@ public class SampleService {
                 GetObjectArgs.builder()
                         .bucket(bucketName)
                         .object(objectName)
-                        .build());
+                        .build())
         ) {
            // Do whatever you want...
         } catch (MinioException e) {
             throw new IllegalStateException(e);
+        }
+    }
+
+}
+----
+
+=== Async Minio Client
+
+In addition to the blocking `MinioClient` the extension also provides `io.minio.MinioAsyncClient` beans with no extra
+configuration effort.
+
+Just specify `MinioAsyncClient` in place of `MinioClient` and you're good to go.
+
+[source,java]
+----
+package com.acme.minio;
+
+import io.minio.MinioAsyncClient;
+
+// ...
+
+@ApplicationScoped
+public class SampleService {
+
+    @Inject
+    MinioAsyncClient minioClient;
+
+    // ...
+
+    public String getObject(String name) {
+        try (InputStream is = minio.getObject(
+                GetObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(objectName)
+                        .build())
+                        .get() // Waits for the result in a blocking fashion
+        ) {
+           // Do whatever you want...
+        } catch (MinioException e) {
+            // ...
         }
     }
 

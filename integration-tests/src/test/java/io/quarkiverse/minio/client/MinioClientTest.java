@@ -41,4 +41,14 @@ public class MinioClientTest {
                 .body(CoreMatchers.containsString("minio_another_client_seconds"));
     }
 
+    @Test
+    public void testInsertAsync() {
+        String response = given()
+                .when().get("/async-minio?name=dummy-bucket")
+                .then()
+                .statusCode(200)
+                .extract().body().asString();
+
+        assertThat(response).isEqualTo("Bucket doesn't exist");
+    }
 }
