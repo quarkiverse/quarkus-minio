@@ -107,6 +107,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "vemilyus",
+      "name": "Alex Katlein",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7115009?v=4",
+      "profile": "https://v47.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
