@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import jakarta.inject.Singleton;
+
+import io.minio.MinioAsyncClient;
+import io.minio.MinioClient;
 import io.quarkiverse.minio.client.EmptyHttpClientProducer;
 import io.quarkiverse.minio.client.MinioBuildTimeConfiguration;
 import io.quarkiverse.minio.client.MinioClients;
@@ -12,10 +16,6 @@ import io.quarkiverse.minio.client.MinioRecorder;
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
 import io.quarkiverse.minio.client.MiniosRuntimeConfiguration;
 import io.quarkiverse.minio.client.WithMetricsHttpClientProducer;
-import jakarta.inject.Singleton;
-
-import io.minio.MinioAsyncClient;
-import io.minio.MinioClient;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
