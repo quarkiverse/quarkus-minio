@@ -4,18 +4,11 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import io.quarkiverse.minio.client.*;
 import jakarta.inject.Singleton;
 
 import io.minio.MinioAsyncClient;
 import io.minio.MinioClient;
-import io.quarkiverse.minio.client.EmptyHttpClientProducer;
-import io.quarkiverse.minio.client.MinioBuildTimeConfiguration;
-import io.quarkiverse.minio.client.MinioClients;
-import io.quarkiverse.minio.client.MinioQualifier;
-import io.quarkiverse.minio.client.MinioRecorder;
-import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
-import io.quarkiverse.minio.client.MiniosRuntimeConfiguration;
-import io.quarkiverse.minio.client.WithMetricsHttpClientProducer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
@@ -42,14 +35,14 @@ class MinioClientProcessor {
         return new FeatureBuildItem(FEATURE);
     }
 
-    @BuildStep(onlyIfNot = { MetricsEnabled.class })
+    @BuildStep(onlyIfNot = {MetricsEnabled.class})
     void ifMetricsAreDisabled(
             BuildProducer<AdditionalBeanBuildItem> additionalBeanBuildItemBuildProducer) {
         additionalBeanBuildItemBuildProducer
                 .produce(AdditionalBeanBuildItem.unremovableOf(EmptyHttpClientProducer.class));
     }
 
-    @BuildStep(onlyIf = { MetricsEnabled.class })
+    @BuildStep(onlyIf = {MetricsEnabled.class})
     void ifMetricsAreEnabled(
             BuildProducer<AdditionalBeanBuildItem> additionalBeanBuildItemBuildProducer) {
         additionalBeanBuildItemBuildProducer
@@ -59,10 +52,10 @@ class MinioClientProcessor {
     @Record(ExecutionTime.RUNTIME_INIT)
     @BuildStep
     void produce(MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
-            MiniosRuntimeConfiguration miniosRuntimeConfiguration,
-            MinioRecorder minioRecorder,
-            BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
-            BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+                 MiniosRuntimeConfiguration miniosRuntimeConfiguration,
+                 MinioRecorder minioRecorder,
+                 BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
+                 BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
         if (miniosBuildTimeConfiguration.getMinioClients().isEmpty()) {
             //No minio client needed
             return;
@@ -86,11 +79,17 @@ class MinioClientProcessor {
                             MinioAsyncClient.class,
                             // Pass runtime configuration to ensure initialization order
                             minioRecorder.minioAsyncClientSupplier(minioClientName, miniosRuntimeConfiguration)));
+
+            syntheticBeanBuildItemBuildProducer.produce(
+                    createMinioBeanBuildItem(minioClientName,
+                            MutinyMinioClient.class,
+                            // Pass runtime configuration to ensure initialization order
+                            minioRecorder.mutinyMinioClientSupplier(minioClientName, miniosRuntimeConfiguration)));
         }
     }
 
     private static <T> SyntheticBeanBuildItem createMinioBeanBuildItem(String minioClientName, Class<T> clientClass,
-            Supplier<T> clientSupplier) {
+                                                                       Supplier<T> clientSupplier) {
         SyntheticBeanBuildItem.ExtendedBeanConfigurator configurator = SyntheticBeanBuildItem
                 .configure(clientClass)
                 .scope(Singleton.class)

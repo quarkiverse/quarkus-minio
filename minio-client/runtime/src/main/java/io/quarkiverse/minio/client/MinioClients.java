@@ -12,6 +12,8 @@ import io.minio.http.HttpUtils;
 import io.quarkus.arc.Arc;
 import io.quarkus.runtime.configuration.ConfigurationException;
 
+import static io.quarkus.arc.Arc.container;
+
 @Singleton
 public class MinioClients {
 
@@ -22,6 +24,8 @@ public class MinioClients {
     private final ConcurrentMap<String, MinioClient> minioClients = new ConcurrentHashMap<>();
 
     private final ConcurrentMap<String, MinioAsyncClient> minioAsyncClients = new ConcurrentHashMap<>();
+
+    private final ConcurrentMap<String, MutinyMinioClient> minioMutinyClients = new ConcurrentHashMap<>();
 
     private final OptionalHttpClientProducer httpClientProducer;
 
@@ -48,7 +52,7 @@ public class MinioClients {
      * This method is thread-safe
      */
     public static MinioClient fromName(String minioClientName) {
-        return Arc.container().instance(MinioClients.class).get()
+        return container().instance(MinioClients.class).get()
                 .getMinioClient(minioClientName);
     }
 
@@ -64,8 +68,12 @@ public class MinioClients {
      * This method is thread-safe
      */
     public static MinioAsyncClient fromNameAsync(String minioClientName) {
-        return Arc.container().instance(MinioClients.class).get()
+        return container().instance(MinioClients.class).get()
                 .getMinioAsyncClient(minioClientName);
+    }
+
+    public static MutinyMinioClient fromNameMutiny(String minioClientName) {
+        return container().instance(MinioClients.class).get().getMutinyMinioClient(minioClientName);
     }
 
     public MinioClient getMinioClient(String minioClientName) {
@@ -74,6 +82,10 @@ public class MinioClients {
 
     public MinioAsyncClient getMinioAsyncClient(String minioClientName) {
         return minioAsyncClients.computeIfAbsent(minioClientName, this::createMinioAsyncClient);
+    }
+
+    public MutinyMinioClient getMutinyMinioClient(String minioClientName) {
+        return minioMutinyClients.computeIfAbsent(minioClientName, this::createMutinyClient);
     }
 
     public MinioClient createMinioClient(String minioClientName) {
@@ -112,6 +124,11 @@ public class MinioClients {
             httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         }
         return builder.build();
+    }
+
+    public MutinyMinioClient createMutinyClient(String minioClientName) {
+        final MinioAsyncClient asyncClient = getMinioAsyncClient(minioClientName);
+        return new MutinyMinioClient(asyncClient);
     }
 
     private MinioRuntimeConfiguration getAndVerifyConfiguration(String minioClientName) {
