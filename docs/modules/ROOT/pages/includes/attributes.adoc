@@ -1,2 +1,0 @@
-:quarkus-version: 3.14.0
-:quarkus-minio-version: 3.7.5

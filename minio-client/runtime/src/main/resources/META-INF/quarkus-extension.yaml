@@ -10,4 +10,6 @@ metadata:
     - "kubernetes"
     - "data"
   status: "stable"
+  config:
+    - "quarkus.minio"
   description: "Integrates MinIO Java SDK for Amazon S3 Compatible Cloud Storage"
