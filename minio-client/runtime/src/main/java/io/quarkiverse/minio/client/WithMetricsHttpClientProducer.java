@@ -44,7 +44,7 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
 
     @Override
     public Optional<OkHttpClient> apply(String minioClientName) {
-        if (!configuration.produceMetrics) {
+        if (!configuration.produceMetrics()) {
             return Optional.empty();
         }
         return Optional.of(getHttpClientWithInterceptor(meterRegistry, minioClientName));
@@ -80,9 +80,9 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
     private MeterFilter maximumAllowedTag(String metricName) {
         MeterFilter denyFilter = new OnlyOnceLoggingDenyMeterFilter(() -> String
                 .format("Reached the maximum number (%s) of URI tags for '%s'. Are you using path parameters?",
-                        configuration.maximumAllowedTag, metricName));
+                        configuration.maximumAllowedTag(), metricName));
 
-        return MeterFilter.maximumAllowableTags(metricName, "uri", configuration.maximumAllowedTag, denyFilter);
+        return MeterFilter.maximumAllowableTags(metricName, "uri", configuration.maximumAllowedTag(), denyFilter);
     }
 
     /**

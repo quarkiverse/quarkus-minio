@@ -5,31 +5,31 @@ import java.util.Optional;
 
 import io.quarkus.runtime.annotations.ConfigDocMapKey;
 import io.quarkus.runtime.annotations.ConfigGroup;
-import io.quarkus.runtime.annotations.ConfigItem;
+import io.smallrye.config.WithDefault;
 
 @ConfigGroup
-public class MinioDevServicesBuildTimeConfig {
+public interface MinioDevServicesBuildTimeConfig {
 
     /**
      * Enable or disable Dev Services explicitly. Dev Services are automatically enabled unless {@code quarkus.minio.url} is
      * set.
      */
-    @ConfigItem
-    public Optional<Boolean> enabled = Optional.empty();
+    @WithDefault("true")
+    Boolean enabled();
 
     /**
      * Optional fixed port the dev service will listen to.
      * <p>
      * If not defined, the port will be chosen randomly.
      */
-    @ConfigItem
-    public Optional<Integer> port;
+    @WithDefault("0")
+    Integer port();
 
     /**
      * The Minio container image to use.
      */
-    @ConfigItem(defaultValue = "minio/minio:RELEASE.2022-10-08T20-11-00Z")
-    public String imageName;
+    @WithDefault("minio/minio:RELEASE.2022-10-08T20-11-00Z")
+    String imageName();
 
     /**
      * Indicates if the Minio server managed by Quarkus Dev Services is shared.
@@ -42,8 +42,8 @@ public class MinioDevServicesBuildTimeConfig {
      * <p>
      * Container sharing is only used in dev mode.
      */
-    @ConfigItem(defaultValue = "true")
-    public boolean shared;
+    @WithDefault("true")
+    boolean shared();
 
     /**
      * The value of the {@code quarkus-dev-service-minio} label attached to the started container.
@@ -55,25 +55,24 @@ public class MinioDevServicesBuildTimeConfig {
      * <p>
      * This property is used when you need multiple shared Minio servers.
      */
-    @ConfigItem(defaultValue = "minio")
-    public String serviceName;
+    @WithDefault("minio")
+    String serviceName();
 
     /**
      * Minio root username access key.
      */
-    @ConfigItem(defaultValue = "minioaccess")
-    public String accessKey;
+    @WithDefault("minioaccess")
+    String accessKey();
 
     /**
      * Minio root username secret key.
      */
-    @ConfigItem(defaultValue = "miniosecret")
-    public String secretKey;
+    @WithDefault("miniosecret")
+    String secretKey();
 
     /**
      * Extra environment variables that will be passed to the devservice.
      */
-    @ConfigItem
     @ConfigDocMapKey("environment-variable-name")
-    public Map<String, String> containerEnv;
+    Map<String, String> containerEnv();
 }

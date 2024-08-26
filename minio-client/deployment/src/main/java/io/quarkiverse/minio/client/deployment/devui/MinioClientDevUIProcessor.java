@@ -18,7 +18,7 @@ public class MinioClientDevUIProcessor {
 
         final CardPageBuildItem card = new CardPageBuildItem();
 
-        card.addBuildTimeData("enabled", devServiceConfig.devservices.enabled.orElse(true));
+        card.addBuildTimeData("enabled", devServiceConfig.devservices().enabled());
 
         card.addPage(Page.externalPageBuilder("Min.io console")
                 .icon("font-awesome-solid:signs-post")

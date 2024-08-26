@@ -260,7 +260,7 @@ public class DevServicesMinioProcessor {
     }
 
     private MinioDevServiceCfg getConfiguration(MinioBuildTimeConfig cfg) {
-        MinioDevServicesBuildTimeConfig devServicesConfig = cfg.devservices;
+        MinioDevServicesBuildTimeConfig devServicesConfig = cfg.devservices();
         return new MinioDevServiceCfg(devServicesConfig);
     }
 
@@ -275,14 +275,14 @@ public class DevServicesMinioProcessor {
         private final Map<String, String> containerEnv;
 
         public MinioDevServiceCfg(MinioDevServicesBuildTimeConfig config) {
-            this.devServicesEnabled = config.enabled.orElse(true);
-            this.imageName = config.imageName;
-            this.fixedExposedPort = config.port.orElse(0);
-            this.shared = config.shared;
-            this.serviceName = config.serviceName;
-            this.accessKey = config.accessKey;
-            this.secretKey = config.secretKey;
-            this.containerEnv = config.containerEnv;
+            this.devServicesEnabled = config.enabled();
+            this.imageName = config.imageName();
+            this.fixedExposedPort = config.port();
+            this.shared = config.shared();
+            this.serviceName = config.serviceName();
+            this.accessKey = config.accessKey();
+            this.secretKey = config.secretKey();
+            this.containerEnv = config.containerEnv();
         }
 
         @Override
