@@ -1,13 +1,17 @@
 package io.quarkiverse.minio.client;
 
 import java.util.Map;
+import java.util.Optional;
 
-import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
+import io.smallrye.config.WithParentName;
 
-@ConfigRoot(name = "minio", phase = ConfigPhase.RUN_TIME)
-public class MiniosRuntimeConfiguration {
+@ConfigMapping(prefix = "quarkus.minio")
+@ConfigRoot(phase = ConfigPhase.RUN_TIME)
+public interface MiniosRuntimeConfiguration {
 
     /**
      * If value is `true` (default) and the `io.quarkus.quarkus-micrometer` is present in the class path,
@@ -17,32 +21,24 @@ public class MiniosRuntimeConfiguration {
      *
      * @asciidoclet
      */
-    @ConfigItem(defaultValue = "true")
-    public boolean produceMetrics;
+    @WithDefault("true")
+    boolean produceMetrics();
 
     /**
      * If minio clients are to produce metrics, then the uri tag will have a max of 100 values
      */
-    @ConfigItem(defaultValue = "100")
-    public Integer maximumAllowedTag;
+    @WithDefault("100")
+    Integer maximumAllowedTag();
 
     /**
      * The default client
      */
-    @ConfigItem(name = ConfigItem.PARENT)
-    public MinioRuntimeConfiguration minio;
+    @WithParentName()
+    Optional<MinioRuntimeConfiguration> minio();
 
     /**
      * Additional named client
      */
-    @ConfigItem(name = ConfigItem.PARENT)
-    public Map<String, MinioRuntimeConfiguration> namedMinioClients;
-
-    public MinioRuntimeConfiguration minio() {
-        return minio;
-    }
-
-    public Map<String, MinioRuntimeConfiguration> namedMinioClients() {
-        return namedMinioClients;
-    }
+    @WithParentName()
+    Map<String, MinioRuntimeConfiguration> namedMinioClients();
 }

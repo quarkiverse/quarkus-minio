@@ -80,16 +80,16 @@ public class MinioClients {
         MinioRuntimeConfiguration configuration = getAndVerifyConfiguration(minioClientName);
 
         MinioClient.Builder builder = MinioClient.builder();
-        configuration.getPort()
+        configuration.port()
                 .ifPresentOrElse(
-                        port -> builder.endpoint(configuration.getUrl(), port, configuration.isTls()),
+                        port -> builder.endpoint(configuration.url(), port, configuration.secure()),
                         () -> builder.endpoint(
-                                HttpUtils.getBaseUrl(configuration.getUrl()).newBuilder()
-                                        .scheme(configuration.isTls() ? "https" : "http").build()));
+                                HttpUtils.getBaseUrl(configuration.url()).newBuilder()
+                                        .scheme(configuration.secure() ? "https" : "http").build()));
 
-        builder.credentials(configuration.getAccessKey(), configuration.getSecretKey());
-        configuration.region.ifPresent(builder::region);
-        if (miniosRuntimeConfiguration.produceMetrics) {
+        builder.credentials(configuration.accessKey(), configuration.secretKey());
+        configuration.region().ifPresent(builder::region);
+        if (miniosRuntimeConfiguration.produceMetrics()) {
             httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         }
         return builder.build();
@@ -99,16 +99,16 @@ public class MinioClients {
         MinioRuntimeConfiguration configuration = getAndVerifyConfiguration(minioClientName);
 
         MinioAsyncClient.Builder builder = MinioAsyncClient.builder();
-        configuration.getPort()
+        configuration.port()
                 .ifPresentOrElse(
-                        port -> builder.endpoint(configuration.getUrl(), port, configuration.isTls()),
+                        port -> builder.endpoint(configuration.url(), port, configuration.secure()),
                         () -> builder.endpoint(
-                                HttpUtils.getBaseUrl(configuration.getUrl()).newBuilder()
-                                        .scheme(configuration.isTls() ? "https" : "http").build()));
+                                HttpUtils.getBaseUrl(configuration.url()).newBuilder()
+                                        .scheme(configuration.secure() ? "https" : "http").build()));
 
-        builder.credentials(configuration.getAccessKey(), configuration.getSecretKey());
-        configuration.region.ifPresent(builder::region);
-        if (miniosRuntimeConfiguration.produceMetrics) {
+        builder.credentials(configuration.accessKey(), configuration.secretKey());
+        configuration.region().ifPresent(builder::region);
+        if (miniosRuntimeConfiguration.produceMetrics()) {
             httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         }
         return builder.build();
@@ -121,13 +121,12 @@ public class MinioClients {
 
         MinioRuntimeConfiguration configuration;
         if (MiniosBuildTimeConfiguration.isDefault(minioClientName)) {
-            configuration = miniosRuntimeConfiguration.minio();
+            configuration = miniosRuntimeConfiguration.minio().get();
         } else {
-            configuration = miniosRuntimeConfiguration.namedMinioClients().getOrDefault(minioClientName,
-                    new MinioRuntimeConfiguration());
+            configuration = miniosRuntimeConfiguration.namedMinioClients().get(minioClientName);
         }
 
-        if (IS_URL_SET.test(configuration.getUrl())) {
+        if (configuration == null || IS_URL_SET.test(configuration.url())) {
             String errorMessage;
             if (MiniosBuildTimeConfiguration.isDefault(minioClientName)) {
                 errorMessage = "\"quarkus.minio.url\" is mandatory and must be a valid url";

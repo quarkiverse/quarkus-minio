@@ -1,16 +1,16 @@
 package io.quarkiverse.minio.client;
 
 import io.quarkus.runtime.annotations.ConfigGroup;
-import io.quarkus.runtime.annotations.ConfigItem;
+import io.smallrye.config.WithDefault;
 
 @ConfigGroup
-public class MinioBuildTimeConfiguration {
+public interface MinioBuildTimeConfiguration {
 
     /**
      * Should the extension provide a `MinioClient`.
      * If set to `false`, you will have to create the clients yourself,
      * but will still benefit the native compatibility work.
      */
-    @ConfigItem(defaultValue = "true")
-    public boolean enabled;
+    @WithDefault("true")
+    boolean enabled();
 }

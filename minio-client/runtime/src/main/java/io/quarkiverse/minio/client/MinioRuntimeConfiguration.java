@@ -2,11 +2,17 @@ package io.quarkiverse.minio.client;
 
 import java.util.Optional;
 
-import io.quarkus.runtime.annotations.ConfigGroup;
-import io.quarkus.runtime.annotations.ConfigItem;
+import org.eclipse.microprofile.config.spi.Converter;
 
+import io.quarkus.runtime.annotations.ConfigGroup;
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.Converters;
+import io.smallrye.config.WithConverter;
+import io.smallrye.config.WithDefault;
+
+@ConfigMapping(prefix = "quarkus.minio")
 @ConfigGroup
-public class MinioRuntimeConfiguration {
+public interface MinioRuntimeConfiguration {
 
     /**
      * The minio server URL.
@@ -20,32 +26,31 @@ public class MinioRuntimeConfiguration {
      *
      * @asciidoclet
      */
-    @ConfigItem
-    Optional<String> url = Optional.empty();
+    @WithConverter(EmptyConverter.class)
+    String url();
 
     /**
      * The minio server access key
      *
      * @asciidoclet
      */
-    @ConfigItem
-    Optional<String> accessKey = Optional.empty();
+    @WithConverter(EmptyConverter.class)
+    String accessKey();
 
     /**
      * The minio server secret key
      *
      * @asciidoclet
      */
-    @ConfigItem
-    Optional<String> secretKey = Optional.empty();
+    @WithConverter(EmptyConverter.class)
+    String secretKey();
 
     /**
      * An optional bucket region
      *
      * @asciidoclet
      */
-    @ConfigItem
-    Optional<String> region = Optional.empty();
+    Optional<String> region();
 
     /**
      * An optional port number.
@@ -53,7 +58,7 @@ public class MinioRuntimeConfiguration {
      *
      * @asciidoclet
      */
-    Optional<Integer> port = Optional.empty();
+    Optional<Integer> port();
 
     /**
      * An optional boolean to enable secure connection.
@@ -61,27 +66,16 @@ public class MinioRuntimeConfiguration {
      *
      * @asciidoclet
      */
-    @ConfigItem(defaultValue = "true")
-    boolean secure;
+    @WithDefault("true")
+    boolean secure();
 
-    public String getUrl() {
-        return url.orElse("");
+    class EmptyConverter implements org.eclipse.microprofile.config.spi.Converter<String> {
+
+        Converter<String> delegate = Converters.newEmptyValueConverter(value -> value, "");
+
+        @Override
+        public String convert(String s) throws IllegalArgumentException, NullPointerException {
+            return delegate.convert(s);
+        }
     }
-
-    String getAccessKey() {
-        return accessKey.orElse("");
-    }
-
-    String getSecretKey() {
-        return secretKey.orElse("");
-    }
-
-    Optional<Integer> getPort() {
-        return port;
-    }
-
-    Boolean isTls() {
-        return secure;
-    }
-
 }
