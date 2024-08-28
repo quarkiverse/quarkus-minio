@@ -14,7 +14,7 @@
   <properties>
     <!-- version.* properties are defined in jboss-parent and are overridden/updated here: -->
     <compiler-plugin.version>3.13.0</compiler-plugin.version>
-    <surefire-plugin.version>3.4.0</surefire-plugin.version>
+    <surefire-plugin.version>3.5.0</surefire-plugin.version>
     <failsafe-plugin.version>${version.surefire.plugin}</failsafe-plugin.version>
     <quarkus.version>3.14.0</quarkus.version>
     <minio.version>8.5.12</minio.version>
