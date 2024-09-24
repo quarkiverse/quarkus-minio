@@ -180,5 +180,5 @@ MinioClient otherMinioClient;
 
 == Configuration Reference
 
-include::includes/quarkus-minio_quarkus.minio.adoc[]
+include::includes/quarkus-minio.adoc[]
 
