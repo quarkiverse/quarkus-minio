@@ -18,7 +18,7 @@
     <failsafe-plugin.version>${version.surefire.plugin}</failsafe-plugin.version>
     <quarkus.version>3.17.7</quarkus.version>
     <minio.version>8.5.16</minio.version>
-    <assertj.version>3.27.2</assertj.version>
+    <assertj.version>3.27.3</assertj.version>
   </properties>
   <scm>
     <connection>scm:git:git@github.com:quarkiverse/quarkus-minio.git</connection>
