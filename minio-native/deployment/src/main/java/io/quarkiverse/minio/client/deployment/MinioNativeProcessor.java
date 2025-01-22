@@ -50,7 +50,7 @@ class MinioNativeProcessor {
             CombinedIndexBuildItem index,
             BuildProducer<ReflectiveClassBuildItem> reflectionClasses) {
         List<String> classes = getClasses("io.minio.messages", null);
-        classes.addAll(getClasses("org.simpleframework.xml.core", ".*Label$"));
+        classes.addAll(getClasses("org.simpleframework.xml.core", ".*Label$|.*Parameter$"));
         classes.addAll(index.getIndex().getAllKnownSubclasses(DotName.createSimple(BaseArgs.class.getName())).stream()
                 .map(ClassInfo::name)
                 .map(DotName::toString)
