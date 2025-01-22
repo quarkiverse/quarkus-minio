@@ -31,7 +31,7 @@ public class MinioClientTest {
         given()
                 .when().get("/minio/yoooo")
                 .then()
-                .statusCode(200);
+                .statusCode(204);
     }
 
     @Test
