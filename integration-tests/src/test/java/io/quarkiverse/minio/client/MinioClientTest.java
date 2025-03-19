@@ -27,6 +27,14 @@ public class MinioClientTest {
     }
 
     @Test
+    public void testPolicy() {
+        given()
+                .when().get("/minio/yoooo")
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
     public void testInsertToAnother() {
         String response = given()
                 .when().post("/another-minio?name=dummy.txt")
