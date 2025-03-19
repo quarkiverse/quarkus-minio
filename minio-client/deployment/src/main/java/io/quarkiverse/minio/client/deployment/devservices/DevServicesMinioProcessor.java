@@ -25,7 +25,7 @@ import io.quarkus.deployment.builditem.DockerStatusBuildItem;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 import io.quarkus.deployment.console.ConsoleInstalledBuildItem;
 import io.quarkus.deployment.console.StartupLogCompressor;
-import io.quarkus.deployment.dev.devservices.GlobalDevServicesConfig;
+import io.quarkus.deployment.dev.devservices.DevServicesConfig;
 import io.quarkus.deployment.logging.LoggingSetupBuildItem;
 import io.quarkus.devservices.common.ConfigureUtil;
 import io.quarkus.devservices.common.ContainerAddress;
@@ -35,7 +35,7 @@ import io.quarkus.runtime.configuration.ConfigUtils;
 
 public class DevServicesMinioProcessor {
     private static final Logger LOGGER = Logger.getLogger(DevServicesMinioProcessor.class);
-    private static final String MINIO_URL = "quarkus.minio%s.url";
+    private static final String MINIO_HOST = "quarkus.minio%s.host";
     private static final String MINIO_PORT = "quarkus.minio%s.port";
     private static final String MINIO_SECURE = "quarkus.minio%s.secure";
     private static final String MINIO_CONSOLE = "quarkus.minio.console";
@@ -57,7 +57,7 @@ public class DevServicesMinioProcessor {
     static volatile MinioDevServiceCfg cfg;
     static volatile boolean first = true;
 
-    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = GlobalDevServicesConfig.Enabled.class)
+    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = DevServicesConfig.Enabled.class)
     public DevServicesResultBuildItem startMinioDevService(
             DockerStatusBuildItem dockerStatusBuildItem,
             LaunchModeBuildItem launchMode,
@@ -65,7 +65,7 @@ public class DevServicesMinioProcessor {
             Optional<ConsoleInstalledBuildItem> consoleInstalledBuildItem,
             CuratedApplicationShutdownBuildItem closeBuildItem,
             LoggingSetupBuildItem loggingSetupBuildItem,
-            GlobalDevServicesConfig devServicesConfig,
+            DevServicesConfig devServicesConfig,
             MiniosBuildTimeConfiguration buildTimeConfiguration,
             List<DevServicesSharedNetworkBuildItem> devServicesSharedNetworkBuildItem) {
 
@@ -84,7 +84,7 @@ public class DevServicesMinioProcessor {
                 (launchMode.isTest() ? "(test) " : "") + "Minio Dev Services Starting:",
                 consoleInstalledBuildItem, loggingSetupBuildItem);
         try {
-            devService = startMinio(dockerStatusBuildItem, configuration, launchMode, devServicesConfig.timeout,
+            devService = startMinio(dockerStatusBuildItem, configuration, launchMode, devServicesConfig.timeout(),
                     buildTimeConfiguration, !devServicesSharedNetworkBuildItem.isEmpty());
             if (devService == null) {
                 compressor.closeAndDumpCaptured();
@@ -115,11 +115,11 @@ public class DevServicesMinioProcessor {
         cfg = configuration;
 
         if (devService.isOwner()) {
-            LOGGER.infof("Dev Services for Minio started on %s", getMinioUrl());
+            LOGGER.infof("Dev Services for Minio started on %s", getMinioHost());
             LOGGER.infof("Other Quarkus applications in dev mode will find the "
                     + "instance automatically. For Quarkus applications in production mode, you can connect to"
                     + " this by starting your application with -D%s=%s -D%s=%s -D%s=%s",
-                    formatPropertyName(MINIO_URL), getMinioUrl(),
+                    formatPropertyName(MINIO_HOST), getMinioHost(),
                     formatPropertyName(MINIO_SECURE), false,
                     formatPropertyName(MINIO_PORT), DEVSERVICE_MINIO_PORT,
                     formatPropertyName(MINIO_ACCESS_KEY), getMinioAccessKey(),
@@ -129,8 +129,8 @@ public class DevServicesMinioProcessor {
         return devService.toBuildItem();
     }
 
-    public static String getMinioUrl() {
-        return devService.getConfig().get(formatPropertyName(MINIO_URL));
+    public static String getMinioHost() {
+        return devService.getConfig().get(formatPropertyName(MINIO_HOST));
     }
 
     public static String getMinioAccessKey() {
@@ -166,9 +166,9 @@ public class DevServicesMinioProcessor {
             return null;
         }
 
-        // Check if quarkus.minio.url is set
-        if (ConfigUtils.isPropertyPresent(formatPropertyName(MINIO_URL))) {
-            LOGGER.debug("Not starting dev services for Minio, the quarkus.minio.url is configured.");
+        // Check if quarkus.minio.host is set
+        if (ConfigUtils.isPropertyPresent(formatPropertyName(MINIO_HOST))) {
+            LOGGER.debug("Not starting dev services for Minio, the quarkus.minio.host is configured.");
             return null;
         }
 
@@ -180,9 +180,9 @@ public class DevServicesMinioProcessor {
             return null;
         }
 
-        if (!dockerStatusBuildItem.isDockerAvailable()) {
+        if (!dockerStatusBuildItem.isContainerRuntimeAvailable()) {
             LOGGER.warn(String.format("Docker isn't working, please configure the Minio Url property (%s).",
-                    formatPropertyName(MINIO_URL)));
+                    formatPropertyName(MINIO_HOST)));
             return null;
         }
 
@@ -238,7 +238,7 @@ public class DevServicesMinioProcessor {
                 .ifPresent(consolePort -> result.put(MINIO_CONSOLE, String.format("http://%s:%d", consoleHost, consolePort)));
 
         buildTimeConfiguration.getMinioClients().entrySet().stream()
-                .map(entry -> Map.of(formatPropertyName(MINIO_URL, entry.getKey()), host,
+                .map(entry -> Map.of(formatPropertyName(MINIO_HOST, entry.getKey()), host,
                         formatPropertyName(MINIO_PORT, entry.getKey()), String.valueOf(port),
                         formatPropertyName(MINIO_SECURE, entry.getKey()), "false",
                         formatPropertyName(MINIO_ACCESS_KEY, entry.getKey()), config.accessKey,

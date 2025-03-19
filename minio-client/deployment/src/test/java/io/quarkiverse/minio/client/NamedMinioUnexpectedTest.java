@@ -17,7 +17,7 @@ class NamedMinioUnexpectedTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
-            .withConfigurationResource("application-valid.properties")
+            .withConfigurationResource("application-valid-deprecated.properties")
             .setExpectedException(UnsatisfiedResolutionException.class);
 
     @Test

@@ -26,8 +26,19 @@ public interface MinioRuntimeConfiguration {
      *
      * @asciidoclet
      */
+    @Deprecated(since = "3.8", forRemoval = true)
     @WithConverter(EmptyConverter.class)
     String url();
+
+    /**
+     * The minio server host.
+     * The host _may_ contains the port, though it's not recommended. If a specific port is needed, `quakus.minio.port` is a
+     * better fit.
+     *
+     * @asciidoclet
+     */
+    @WithConverter(EmptyConverter.class)
+    String host();
 
     /**
      * The minio server access key

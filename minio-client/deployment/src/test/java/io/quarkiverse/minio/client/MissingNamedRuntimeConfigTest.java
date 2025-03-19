@@ -28,7 +28,7 @@ class MissingNamedRuntimeConfigTest {
     public void unexpected() {
         Assertions.assertThatThrownBy(() -> minioClient.get())
                 .isInstanceOf(CreationException.class)
-                .hasMessageContaining("\"quarkus.minio.acme.url\" is mandatory")
+                .hasMessageContaining("\"quarkus.minio.acme.host\" is mandatory")
                 .hasCauseInstanceOf(ConfigurationException.class);
     }
 }

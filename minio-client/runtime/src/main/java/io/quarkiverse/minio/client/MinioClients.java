@@ -25,7 +25,7 @@ public class MinioClients {
 
     private final OptionalHttpClientProducer httpClientProducer;
 
-    private static final Predicate<String> IS_URL_SET = value -> value == null || value.isBlank();
+    private static final Predicate<String> IS_HOST_SET = value -> value == null || value.isBlank();
 
     public MinioClients(
             MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
@@ -82,9 +82,9 @@ public class MinioClients {
         MinioClient.Builder builder = MinioClient.builder();
         configuration.port()
                 .ifPresentOrElse(
-                        port -> builder.endpoint(configuration.url(), port, configuration.secure()),
+                        port -> builder.endpoint(configuration.host(), port, configuration.secure()),
                         () -> builder.endpoint(
-                                HttpUtils.getBaseUrl(configuration.url()).newBuilder()
+                                HttpUtils.getBaseUrl(configuration.host()).newBuilder()
                                         .scheme(configuration.secure() ? "https" : "http").build()));
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
@@ -101,9 +101,9 @@ public class MinioClients {
         MinioAsyncClient.Builder builder = MinioAsyncClient.builder();
         configuration.port()
                 .ifPresentOrElse(
-                        port -> builder.endpoint(configuration.url(), port, configuration.secure()),
+                        port -> builder.endpoint(configuration.host(), port, configuration.secure()),
                         () -> builder.endpoint(
-                                HttpUtils.getBaseUrl(configuration.url()).newBuilder()
+                                HttpUtils.getBaseUrl(configuration.host()).newBuilder()
                                         .scheme(configuration.secure() ? "https" : "http").build()));
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
@@ -126,12 +126,12 @@ public class MinioClients {
             configuration = miniosRuntimeConfiguration.namedMinioClients().get(minioClientName);
         }
 
-        if (configuration == null || IS_URL_SET.test(configuration.url())) {
+        if (configuration == null || IS_HOST_SET.test(configuration.host())) {
             String errorMessage;
             if (MiniosBuildTimeConfiguration.isDefault(minioClientName)) {
-                errorMessage = "\"quarkus.minio.url\" is mandatory and must be a valid url";
+                errorMessage = "\"quarkus.minio.host\" is mandatory.";
             } else {
-                errorMessage = "\"quarkus.minio." + minioClientName + ".url\" is mandatory and must be a valid url";
+                errorMessage = "\"quarkus.minio." + minioClientName + ".host\" is mandatory.";
             }
             throw new ConfigurationException(errorMessage);
         }

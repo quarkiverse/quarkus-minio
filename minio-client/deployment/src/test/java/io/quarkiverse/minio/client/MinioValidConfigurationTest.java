@@ -21,7 +21,7 @@ class MinioValidConfigurationTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
-            .withConfigurationResource("application-valid.properties");
+            .withConfigurationResource("application-valid-deprecated.properties");
 
     @Test
     public void testDefaultMinioClientInjection() {
