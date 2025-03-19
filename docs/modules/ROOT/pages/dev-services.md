@@ -1,0 +1,72 @@
+## Dev Services
+
+Quarkus supports a feature called Dev Services that allows you to create various containers without any config.
+What that means in practice is that if you have Docker running and have not configured `quarkus.minio.url`, 
+Quarkus will automatically start a Minio container when running tests or in dev mode, and automatically configure the connection.
+
+When running the production version of the application, the Minio connection needs to be configured as normal.
+
+<dl><dt><strong>📌 NOTE</strong></dt><dd>
+
+If using multiple minio client, all will target the same container.
+At the moment it’s also not possible to configure devservices individually for each minio client.
+</dd></dl>
+
+### Shared server
+
+Most of the time you need to share the server between applications.
+Dev Services for Minio implements a _service discovery_ mechanism for your multiple Quarkus applications running in _dev_ mode to share a single server.
+
+**📌 NOTE**\
+Dev Services for Minio starts the container with the `quarkus-dev-service-minio` label which is used to identify the container.
+
+If you need multiple (shared) servers, you can configure the `quarkus.minio.devservices.service-name` attribute and indicate the server name.
+It looks for a container with the same value, or starts a new one if none can be found.
+The default service name is `minio`.
+
+Containers are started using Testcontainers and support reusable instances.
+If you add the property `testcontainers.reuse.enable=true` in your Testcontainers configuration file, then the container will not be stopped after each run, and can be reused.
+See &lt;https://www.testcontainers.org/features/reuse/#how-to-use-it>
+for more information.
+
+Sharing is enabled by default in dev mode, but disabled in test mode.
+You can disable the sharing with `quarkus.minio.devservices.shared=false`.
+
+### Available properties
+
+When using the Dev service, the following properties will be made available at runtime :
+
+* **`quarkus.minio.url`**\
+The container host name. It isn’t an _URL_, it doesn’t contains the exposed port. It’s value will certainly be `localhost`
+* **Hard drive**\
+Permanent storage for operating system and/or user files.
+* **`quarkus.minio.port`**\
+The container exposed port. May be used in combination with `quarkus.minio.url` to get an _URL_
+* **`quarkus.minio.secure`**\
+Will be `false`
+* **`quarkus.minio.secret-key`**\
+Will be logged at startup
+* **`quarkus.minio.access-key`**\
+Will be logged at startup
+
+footnote:disclaimer[Opinions are my own.]
+
+### Additional environment variables
+
+You can enhance the container’s functionality by injecting additional environment variables.
+These variables might be used, for instance, to configure
+[Bucket Notifications](https://min.io/docs/minio/linux/administration/monitoring/bucket-notifications.html) or
+[Identity and Access Management](https://min.io/docs/minio/linux/administration/identity-access-management.html). You can
+achieve this by including `quarkus.minio.devservices.container-env.ENV_VAR_NAME=value` in your configuration settings.
+
+```properties
+quarkus.minio.devservices.container-env.MINIO_NOTIFY_KAFKA_ENABLE_LOCAL=on
+quarkus.minio.devservices.container-env.MINIO_NOTIFY_KAFKA_TOPIC_LOCAL=example.topic
+
+quarkus.minio.devservices.container-env.MINIO_IDENTITY_OPENID_CLAIM_NAME=policy
+```
+
+* **Test**\
+The `quarkus.minio.devservices.container-env` prefix is mandatory.
+* **ET donc**\
+The `container-env` prefix is mandatory.
