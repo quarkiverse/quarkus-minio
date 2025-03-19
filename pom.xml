@@ -8,7 +8,7 @@
   </parent>
   <groupId>io.quarkiverse.minio</groupId>
   <artifactId>quarkus-minio-parent</artifactId>
-  <version>3.7.8-SNAPSHOT</version>
+  <version>3.8.1-SNAPSHOT</version>
   <name>Quarkus Minio - Parent</name>
   <packaging>pom</packaging>
   <properties>
