@@ -10,6 +10,8 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
@@ -28,13 +30,15 @@ public class AnOtherMinioResource {
     @MinioQualifier("another")
     MinioClient minioClient;
 
+    @ConfigProperty(name = "quarkus.minio.host")
+    String minioHost;
+
     @POST
     public String addObject(@QueryParam("name") String fileName) throws IOException, MinioException, GeneralSecurityException {
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build())) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
         }
-        String dummyFile = "Dummy content";
-        try (InputStream is = new ByteArrayInputStream((dummyFile.getBytes()))) {
+        try (InputStream is = new ByteArrayInputStream((minioHost.getBytes()))) {
             ObjectWriteResponse response = minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(BUCKET_NAME)

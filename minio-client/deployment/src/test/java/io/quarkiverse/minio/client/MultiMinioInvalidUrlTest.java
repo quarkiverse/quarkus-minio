@@ -34,7 +34,7 @@ class MultiMinioInvalidUrlTest {
         // toString method only here to trigger client instanciation
         assertThatThrownBy(() -> minioClient.get())
                 .isInstanceOf(CreationException.class)
-                .hasMessageContaining("\"quarkus.minio.url\" is mandatory")
+                .hasMessageContaining("\"quarkus.minio.host\" is mandatory")
                 .hasCauseInstanceOf(ConfigurationException.class);
         assertThatCode(() -> anotherValidMinioClient.toString()).doesNotThrowAnyException();
     }

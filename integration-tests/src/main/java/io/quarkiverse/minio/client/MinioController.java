@@ -14,6 +14,8 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import io.micrometer.core.annotation.Timed;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
@@ -48,14 +50,16 @@ public class MinioController {
     @Inject
     MinioClient minioClient;
 
+    @ConfigProperty(name = "quarkus.minio.url")
+    String minioUrl;
+
     @POST
     @Timed(histogram = true)
     public String addObject(@QueryParam("name") String fileName) throws IOException, MinioException, GeneralSecurityException {
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build())) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
         }
-        String dummyFile = "Dummy content";
-        try (InputStream is = new ByteArrayInputStream((dummyFile.getBytes()))) {
+        try (InputStream is = new ByteArrayInputStream((minioUrl.getBytes()))) {
             ObjectWriteResponse response = minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(BUCKET_NAME)
@@ -71,8 +75,7 @@ public class MinioController {
 
     @GET
     public String getObject(@QueryParam("name") String fileName) {
-        String dummyFile = "Dummy content";
-        try (InputStream is = new ByteArrayInputStream((dummyFile.getBytes()))) {
+        try (InputStream is = new ByteArrayInputStream((minioUrl.getBytes()))) {
             GetObjectResponse response = minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(BUCKET_NAME)

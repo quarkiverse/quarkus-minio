@@ -1,0 +1,2 @@
+io.quarkiverse.minio.client.hosturlmap.MinioUrlRelocateInterceptor
+io.quarkiverse.minio.client.hosturlmap.MinioHostFallbackInterceptor

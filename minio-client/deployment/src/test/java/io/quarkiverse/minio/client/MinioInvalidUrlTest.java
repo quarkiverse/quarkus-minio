@@ -27,7 +27,7 @@ class MinioInvalidUrlTest {
         //Not validating other configuration keys as quarkus already does it for us.
         // toString method only here to trigger client instanciation
         Assertions.assertThatThrownBy(() -> minioClient.get())
-                .hasMessageContaining("\"quarkus.minio.url\" is mandatory")
+                .hasMessageContaining("\"quarkus.minio.host\" is mandatory")
                 .hasCauseInstanceOf(ConfigurationException.class);
     }
 }
