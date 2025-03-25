@@ -30,7 +30,7 @@ public class MinioClientDevUIProcessor {
         cardProducer.produce(card);
     }
 
-    @BuildStep(onlyIf = IsDevelopment.class)
+    @BuildStep
     JsonRPCProvidersBuildItem createJsonRPCServiceForCache() {
         return new JsonRPCProvidersBuildItem(MinioJsonRPCService.class);
     }
