@@ -2,7 +2,7 @@
 == Dev Services
 
 Quarkus supports a feature called Dev Services that allows you to create various containers without any config.
-What that means in practice is that if you have Docker running and have not configured `quarkus.minio.url`, 
+What that means in practice is that if you have Docker running and have not configured `quarkus.minio.host`, 
 Quarkus will automatically start a Minio container when running tests or in dev mode, and automatically configure the connection.
 
 When running the production version of the application, the Minio connection needs to be configured as normal.
@@ -27,10 +27,9 @@ The default service name is `minio`.
 
 Containers are started using Testcontainers and support reusable instances.
 If you add the property `testcontainers.reuse.enable=true` in your Testcontainers configuration file, then the container will not be stopped after each run, and can be reused.
-See <https://www.testcontainers.org/features/reuse/#how-to-use-it>
-for more information.
+Please also not that you will have to delete them yourself to avoid dangling containers. See <https://www.testcontainers.org/features/reuse/#how-to-use-it> for more information.
 
-Sharing is enabled by default in dev mode, but disabled in test mode.
+Sharing is enabled by default in dev mode, but disabled in test mode. 
 You can disable the sharing with `quarkus.minio.devservices.shared=false`.
 
 === Available properties
@@ -38,9 +37,9 @@ You can disable the sharing with `quarkus.minio.devservices.shared=false`.
 When using the Dev service, the following properties will be made available at runtime :
 
 [horizontal]
-`quarkus.minio.url`:: The container host name. It isn't an _URL_, it doesn't contains the exposed port. It's value will certainly be `localhost`
+`quarkus.minio.host`:: The container host name. It isn't an _URL_, it doesn't contains the exposed port. It's value will certainly be `localhost`
 Hard drive:: Permanent storage for operating system and/or user files.
-`quarkus.minio.port`:: The container exposed port. May be used in combination with `quarkus.minio.url` to get an _URL_
+`quarkus.minio.port`:: The container exposed port. May be used in combination with `quarkus.minio.host` to get an _URL_
 `quarkus.minio.secure`:: Will be `false`
 `quarkus.minio.secret-key`:: Will be logged at startup
 `quarkus.minio.access-key`:: Will be logged at startup

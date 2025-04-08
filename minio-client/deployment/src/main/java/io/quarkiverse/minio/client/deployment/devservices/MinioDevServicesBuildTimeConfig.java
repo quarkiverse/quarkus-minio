@@ -10,7 +10,7 @@ import io.smallrye.config.WithDefault;
 public interface MinioDevServicesBuildTimeConfig {
 
     /**
-     * Enable or disable Dev Services explicitly. Dev Services are automatically enabled unless {@code quarkus.minio.url} is
+     * Enable or disable Dev Services explicitly. Dev Services are automatically enabled unless {@code quarkus.minio.host} is
      * set.
      */
     @WithDefault("true")
