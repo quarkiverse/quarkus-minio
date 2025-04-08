@@ -97,6 +97,29 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`true`
 
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-reuse-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-reuse-enabled[`quarkus.minio.devservices.reuse-enabled`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.minio.devservices.reuse-enabled+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+Whether to keep Dev Service containers running after a dev mode session or test suite execution to reuse them in the next dev mode session.
+
+Enabled by default
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_REUSE_ENABLED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_REUSE_ENABLED+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`true`
+
 a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-service-name]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-service-name[`quarkus.minio.devservices.service-name`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.service-name+++[]
