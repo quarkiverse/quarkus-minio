@@ -36,12 +36,12 @@ You can disable the sharing with `quarkus.minio.devservices.shared=false`.
 
 When using the Dev service, the following properties will be made available at runtime :
 
-* **`quarkus.minio.url`**\
+* **`quarkus.minio.host`**\
 The container host name. It isn’t an _URL_, it doesn’t contains the exposed port. It’s value will certainly be `localhost`
 * **Hard drive**\
 Permanent storage for operating system and/or user files.
 * **`quarkus.minio.port`**\
-The container exposed port. May be used in combination with `quarkus.minio.url` to get an _URL_
+The container exposed port. May be used in combination with `quarkus.minio.host` to get an _URL_
 * **`quarkus.minio.secure`**\
 Will be `false`
 * **`quarkus.minio.secret-key`**\
