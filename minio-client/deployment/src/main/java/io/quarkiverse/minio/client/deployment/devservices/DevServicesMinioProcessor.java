@@ -42,6 +42,7 @@ public class DevServicesMinioProcessor {
     private static final String MINIO_ALLOW_EMPTY = "quarkus.minio%s.allow-empty";
     private static final String MINIO_ACCESS_KEY = "quarkus.minio%s.access-key";
     private static final String MINIO_SECRET_KEY = "quarkus.minio%s.secret-key";
+    private static final String MINIO_DEVSERVICE_REUSE_ENABLED = "quarkus.minio.devservices.reuse.enabled";
 
     /**
      * Label to add to shared Dev Service for Minio running in containers.
@@ -209,7 +210,7 @@ public class DevServicesMinioProcessor {
 
             timeout.ifPresent(container::withStartupTimeout);
 
-            container.withReuse(true);
+            container.withReuse(config.reuseEnabled);
 
             container.start();
             return new RunningDevService(config.serviceName,
@@ -269,6 +270,7 @@ public class DevServicesMinioProcessor {
         private final String imageName;
         private final Integer fixedExposedPort;
         private final boolean shared;
+        private final boolean reuseEnabled;
         private final String serviceName;
         private final String accessKey;
         private final String secretKey;
@@ -279,6 +281,7 @@ public class DevServicesMinioProcessor {
             this.imageName = config.imageName();
             this.fixedExposedPort = config.port();
             this.shared = config.shared();
+            this.reuseEnabled = config.reuseEnabled();
             this.serviceName = config.serviceName();
             this.accessKey = config.accessKey();
             this.secretKey = config.secretKey();
