@@ -1,6 +1,6 @@
 # Quarkus Minio Extension
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build](https://github.com/quarkiverse/quarkus-minio/workflows/Build/badge.svg)](https://github.com/quarkiverse/quarkus-minio/actions?query=workflow%3ABuild)
 [![Maven Central](https://img.shields.io/maven-central/v/io.quarkiverse.minio/quarkus-minio-parent.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.quarkiverse.minio/quarkus-minio-parent)
@@ -38,6 +38,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="http://gastaldi.wordpress.com"><img src="https://avatars.githubusercontent.com/u/54133?v=4?s=100" width="100px;" alt="George Gastaldi"/><br /><sub><b>George Gastaldi</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=gastaldi" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://exentra.de"><img src="https://avatars.githubusercontent.com/u/545499?v=4?s=100" width="100px;" alt="Markus Herhoffer"/><br /><sub><b>Markus Herhoffer</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=d135-1r43" title="Documentation">📖</a> <a href="https://github.com/quarkiverse/quarkus-minio/commits?author=d135-1r43" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://v47.io"><img src="https://avatars.githubusercontent.com/u/7115009?v=4?s=100" width="100px;" alt="Alex Katlein"/><br /><sub><b>Alex Katlein</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=vemilyus" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://about.me/metacosm"><img src="https://avatars.githubusercontent.com/u/120057?v=4?s=100" width="100px;" alt="Chris Laprun"/><br /><sub><b>Chris Laprun</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-minio/commits?author=metacosm" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
