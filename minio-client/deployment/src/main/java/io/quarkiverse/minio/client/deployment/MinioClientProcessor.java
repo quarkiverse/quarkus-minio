@@ -1,7 +1,7 @@
 package io.quarkiverse.minio.client.deployment;
 
 import java.util.Map;
-import java.util.function.BooleanSupplier;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import jakarta.inject.Singleton;
@@ -19,41 +19,21 @@ import io.quarkiverse.minio.client.WithMetricsHttpClientProducer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
-import io.quarkus.bootstrap.classloading.QuarkusClassLoader;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.metrics.MetricsCapabilityBuildItem;
+import io.quarkus.runtime.metrics.MetricsFactory;
 
 class MinioClientProcessor {
 
     private static final String FEATURE = "minio-client";
 
-    public static class MetricsEnabled implements BooleanSupplier {
-        @Override
-        public boolean getAsBoolean() {
-            return QuarkusClassLoader.isClassPresentAtRuntime("io.micrometer.core.instrument.MeterRegistry");
-        }
-    }
-
     @BuildStep
     FeatureBuildItem feature() {
         return new FeatureBuildItem(FEATURE);
-    }
-
-    @BuildStep(onlyIfNot = { MetricsEnabled.class })
-    void ifMetricsAreDisabled(
-            BuildProducer<AdditionalBeanBuildItem> additionalBeanBuildItemBuildProducer) {
-        additionalBeanBuildItemBuildProducer
-                .produce(AdditionalBeanBuildItem.unremovableOf(EmptyHttpClientProducer.class));
-    }
-
-    @BuildStep(onlyIf = { MetricsEnabled.class })
-    void ifMetricsAreEnabled(
-            BuildProducer<AdditionalBeanBuildItem> additionalBeanBuildItemBuildProducer) {
-        additionalBeanBuildItemBuildProducer
-                .produce(AdditionalBeanBuildItem.unremovableOf(WithMetricsHttpClientProducer.class));
     }
 
     @Record(ExecutionTime.RUNTIME_INIT)
@@ -62,7 +42,8 @@ class MinioClientProcessor {
             MiniosRuntimeConfiguration miniosRuntimeConfiguration,
             MinioRecorder minioRecorder,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
-            BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+            BuildProducer<AdditionalBeanBuildItem> additionalBeans,
+            Optional<MetricsCapabilityBuildItem> metricsCapability) {
         if (miniosBuildTimeConfiguration.getMinioClients().isEmpty()) {
             //No minio client needed
             return;
@@ -86,6 +67,14 @@ class MinioClientProcessor {
                             MinioAsyncClient.class,
                             // Pass runtime configuration to ensure initialization order
                             minioRecorder.minioAsyncClientSupplier(minioClientName, miniosRuntimeConfiguration)));
+        }
+
+        // add default bean based on whether or not micrometer is enabled
+        if (metricsCapability.map(m -> m.metricsSupported(MetricsFactory.MICROMETER)).orElse(false)) {
+            // we use the class name to not import any micrometer-related dependencies to prevent activation
+            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(WithMetricsHttpClientProducer.class));
+        } else {
+            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(EmptyHttpClientProducer.class));
         }
     }
 
