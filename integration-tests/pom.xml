@@ -27,7 +27,7 @@
 
         <dependency>
             <groupId>io.quarkiverse.minio</groupId>
-            <artifactId>quarkus-minio</artifactId>
+            <artifactId>quarkus-minio-admin</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

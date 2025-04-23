@@ -1,4 +1,4 @@
-name: "Minio Client Native extension"
+name: "Minio Admin Client extension"
 artifact: ${project.groupId}:${project.artifactId}:${project.version}
 metadata:
   keywords:
