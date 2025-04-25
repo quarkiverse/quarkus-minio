@@ -1,8 +1,7 @@
-import { LitElement, html, css} from 'lit';
-import { pages } from 'build-time-data';
-import { enabled } from 'build-time-data';
+import {css, html, LitElement} from 'lit';
+import {enabled, pages} from 'build-time-data';
 import 'qwc/qwc-extension-link.js';
-import { JsonRpc } from 'jsonrpc'
+import {JsonRpc} from 'jsonrpc'
 import 'qui-badge';
 
 export class QwcMinioCard extends LitElement {

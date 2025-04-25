@@ -1,7 +1,6 @@
 package io.quarkiverse.minio.client.deployment.devservices;
 
 import java.util.Map;
-import java.util.Optional;
 
 import io.quarkus.runtime.annotations.ConfigDocMapKey;
 import io.quarkus.runtime.annotations.ConfigGroup;

@@ -1,5 +1,6 @@
 package io.quarkiverse.minio.client.deployment.devservices;
 
+import java.io.Closeable;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,9 @@ import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
+import io.quarkus.builder.item.SimpleBuildItem;
 import io.quarkus.deployment.IsNormal;
+import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CuratedApplicationShutdownBuildItem;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
@@ -38,7 +41,6 @@ public class DevServicesMinioProcessor {
     private static final String MINIO_HOST = "quarkus.minio%s.host";
     private static final String MINIO_PORT = "quarkus.minio%s.port";
     private static final String MINIO_SECURE = "quarkus.minio%s.secure";
-    private static final String MINIO_CONSOLE = "quarkus.minio.console";
     private static final String MINIO_ALLOW_EMPTY = "quarkus.minio%s.allow-empty";
     private static final String MINIO_ACCESS_KEY = "quarkus.minio%s.access-key";
     private static final String MINIO_SECRET_KEY = "quarkus.minio%s.secret-key";
@@ -67,6 +69,7 @@ public class DevServicesMinioProcessor {
             LoggingSetupBuildItem loggingSetupBuildItem,
             DevServicesConfig devServicesConfig,
             MiniosBuildTimeConfiguration buildTimeConfiguration,
+            BuildProducer<MinioConsoleURLBuildItem> minioConsoleURLBuildItemBuildProducer,
             List<DevServicesSharedNetworkBuildItem> devServicesSharedNetworkBuildItem) {
 
         MinioDevServiceCfg configuration = getConfiguration(minioBuildTimeConfig);
@@ -85,7 +88,8 @@ public class DevServicesMinioProcessor {
                 consoleInstalledBuildItem, loggingSetupBuildItem);
         try {
             devService = startMinio(dockerStatusBuildItem, configuration, launchMode, devServicesConfig.timeout(),
-                    buildTimeConfiguration, !devServicesSharedNetworkBuildItem.isEmpty());
+                    buildTimeConfiguration, !devServicesSharedNetworkBuildItem.isEmpty(),
+                    minioConsoleURLBuildItemBuildProducer);
             if (devService == null) {
                 compressor.closeAndDumpCaptured();
             } else {
@@ -159,7 +163,7 @@ public class DevServicesMinioProcessor {
             LaunchModeBuildItem launchMode,
             Optional<Duration> timeout,
             MiniosBuildTimeConfiguration buildTimeConfiguration,
-            boolean useSharedNetwork) {
+            boolean useSharedNetwork, BuildProducer<MinioConsoleURLBuildItem> minioConsoleURLBuildItemBuildProducer) {
         if (!config.devServicesEnabled) {
             // explicitly disabled
             LOGGER.debug("Not starting dev services for Minio, as it has been disabled in the config.");
@@ -212,37 +216,63 @@ public class DevServicesMinioProcessor {
             container.withReuse(true);
 
             container.start();
-            return new RunningDevService(config.serviceName,
+
+            return getRunningContainer(minioConsoleURLBuildItemBuildProducer,
+                    Optional.of(container.getConsolePort()),
+                    container.getEffectiveHost(),
+                    container.getPort(),
                     container.getContainerId(),
+                    config,
+                    buildTimeConfiguration,
                     new ContainerShutdownCloseable(container, config.serviceName),
-                    getRunningDevServicesConfig(config, container.getEffectiveHost(), container.getPort(), container.getHost(),
-                            Optional.of(container.getConsolePort()),
-                            buildTimeConfiguration));
+                    container.getHost());
+
         };
 
         return maybeContainerAddress
-                .map(containerAddress -> new RunningDevService(config.serviceName,
+                .map(containerAddress -> getRunningContainer(minioConsoleURLBuildItemBuildProducer,
+                        maybeConsolePort,
+                        containerAddress.getHost(),
+                        containerAddress.getPort(),
                         containerAddress.getId(),
+                        config,
+                        buildTimeConfiguration,
                         null,
-                        getRunningDevServicesConfig(config, containerAddress.getHost(), containerAddress.getPort(),
-                                containerAddress.getHost(),
-                                maybeConsolePort, buildTimeConfiguration)))
+                        containerAddress.getHost()))
                 .orElseGet(defaultMinioBrokerSupplier);
     }
 
-    private Map<String, String> getRunningDevServicesConfig(MinioDevServiceCfg config, String host, int port,
-            String consoleHost,
-            Optional<Integer> maybeConsolePort, MiniosBuildTimeConfiguration buildTimeConfiguration) {
-        var result = new HashMap<String, String>();
-        maybeConsolePort
-                .ifPresent(consolePort -> result.put(MINIO_CONSOLE, String.format("http://%s:%d", consoleHost, consolePort)));
+    private RunningDevService getRunningContainer(BuildProducer<MinioConsoleURLBuildItem> minioConsoleURLBuildItemBuildProducer,
+            Optional<Integer> maybeConsolePort,
+            String containerHost,
+            int containerPort,
+            String containerId,
+            MinioDevServiceCfg config,
+            MiniosBuildTimeConfiguration buildTimeConfiguration,
+            Closeable closeable,
+            String hostName) {
 
-        buildTimeConfiguration.getMinioClients().entrySet().stream()
-                .map(entry -> Map.of(formatPropertyName(MINIO_HOST, entry.getKey()), host,
-                        formatPropertyName(MINIO_PORT, entry.getKey()), String.valueOf(port),
-                        formatPropertyName(MINIO_SECURE, entry.getKey()), "false",
-                        formatPropertyName(MINIO_ACCESS_KEY, entry.getKey()), config.accessKey,
-                        formatPropertyName(MINIO_SECRET_KEY, entry.getKey()), config.secretKey))
+        maybeConsolePort.ifPresent(consolePort -> minioConsoleURLBuildItemBuildProducer
+                .produce(new MinioConsoleURLBuildItem(String.format("http://%s:%d", hostName, consolePort))));
+        return new RunningDevService(config.serviceName,
+                containerId,
+                closeable,
+                getRunningDevServicesConfig(config, containerHost, containerPort,
+                        buildTimeConfiguration));
+
+    }
+
+    private Map<String, String> getRunningDevServicesConfig(MinioDevServiceCfg config, String host, int port,
+            MiniosBuildTimeConfiguration buildTimeConfiguration) {
+        var result = new HashMap<String, String>();
+
+        buildTimeConfiguration.getMinioClients().keySet().stream()
+                .filter(minioClientName -> !minioClientName.equals("devservices"))
+                .map(minioClientName -> Map.of(formatPropertyName(MINIO_HOST, minioClientName), host,
+                        formatPropertyName(MINIO_PORT, minioClientName), String.valueOf(port),
+                        formatPropertyName(MINIO_SECURE, minioClientName), "false",
+                        formatPropertyName(MINIO_ACCESS_KEY, minioClientName), config.accessKey,
+                        formatPropertyName(MINIO_SECRET_KEY, minioClientName), config.secretKey))
                 .forEach(result::putAll);
         return result;
     }
@@ -319,12 +349,12 @@ public class DevServicesMinioProcessor {
             super(dockerImageName);
             this.port = fixedExposedPort;
             this.useSharedNetwork = useSharedNetwork;
-            withExposedPorts(DEVSERVICE_MINIO_PORT, DEVSERVICE_MINIO_CONSOLE_PORT);
-            withEnv("MINIO_ACCESS_KEY", accessKey);
-            withEnv("MINIO_SECRET_KEY", secretKey);
-            withEnv(containerEnv);
-            withCommand("server", "/data", "--console-address", ":9001");
-            waitingFor(new HttpWaitStrategy().forPort(9000).forPath("/minio/health/live"));
+            withExposedPorts(DEVSERVICE_MINIO_PORT, DEVSERVICE_MINIO_CONSOLE_PORT)
+                    .withEnv("MINIO_ACCESS_KEY", accessKey)
+                    .withEnv("MINIO_SECRET_KEY", secretKey)
+                    .withEnv(containerEnv)
+                    .withCommand("server", "/data", "--console-address", ":9001")
+                    .waitingFor(new HttpWaitStrategy().forPort(9000).forPath("/minio/health/live"));
         }
 
         @Override
@@ -361,6 +391,18 @@ public class DevServicesMinioProcessor {
         public int getConsolePort() {
             // console port is meant to be exposed only
             return getMappedPort(DEVSERVICE_MINIO_CONSOLE_PORT);
+        }
+    }
+
+    public static final class MinioConsoleURLBuildItem extends SimpleBuildItem {
+        private final String url;
+
+        public MinioConsoleURLBuildItem(String url) {
+            this.url = url;
+        }
+
+        public String getUrl() {
+            return url;
         }
     }
 }

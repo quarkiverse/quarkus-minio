@@ -11,11 +11,6 @@ public class MinioJsonRPCService {
     Config config = ConfigProvider.getConfig();
 
     @NonBlocking
-    public String getMinioConsoleUrl() {
-        return config.getOptionalValue("quarkus.minio.console", String.class).orElse(null);
-    }
-
-    @NonBlocking
     public JsonObject getLoginDetails() {
         return JsonObject.of(
                 "accesskey", config.getOptionalValue("quarkus.minio.access-key", String.class).orElse(null),

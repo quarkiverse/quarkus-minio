@@ -1,7 +1,5 @@
 package io.quarkiverse.minio.client;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import jakarta.enterprise.inject.CreationException;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
