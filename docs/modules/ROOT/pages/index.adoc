@@ -115,6 +115,42 @@ public class SampleService {
 }
 ----
 
+=== Minio Admin Client
+
+It's also possible to get a `io.minio.admin.MinioAdminClient` injected. (Note that it will only work in JRE mode for now. If you feel the need for a native mode, please fill up an issue)
+
+[source,java]
+----
+package com.acme.minio;
+
+import io.minio.MinioAsyncClient;
+import io.minio.admin.MinioAdminClient;
+import io.minio.admin.UserInfo;
+
+// ...
+
+@ApplicationScoped
+public class SampleService {
+
+    @Inject
+    MinioAdminClientClient minioAdminClient;
+
+    // ...
+
+    public void setAdminUser() {
+            var nullPolicy = null;
+            minioAdminClient.addUser(
+               "supersecret_user_access_key",
+                UserInfo.Status.ENABLED,
+               "supersecret_user_secret_key",
+                nullPolicy, // Allow to specify PBAC
+                List.of() // Optional list of group membership
+        );
+    }
+
+}
+----
+
 == Multiple Minio clients
 
 === Configuring Multiple MinioClients
