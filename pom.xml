@@ -29,6 +29,7 @@
   <modules>
     <module>minio-native</module>
     <module>minio-client</module>
+    <module>minio-admin-native</module>
     <module>minio-admin</module>
   </modules>
   <profiles>

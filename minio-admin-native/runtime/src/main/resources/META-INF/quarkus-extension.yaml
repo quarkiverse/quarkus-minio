@@ -1,0 +1,13 @@
+name: "Minio Admin Native extension"
+artifact: ${project.groupId}:${project.artifactId}:${project.version}
+metadata:
+  keywords:
+    - "minio"
+    - "storage"
+    - "kubernetes"
+  guide: "https://quarkiverse.github.io/quarkiverse-docs/quarkus-minio/dev/index.html"
+  categories:
+    - "kubernetes"
+    - "data"
+  status: "stable"
+  description: "Handler minio admin java sdk native compatibility"
