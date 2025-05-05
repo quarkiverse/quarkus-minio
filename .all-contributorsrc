@@ -134,6 +134,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jonesbusy",
+      "name": "Valentin Delaye",
+      "avatar_url": "https://avatars.githubusercontent.com/u/825750?v=4",
+      "profile": "https://github.com/jonesbusy",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
