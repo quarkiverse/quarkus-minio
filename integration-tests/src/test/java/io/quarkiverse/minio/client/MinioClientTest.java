@@ -1,11 +1,12 @@
 package io.quarkiverse.minio.client;
 
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 public class MinioClientTest {
