@@ -70,7 +70,7 @@ Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_IMAGE_NAME+++`
 endif::add-copy-button-to-env-var[]
 --
 |string
-|`minio/minio:RELEASE.2022-10-08T20-11-00Z`
+|`minio/minio:RELEASE.2025-04-22T22-12-26Z`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-shared]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-shared[`quarkus.minio.devservices.shared`]##
 ifdef::add-copy-button-to-config-props[]
