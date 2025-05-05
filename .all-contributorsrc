@@ -125,6 +125,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "GuillaumeBenoot",
+      "name": "GuillaumeB",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36510246?v=4",
+      "profile": "https://github.com/GuillaumeBenoot",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
