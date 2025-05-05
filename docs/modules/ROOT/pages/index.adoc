@@ -117,7 +117,7 @@ public class SampleService {
 
 === Minio Admin Client
 
-It's also possible to get a `io.minio.admin.MinioAdminClient` injected. (Note that it will only work in JRE mode for now. If you feel the need for a native mode, please fill up an issue)
+It's also possible to get a `io.minio.admin.MinioAdminClient` injected.
 
 [source,java]
 ----
