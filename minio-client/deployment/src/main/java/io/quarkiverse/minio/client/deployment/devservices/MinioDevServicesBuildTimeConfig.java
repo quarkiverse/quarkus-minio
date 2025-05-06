@@ -45,6 +45,15 @@ public interface MinioDevServicesBuildTimeConfig {
     boolean shared();
 
     /**
+     * Whether to keep Dev Service containers running after a dev mode session or test
+     * suite execution to reuse them in the next dev mode session.
+     * <p>
+     * Enabled by default
+     */
+    @WithDefault("true")
+    boolean reuseEnabled();
+
+    /**
      * The value of the {@code quarkus-dev-service-minio} label attached to the started container.
      * This property is used when {@code shared} is set to {@code true}.
      * In this case, before starting a container, Dev Services for Minio looks for a container with the

@@ -213,7 +213,7 @@ public class DevServicesMinioProcessor {
 
             timeout.ifPresent(container::withStartupTimeout);
 
-            container.withReuse(true);
+            container.withReuse(config.reuseEnabled);
 
             container.start();
 
@@ -299,6 +299,7 @@ public class DevServicesMinioProcessor {
         private final String imageName;
         private final Integer fixedExposedPort;
         private final boolean shared;
+        private final boolean reuseEnabled;
         private final String serviceName;
         private final String accessKey;
         private final String secretKey;
@@ -309,6 +310,7 @@ public class DevServicesMinioProcessor {
             this.imageName = config.imageName();
             this.fixedExposedPort = config.port();
             this.shared = config.shared();
+            this.reuseEnabled = config.reuseEnabled();
             this.serviceName = config.serviceName();
             this.accessKey = config.accessKey();
             this.secretKey = config.secretKey();
