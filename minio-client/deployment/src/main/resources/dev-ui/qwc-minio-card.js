@@ -86,13 +86,13 @@ export class QwcMinioCard extends LitElement {
                             </qwc-extension-link>
                         `)}`;
         } else {
-            return html`<span>Disabled</span>`;
+            return html`<span>Dev service not provided by the extension</span>`;
         }
         
     }
     
     _renderLoginDetails(){
-        if(this._loginDetails){
+        if(this._loginDetails && enabled){
             return html`<div class="loginDetails">
                             <span>Access Key: <qui-badge><span>${this._loginDetails.accesskey}</span></qui-badge></span><br/>
                             <span>Secret Key: <qui-badge><span>${this._loginDetails.secretkey}</span></qui-badge></span>

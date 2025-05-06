@@ -1,5 +1,7 @@
 package io.quarkiverse.minio.client.deployment.devui;
 
+import java.util.Optional;
+
 import io.quarkiverse.minio.client.deployment.devservices.DevServicesMinioProcessor;
 import io.quarkiverse.minio.client.deployment.devservices.MinioBuildTimeConfig;
 import io.quarkiverse.minio.client.devui.MinioJsonRPCService;
@@ -15,16 +17,18 @@ public class MinioClientDevUIProcessor {
     @BuildStep(onlyIf = IsDevelopment.class)
     void createCard(BuildProducer<CardPageBuildItem> cardProducer,
             MinioBuildTimeConfig devServiceConfig,
-            DevServicesMinioProcessor.MinioConsoleURLBuildItem minioConsoleURLBuildItem) {
+            Optional<DevServicesMinioProcessor.MinioConsoleURLBuildItem> minioConsoleURLBuildItem) {
 
         final CardPageBuildItem card = new CardPageBuildItem();
 
-        card.addBuildTimeData("enabled", devServiceConfig.devservices().enabled());
+        card.addBuildTimeData("enabled", devServiceConfig.devservices().enabled() && minioConsoleURLBuildItem.isPresent());
 
-        card.addPage(Page.externalPageBuilder("Min.io console")
-                .icon("font-awesome-solid:signs-post")
-                .url(minioConsoleURLBuildItem.getUrl())
-                .doNotEmbed());
+        minioConsoleURLBuildItem.ifPresent(item -> {
+            card.addPage(Page.externalPageBuilder("Min.io console")
+                    .icon("font-awesome-solid:signs-post")
+                    .url(item.getUrl())
+                    .doNotEmbed());
+        });
 
         card.setCustomCard("qwc-minio-card.js");
 
