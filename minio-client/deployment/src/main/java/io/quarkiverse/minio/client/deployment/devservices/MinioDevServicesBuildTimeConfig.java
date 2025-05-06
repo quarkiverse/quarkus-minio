@@ -27,7 +27,7 @@ public interface MinioDevServicesBuildTimeConfig {
     /**
      * The Minio container image to use.
      */
-    @WithDefault("minio/minio:RELEASE.2022-10-08T20-11-00Z")
+    @WithDefault("minio/minio:RELEASE.2025-04-22T22-12-26Z")
     String imageName();
 
     /**
