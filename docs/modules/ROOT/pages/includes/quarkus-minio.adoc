@@ -15,7 +15,7 @@ endif::add-copy-button-to-config-props[]
 
 [.description]
 --
-Enable or disable Dev Services explicitly. Dev Services are automatically enabled unless `quarkus.minio.url` is set.
+Enable or disable Dev Services explicitly. Dev Services are automatically enabled unless `quarkus.minio.host` is set.
 
 
 ifdef::add-copy-button-to-env-var[]
