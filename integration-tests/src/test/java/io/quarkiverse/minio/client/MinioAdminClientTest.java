@@ -20,4 +20,16 @@ public class MinioAdminClientTest {
 
         assertThat(response).isNotEmpty();
     }
+
+    @Test
+    public void testAdminClientCreateDeleteUser() {
+        String response = given()
+                .when().get("/adminClient/user")
+                .then()
+                .statusCode(200)
+                .extract().body().asString();
+
+        assertThat(response).isEqualTo("added and deleted user");
+    }
+
 }
