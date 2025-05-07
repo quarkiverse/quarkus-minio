@@ -8,6 +8,7 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 
 public class MinioAdminClientNativeProcessor {
 
@@ -17,13 +18,18 @@ public class MinioAdminClientNativeProcessor {
     }
 
     @BuildStep
+    RuntimeInitializedClassBuildItem runtimeInit() {
+        return new RuntimeInitializedClassBuildItem("io.minio.admin.Crypto");
+    }
+
+    @BuildStep
     void registerForReflection(
             CombinedIndexBuildItem index,
             BuildProducer<ReflectiveClassBuildItem> reflectionClasses) {
         List<String> classes = new ArrayList<>();
         classes.addAll(getClasses(index, "io.minio.admin.messages"));
         classes.addAll(getClasses(index, "io.minio.admin.messages.info"));
-        classes.addAll(getClasses(index, "io.minio.admin", ".*Resp$|.*Info$"));
+        classes.addAll(getClasses(index, "io.minio.admin", ".*Resp$|.*Info$|.*Status$"));
         reflectionClasses
                 .produce(ReflectiveClassBuildItem.builder(classes.toArray(new String[0])).fields(true).methods(true).build());
     }
