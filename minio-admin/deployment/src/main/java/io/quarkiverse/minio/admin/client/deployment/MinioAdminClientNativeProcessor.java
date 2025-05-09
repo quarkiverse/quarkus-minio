@@ -31,7 +31,8 @@ public class MinioAdminClientNativeProcessor {
         classes.addAll(getClasses(index, "io.minio.admin.messages.info"));
         classes.addAll(getClasses(index, "io.minio.admin", ".*Resp$|.*Info$|.*Status$"));
         reflectionClasses
-                .produce(ReflectiveClassBuildItem.builder(classes.toArray(new String[0])).fields(true).methods(true).build());
+                .produce(ReflectiveClassBuildItem.builder(classes.toArray(new String[0])).constructors(true).fields(true)
+                        .methods(true).build());
     }
 
     private List<String> getClasses(CombinedIndexBuildItem index, String packageName) {
