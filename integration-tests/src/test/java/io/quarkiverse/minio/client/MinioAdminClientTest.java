@@ -32,4 +32,26 @@ public class MinioAdminClientTest {
         assertThat(response).isEqualTo("added and deleted user");
     }
 
+    @Test
+    public void testAdminClientUserPolicies() {
+        String response = given()
+                .when().get("/adminClient/user-policy")
+                .then()
+                .statusCode(200)
+                .extract().body().asString();
+
+        assertThat(response).isEqualTo("added assigned policy to user");
+    }
+
+    @Test
+    public void testAdminClientGroupPolicies() {
+        String response = given()
+                .when().get("/adminClient/group-policy")
+                .then()
+                .statusCode(200)
+                .extract().body().asString();
+
+        assertThat(response).isEqualTo("added assigned policy to group");
+    }
+
 }
