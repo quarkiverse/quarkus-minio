@@ -1,2 +1,2 @@
-:quarkus-version: 3.22.2
-:quarkus-minio-version: 3.8.3
+:quarkus-version: 3.23.0
+:quarkus-minio-version: 3.8.4
