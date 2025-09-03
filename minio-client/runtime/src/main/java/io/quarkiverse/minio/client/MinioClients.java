@@ -17,7 +17,7 @@ public class MinioClients {
 
     private final MiniosBuildTimeConfiguration miniosBuildTimeConfiguration;
 
-    private final MiniosRuntimeConfiguration miniosRuntimeConfiguration;
+    private final MiniosConfiguration miniosConfiguration;
 
     private final ConcurrentMap<String, MinioClient> minioClients = new ConcurrentHashMap<>();
 
@@ -29,10 +29,10 @@ public class MinioClients {
 
     public MinioClients(
             MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
-            MiniosRuntimeConfiguration miniosRuntimeConfiguration,
+            MiniosConfiguration miniosConfiguration,
             OptionalHttpClientProducer httpClientProducer) {
         this.miniosBuildTimeConfiguration = miniosBuildTimeConfiguration;
-        this.miniosRuntimeConfiguration = miniosRuntimeConfiguration;
+        this.miniosConfiguration = miniosConfiguration;
         this.httpClientProducer = httpClientProducer;
     }
 
@@ -89,7 +89,7 @@ public class MinioClients {
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
         configuration.region().ifPresent(builder::region);
-        if (miniosRuntimeConfiguration.produceMetrics()) {
+        if (miniosConfiguration.produceMetrics()) {
             httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         }
         return builder.build();
@@ -108,7 +108,7 @@ public class MinioClients {
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
         configuration.region().ifPresent(builder::region);
-        if (miniosRuntimeConfiguration.produceMetrics()) {
+        if (miniosConfiguration.produceMetrics()) {
             httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         }
         return builder.build();
@@ -121,9 +121,9 @@ public class MinioClients {
 
         MinioRuntimeConfiguration configuration;
         if (MiniosBuildTimeConfiguration.isDefault(minioClientName)) {
-            configuration = miniosRuntimeConfiguration.minio().get();
+            configuration = miniosConfiguration.minio().get();
         } else {
-            configuration = miniosRuntimeConfiguration.namedMinioClients().get(minioClientName);
+            configuration = miniosConfiguration.namedMinioClients().get(minioClientName);
         }
 
         if (configuration == null || IS_HOST_SET.test(configuration.host())) {

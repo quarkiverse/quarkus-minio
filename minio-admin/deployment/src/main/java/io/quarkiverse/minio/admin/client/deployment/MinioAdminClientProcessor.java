@@ -32,7 +32,6 @@ public class MinioAdminClientProcessor {
     @Record(ExecutionTime.RUNTIME_INIT)
     @BuildStep
     void produce(MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
-            MiniosRuntimeConfiguration miniosRuntimeConfiguration,
             MinioRecorder minioRecorder,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
             BuildProducer<AdditionalBeanBuildItem> additionalBeans,
@@ -50,7 +49,7 @@ public class MinioAdminClientProcessor {
             syntheticBeanBuildItemBuildProducer.produce(
                     createMinioBeanBuildItem(minioAdminClientName,
                             // Pass runtime configuration to ensure initialization order
-                            minioRecorder.minioAdminClientSupplier(minioAdminClientName, miniosRuntimeConfiguration)));
+                            minioRecorder.minioAdminClientSupplier(minioAdminClientName)));
 
         }
 

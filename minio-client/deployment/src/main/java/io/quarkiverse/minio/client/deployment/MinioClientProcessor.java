@@ -14,7 +14,6 @@ import io.quarkiverse.minio.client.MinioClients;
 import io.quarkiverse.minio.client.MinioQualifier;
 import io.quarkiverse.minio.client.MinioRecorder;
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
-import io.quarkiverse.minio.client.MiniosRuntimeConfiguration;
 import io.quarkiverse.minio.client.WithMetricsHttpClientProducer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
@@ -39,7 +38,6 @@ class MinioClientProcessor {
     @Record(ExecutionTime.RUNTIME_INIT)
     @BuildStep
     void produce(MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
-            MiniosRuntimeConfiguration miniosRuntimeConfiguration,
             MinioRecorder minioRecorder,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
             BuildProducer<AdditionalBeanBuildItem> additionalBeans,
@@ -60,13 +58,13 @@ class MinioClientProcessor {
                     createMinioBeanBuildItem(minioClientName,
                             MinioClient.class,
                             // Pass runtime configuration to ensure initialization order
-                            minioRecorder.minioClientSupplier(minioClientName, miniosRuntimeConfiguration)));
+                            minioRecorder.minioClientSupplier(minioClientName)));
 
             syntheticBeanBuildItemBuildProducer.produce(
                     createMinioBeanBuildItem(minioClientName,
                             MinioAsyncClient.class,
                             // Pass runtime configuration to ensure initialization order
-                            minioRecorder.minioAsyncClientSupplier(minioClientName, miniosRuntimeConfiguration)));
+                            minioRecorder.minioAsyncClientSupplier(minioClientName)));
         }
 
         // add default bean based on whether or not micrometer is enabled

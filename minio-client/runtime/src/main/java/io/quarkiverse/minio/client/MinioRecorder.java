@@ -9,13 +9,11 @@ import io.quarkus.runtime.annotations.Recorder;
 @Recorder
 public class MinioRecorder {
 
-    public Supplier<MinioClient> minioClientSupplier(String minioClientName,
-            @SuppressWarnings("unused") MiniosRuntimeConfiguration minioRuntimeConfig) {
+    public Supplier<MinioClient> minioClientSupplier(String minioClientName) {
         return () -> MinioClients.fromName(minioClientName);
     }
 
-    public Supplier<MinioAsyncClient> minioAsyncClientSupplier(String minioClientName,
-            @SuppressWarnings("unused") MiniosRuntimeConfiguration minioRuntimeConfig) {
+    public Supplier<MinioAsyncClient> minioAsyncClientSupplier(String minioClientName) {
         return () -> MinioClients.fromNameAsync(minioClientName);
     }
 }

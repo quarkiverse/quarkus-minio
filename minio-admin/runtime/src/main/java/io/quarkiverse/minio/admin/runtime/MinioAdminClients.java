@@ -10,7 +10,7 @@ import io.minio.admin.MinioAdminClient;
 import io.minio.http.HttpUtils;
 import io.quarkiverse.minio.client.MinioRuntimeConfiguration;
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
-import io.quarkiverse.minio.client.MiniosRuntimeConfiguration;
+import io.quarkiverse.minio.client.MiniosConfiguration;
 import io.quarkiverse.minio.client.OptionalHttpClientProducer;
 import io.quarkus.arc.Arc;
 import io.quarkus.runtime.configuration.ConfigurationException;
@@ -20,16 +20,16 @@ public class MinioAdminClients {
 
     private final MiniosBuildTimeConfiguration miniosBuildTimeConfiguration;
 
-    private final MiniosRuntimeConfiguration miniosRuntimeConfiguration;
+    private final MiniosConfiguration miniosConfiguration;
 
     private final ConcurrentMap<String, MinioAdminClient> minioAdminClients = new ConcurrentHashMap<>();
     private final OptionalHttpClientProducer httpClientProducer;
     private static final Predicate<String> IS_HOST_SET = value -> value == null || value.isBlank();
 
     public MinioAdminClients(MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
-            MiniosRuntimeConfiguration miniosRuntimeConfiguration, OptionalHttpClientProducer httpClientProducer) {
+            MiniosConfiguration miniosConfiguration, OptionalHttpClientProducer httpClientProducer) {
         this.miniosBuildTimeConfiguration = miniosBuildTimeConfiguration;
-        this.miniosRuntimeConfiguration = miniosRuntimeConfiguration;
+        this.miniosConfiguration = miniosConfiguration;
         this.httpClientProducer = httpClientProducer;
     }
 
@@ -66,7 +66,7 @@ public class MinioAdminClients {
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
         configuration.region().ifPresent(builder::region);
-        if (miniosRuntimeConfiguration.produceMetrics()) {
+        if (miniosConfiguration.produceMetrics()) {
             httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         }
         return builder.build();
@@ -79,9 +79,9 @@ public class MinioAdminClients {
 
         MinioRuntimeConfiguration configuration;
         if (MiniosBuildTimeConfiguration.isDefault(minioAdminClientName)) {
-            configuration = miniosRuntimeConfiguration.minio().get();
+            configuration = miniosConfiguration.minio().get();
         } else {
-            configuration = miniosRuntimeConfiguration.namedMinioClients().get(minioAdminClientName);
+            configuration = miniosConfiguration.namedMinioClients().get(minioAdminClientName);
         }
 
         if (configuration == null || IS_HOST_SET.test(configuration.host())) {

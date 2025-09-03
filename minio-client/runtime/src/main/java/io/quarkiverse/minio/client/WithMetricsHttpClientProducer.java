@@ -35,9 +35,9 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
 
     private MeterRegistry meterRegistry;
 
-    private MiniosRuntimeConfiguration configuration;
+    private MiniosConfiguration configuration;
 
-    public WithMetricsHttpClientProducer(MeterRegistry meterRegistry, MiniosRuntimeConfiguration configuration) {
+    public WithMetricsHttpClientProducer(MeterRegistry meterRegistry, MiniosConfiguration configuration) {
         this.meterRegistry = meterRegistry;
         this.configuration = configuration;
     }
