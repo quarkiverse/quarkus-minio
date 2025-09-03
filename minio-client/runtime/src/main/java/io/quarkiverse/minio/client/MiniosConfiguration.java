@@ -11,7 +11,7 @@ import io.smallrye.config.WithParentName;
 
 @ConfigMapping(prefix = "quarkus.minio")
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
-public interface MiniosRuntimeConfiguration {
+public interface MiniosConfiguration {
 
     /**
      * If value is `true` (default) and the `io.quarkus.quarkus-micrometer` is present in the class path,
