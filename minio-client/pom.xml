@@ -4,12 +4,12 @@
     <parent>
         <groupId>io.quarkiverse.minio</groupId>
         <artifactId>quarkus-minio-parent</artifactId>
-        <version>3.8.5-SNAPSHOT</version>
+        <version>3.8.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>quarkus-minio-client-parent</artifactId>
-    <version>3.8.5-SNAPSHOT</version>
+    <version>3.8.5</version>
     <name>Quarkus Minio - Client - Parent</name>
 
     <packaging>pom</packaging>
