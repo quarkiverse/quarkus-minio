@@ -4,11 +4,11 @@
     <parent>
         <groupId>io.quarkiverse.minio</groupId>
         <artifactId>quarkus-minio-parent</artifactId>
-        <version>3.8.6</version>
+        <version>3.8.7-SNAPSHOT</version>
     </parent>
 
     <artifactId>quarkus-minio-admin-parent</artifactId>
-    <version>3.8.6</version>
+    <version>3.8.7-SNAPSHOT</version>
     <name>Quarkus Minio - Admin Client - Parent</name>
 
     <packaging>pom</packaging>
