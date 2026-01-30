@@ -553,5 +553,65 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
+a| [[quarkus-minio_quarkus-minio-url]] [.property-path]##link:#quarkus-minio_quarkus-minio-url[[.line-through]#`quarkus.minio.url`#]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.minio.url+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+_This property is deprecated since `3.8`._
+
+The minio server URL.
+The url _may_ contains the port, though it's not recommended. If a specific port is needed, `quakus.minio.port` is a
+better fit.
+<p>
+[NOTE]
+====
+Value must start with `http://` or `https://`
+====
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_URL+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_URL+++`
+endif::add-copy-button-to-env-var[]
+--
+|string
+|required icon:exclamation-circle[title=Configuration property is required]
+
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-url]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-url[[.line-through]#`quarkus.minio."named-minio-clients".url`#]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.minio."named-minio-clients".url+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+_This property is deprecated since `3.8`._
+
+The minio server URL.
+The url _may_ contains the port, though it's not recommended. If a specific port is needed, `quakus.minio.port` is a
+better fit.
+<p>
+[NOTE]
+====
+Value must start with `http://` or `https://`
+====
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__URL+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO__NAMED_MINIO_CLIENTS__URL+++`
+endif::add-copy-button-to-env-var[]
+--
+|string
+|required icon:exclamation-circle[title=Configuration property is required]
+
 |===
 

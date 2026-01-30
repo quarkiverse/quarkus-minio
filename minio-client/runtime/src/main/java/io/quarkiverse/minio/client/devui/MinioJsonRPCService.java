@@ -16,4 +16,9 @@ public class MinioJsonRPCService {
                 "accesskey", config.getOptionalValue("quarkus.minio.access-key", String.class).orElse(null),
                 "secretkey", config.getOptionalValue("quarkus.minio.secret-key", String.class).orElse(null));
     }
+
+    @NonBlocking
+    public String getConsoleUrl() {
+        return config.getOptionalValue("quarkus.minio.console", String.class).orElse(null);
+    }
 }
