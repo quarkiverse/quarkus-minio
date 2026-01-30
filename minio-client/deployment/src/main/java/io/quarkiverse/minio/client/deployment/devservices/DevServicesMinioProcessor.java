@@ -1,13 +1,12 @@
 package io.quarkiverse.minio.client.deployment.devservices;
 
-import java.io.Closeable;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.jboss.logging.Logger;
 import org.testcontainers.containers.GenericContainer;
@@ -16,28 +15,23 @@ import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
-import io.quarkus.builder.item.SimpleBuildItem;
+import io.quarkiverse.minio.client.deployment.MinioClientProcessor;
 import io.quarkus.deployment.IsNormal;
-import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
-import io.quarkus.deployment.builditem.CuratedApplicationShutdownBuildItem;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
-import io.quarkus.deployment.builditem.DevServicesResultBuildItem.RunningDevService;
 import io.quarkus.deployment.builditem.DevServicesSharedNetworkBuildItem;
 import io.quarkus.deployment.builditem.DockerStatusBuildItem;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
-import io.quarkus.deployment.console.ConsoleInstalledBuildItem;
-import io.quarkus.deployment.console.StartupLogCompressor;
+import io.quarkus.deployment.builditem.Startable;
 import io.quarkus.deployment.dev.devservices.DevServicesConfig;
-import io.quarkus.deployment.logging.LoggingSetupBuildItem;
 import io.quarkus.devservices.common.ConfigureUtil;
 import io.quarkus.devservices.common.ContainerAddress;
 import io.quarkus.devservices.common.ContainerLocator;
-import io.quarkus.devservices.common.ContainerShutdownCloseable;
 import io.quarkus.runtime.configuration.ConfigUtils;
 
 public class DevServicesMinioProcessor {
     private static final Logger LOGGER = Logger.getLogger(DevServicesMinioProcessor.class);
+    public static final String MINIO_CONSOLE = "quarkus.minio.console";
     private static final String MINIO_HOST = "quarkus.minio%s.host";
     private static final String MINIO_PORT = "quarkus.minio%s.port";
     private static final String MINIO_SECURE = "quarkus.minio%s.secure";
@@ -51,142 +45,23 @@ public class DevServicesMinioProcessor {
      */
     static final String DEV_SERVICE_LABEL = "quarkus-dev-service-minio";
     static final int DEVSERVICE_MINIO_PORT = 9000;
-
     static final int DEVSERVICE_MINIO_CONSOLE_PORT = 9001;
+
     private static final ContainerLocator minioContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL,
             DEVSERVICE_MINIO_PORT);
-    static volatile RunningDevService devService;
-    static volatile MinioDevServiceCfg cfg;
-    static volatile boolean first = true;
 
     @BuildStep(onlyIfNot = IsNormal.class, onlyIf = DevServicesConfig.Enabled.class)
     public DevServicesResultBuildItem startMinioDevService(
             DockerStatusBuildItem dockerStatusBuildItem,
-            LaunchModeBuildItem launchMode,
             MinioBuildTimeConfig minioBuildTimeConfig,
-            Optional<ConsoleInstalledBuildItem> consoleInstalledBuildItem,
-            CuratedApplicationShutdownBuildItem closeBuildItem,
-            LoggingSetupBuildItem loggingSetupBuildItem,
+            LaunchModeBuildItem launchMode,
             DevServicesConfig devServicesConfig,
             MiniosBuildTimeConfiguration buildTimeConfiguration,
-            BuildProducer<MinioConsoleURLBuildItem> minioConsoleURLBuildItemBuildProducer,
             List<DevServicesSharedNetworkBuildItem> devServicesSharedNetworkBuildItem) {
 
-        MinioDevServiceCfg configuration = getConfiguration(minioBuildTimeConfig);
-
-        if (devService != null) {
-            boolean shouldShutdownTheBroker = !configuration.equals(cfg);
-            if (!shouldShutdownTheBroker) {
-                return devService.toBuildItem();
-            }
-            shutdownServer();
-            cfg = null;
-        }
-
-        StartupLogCompressor compressor = new StartupLogCompressor(
-                (launchMode.isTest() ? "(test) " : "") + "Minio Dev Services Starting:",
-                consoleInstalledBuildItem, loggingSetupBuildItem);
-        try {
-            devService = startMinio(dockerStatusBuildItem, configuration, launchMode, devServicesConfig.timeout(),
-                    buildTimeConfiguration, !devServicesSharedNetworkBuildItem.isEmpty(),
-                    minioConsoleURLBuildItemBuildProducer);
-            if (devService == null) {
-                compressor.closeAndDumpCaptured();
-            } else {
-                compressor.close();
-            }
-        } catch (Throwable t) {
-            compressor.closeAndDumpCaptured();
-            throw t instanceof RuntimeException ? (RuntimeException) t : new RuntimeException(t);
-        }
-
-        if (devService == null) {
-            return null;
-        }
-
-        if (first) {
-            first = false;
-            Runnable closeTask = () -> {
-                if (devService != null) {
-                    shutdownServer();
-                }
-                first = true;
-                devService = null;
-                cfg = null;
-            };
-            closeBuildItem.addCloseTask(closeTask, true);
-        }
-        cfg = configuration;
-
-        if (devService.isOwner()) {
-            LOGGER.infof("Dev Services for Minio started on %s", getMinioHost());
-            LOGGER.infof("Other Quarkus applications in dev mode will find the "
-                    + "instance automatically. For Quarkus applications in production mode, you can connect to"
-                    + " this by starting your application with -D%s=%s -D%s=%s -D%s=%s",
-                    formatPropertyName(MINIO_HOST), getMinioHost(),
-                    formatPropertyName(MINIO_SECURE), false,
-                    formatPropertyName(MINIO_PORT), DEVSERVICE_MINIO_PORT,
-                    formatPropertyName(MINIO_ACCESS_KEY), getMinioAccessKey(),
-                    formatPropertyName(MINIO_SECRET_KEY), getMinioSecretKey());
-        }
-
-        return devService.toBuildItem();
-    }
-
-    public static String getMinioHost() {
-        return devService.getConfig().get(formatPropertyName(MINIO_HOST));
-    }
-
-    public static String getMinioAccessKey() {
-        return devService.getConfig().get(formatPropertyName(MINIO_ACCESS_KEY));
-    }
-
-    public static String getMinioSecretKey() {
-        return devService.getConfig().get(formatPropertyName(MINIO_SECRET_KEY));
-    }
-
-    private void shutdownServer() {
-        if (devService != null) {
-            try {
-                devService.close();
-            } catch (Throwable e) {
-                LOGGER.error("Failed to stop the Minio server", e);
-            } finally {
-                devService = null;
-            }
-        }
-    }
-
-    private RunningDevService startMinio(
-            DockerStatusBuildItem dockerStatusBuildItem,
-            MinioDevServiceCfg config,
-            LaunchModeBuildItem launchMode,
-            Optional<Duration> timeout,
-            MiniosBuildTimeConfiguration buildTimeConfiguration,
-            boolean useSharedNetwork, BuildProducer<MinioConsoleURLBuildItem> minioConsoleURLBuildItemBuildProducer) {
-        if (!config.devServicesEnabled) {
-            // explicitly disabled
-            LOGGER.debug("Not starting dev services for Minio, as it has been disabled in the config.");
-            return null;
-        }
-
-        // Check if quarkus.minio.host is set
-        if (ConfigUtils.isPropertyPresent(formatPropertyName(MINIO_HOST))) {
-            LOGGER.debug("Not starting dev services for Minio, the quarkus.minio.host is configured.");
-            return null;
-        }
-
-        // Check if quarkus.minio.allow-empty is set to true
-        Optional<Boolean> allowEmpty = ConfigUtils.getFirstOptionalValue(List.of(formatPropertyName(MINIO_ALLOW_EMPTY)),
-                Boolean.class);
-        if (allowEmpty.isPresent() && allowEmpty.get()) {
-            LOGGER.debug("Not starting dev services for Minio, the quarkus.minio.allow-empty is set to true.");
-            return null;
-        }
-
-        if (!dockerStatusBuildItem.isContainerRuntimeAvailable()) {
-            LOGGER.warn(String.format("Docker isn't working, please configure the Minio Url property (%s).",
-                    formatPropertyName(MINIO_HOST)));
+        // If the dev service is disabled, we return null to indicate that no dev service was started.
+        MinioDevServiceCfg config = getConfiguration(minioBuildTimeConfig);
+        if (devServiceDisabled(dockerStatusBuildItem, minioBuildTimeConfig.devservices())) {
             return null;
         }
 
@@ -197,83 +72,131 @@ public class DevServicesMinioProcessor {
                 config.shared,
                 launchMode.getLaunchMode(), 9001);
 
-        // Starting the server
-        final Supplier<RunningDevService> defaultMinioBrokerSupplier = () -> {
-            MinioContainer container = new MinioContainer(
-                    DockerImageName.parse(config.imageName),
-                    config.fixedExposedPort,
-                    config.accessKey,
-                    config.secretKey,
-                    config.containerEnv,
-                    useSharedNetwork);
+        return maybeContainerAddress.map(containerAddress -> DevServicesResultBuildItem.discovered()
+                //.feature(MinioClientProcessor.FEATURE) FIXME when released
+                .name(MinioClientProcessor.FEATURE)
+                .containerId(containerAddress.getId())
+                .config(getRunningDevServicesConfig(maybeConsolePort, config,
+                        containerAddress.getHost(), containerAddress.getPort(), buildTimeConfiguration))
+                .build())
+                .orElseGet(() -> DevServicesResultBuildItem.owned()
+                        .feature(MinioClientProcessor.FEATURE)
+                        .serviceName(config.serviceName)
+                        .serviceConfig(config)
+                        .startable(() -> startMinio(config, devServicesConfig.timeout(),
+                                !devServicesSharedNetworkBuildItem.isEmpty()))
+                        .postStartHook(
+                                minioContainer -> logStarted(minioContainer, config))
+                        .configProvider(getRunningDevServicesConfig(config, buildTimeConfiguration))
+                        .build());
 
-            if (config.serviceName != null) {
-                container.withLabel(DevServicesMinioProcessor.DEV_SERVICE_LABEL, config.serviceName);
-            }
-
-            timeout.ifPresent(container::withStartupTimeout);
-
-            container.withReuse(config.reuseEnabled);
-
-            container.start();
-
-            return getRunningContainer(minioConsoleURLBuildItemBuildProducer,
-                    Optional.of(container.getConsolePort()),
-                    container.getEffectiveHost(),
-                    container.getPort(),
-                    container.getContainerId(),
-                    config,
-                    buildTimeConfiguration,
-                    new ContainerShutdownCloseable(container, config.serviceName),
-                    container.getHost());
-
-        };
-
-        return maybeContainerAddress
-                .map(containerAddress -> getRunningContainer(minioConsoleURLBuildItemBuildProducer,
-                        maybeConsolePort,
-                        containerAddress.getHost(),
-                        containerAddress.getPort(),
-                        containerAddress.getId(),
-                        config,
-                        buildTimeConfiguration,
-                        null,
-                        containerAddress.getHost()))
-                .orElseGet(defaultMinioBrokerSupplier);
     }
 
-    private RunningDevService getRunningContainer(BuildProducer<MinioConsoleURLBuildItem> minioConsoleURLBuildItemBuildProducer,
-            Optional<Integer> maybeConsolePort,
-            String containerHost,
-            int containerPort,
-            String containerId,
+    private static void logStarted(MinioContainer container, MinioDevServiceCfg config) {
+        LOGGER.infof("Dev Services for Minio started on %s", container.getEffectiveHost());
+
+        LOGGER.infof("Console for Minio is available on %s", container.getConsolePort());
+
+        LOGGER.infof("Other Quarkus applications in dev mode will find the "
+                + "instance automatically. For Quarkus applications in production mode, you can connect to"
+                + " this by starting your application with -D%s=%s -D%s=%s -D%s=%s",
+                formatPropertyName(MINIO_HOST), container.getEffectiveHost(),
+                formatPropertyName(MINIO_SECURE), false,
+                formatPropertyName(MINIO_PORT), DEVSERVICE_MINIO_PORT,
+                formatPropertyName(MINIO_ACCESS_KEY), config.accessKey,
+                formatPropertyName(MINIO_SECRET_KEY), config.secretKey);
+    }
+
+    private boolean devServiceDisabled(DockerStatusBuildItem dockerStatusBuildItem,
+            MinioDevServicesBuildTimeConfig config) {
+        if (!config.enabled()) {
+            // explicitly disabled
+            LOGGER.debug("Not starting dev services for Minio, as it has been disabled in the config.");
+            return true;
+        }
+
+        // Check if quarkus.minio.host is set
+        if (ConfigUtils.isPropertyPresent(formatPropertyName(MINIO_HOST))) {
+            LOGGER.debug("Not starting dev services for Minio, the quarkus.minio.host is configured.");
+            return true;
+        }
+
+        // Check if quarkus.minio.allow-empty is set to true
+        Optional<Boolean> allowEmpty = ConfigUtils.getFirstOptionalValue(List.of(formatPropertyName(MINIO_ALLOW_EMPTY)),
+                Boolean.class);
+        if (allowEmpty.isPresent() && allowEmpty.get()) {
+            LOGGER.debug("Not starting dev services for Minio, the quarkus.minio.allow-empty is set to true.");
+            return true;
+        }
+
+        if (!dockerStatusBuildItem.isContainerRuntimeAvailable()) {
+            LOGGER.warn(String.format("Docker isn't working, please configure the Minio Url property (%s).",
+                    formatPropertyName(MINIO_HOST)));
+            return true;
+        }
+        return false;
+    }
+
+    private MinioContainer startMinio(
             MinioDevServiceCfg config,
-            MiniosBuildTimeConfiguration buildTimeConfiguration,
-            Closeable closeable,
-            String hostName) {
+            Optional<Duration> timeout,
+            Boolean useSharedNetwork) {
 
-        maybeConsolePort.ifPresent(consolePort -> minioConsoleURLBuildItemBuildProducer
-                .produce(new MinioConsoleURLBuildItem(String.format("http://%s:%d", hostName, consolePort))));
-        return new RunningDevService(config.serviceName,
-                containerId,
-                closeable,
-                getRunningDevServicesConfig(config, containerHost, containerPort,
-                        buildTimeConfiguration));
+        MinioContainer container = new MinioContainer(
+                DockerImageName.parse(config.imageName),
+                config.fixedExposedPort,
+                config.accessKey,
+                config.secretKey,
+                config.containerEnv,
+                useSharedNetwork);
 
+        if (config.serviceName != null) {
+            container.withLabel(DevServicesMinioProcessor.DEV_SERVICE_LABEL, config.serviceName);
+        }
+
+        timeout.ifPresent(container::withStartupTimeout);
+
+        container.withReuse(config.reuseEnabled);
+
+        return container;
     }
 
-    private Map<String, String> getRunningDevServicesConfig(MinioDevServiceCfg config, String host, int port,
+    private Map<String, String> getRunningDevServicesConfig(
+            Optional<Integer> maybeConsolePort,
+            MinioDevServiceCfg config, String host, int port,
             MiniosBuildTimeConfiguration buildTimeConfiguration) {
         var result = new HashMap<String, String>();
 
         buildTimeConfiguration.getMinioClients().keySet().stream()
                 .filter(minioClientName -> !minioClientName.equals("devservices"))
-                .map(minioClientName -> Map.of(formatPropertyName(MINIO_HOST, minioClientName), host,
+                .map(minioClientName -> Map.of(
+                        formatPropertyName(MINIO_HOST, minioClientName), host,
                         formatPropertyName(MINIO_PORT, minioClientName), String.valueOf(port),
                         formatPropertyName(MINIO_SECURE, minioClientName), "false",
                         formatPropertyName(MINIO_ACCESS_KEY, minioClientName), config.accessKey,
                         formatPropertyName(MINIO_SECRET_KEY, minioClientName), config.secretKey))
                 .forEach(result::putAll);
+        maybeConsolePort.ifPresent(consolePort -> result.put(MINIO_CONSOLE, "http://%s:%s".formatted(host, consolePort)));
+        return result;
+    }
+
+    private Map<String, Function<MinioContainer, String>> getRunningDevServicesConfig(MinioDevServiceCfg config,
+            MiniosBuildTimeConfiguration buildTimeConfiguration) {
+        var result = new HashMap<String, Function<MinioContainer, String>>();
+
+        buildTimeConfiguration.getMinioClients().keySet().stream()
+                .filter(minioClientName -> !minioClientName.equals("devservices"))
+                .map(minioClientName -> Map.<String, Function<MinioContainer, String>> of(
+                        formatPropertyName(MINIO_HOST, minioClientName), MinioContainer::getEffectiveHost,
+                        formatPropertyName(MINIO_PORT, minioClientName),
+                        minioContainer -> String.valueOf(minioContainer.getPort()),
+                        formatPropertyName(MINIO_SECURE, minioClientName), minioContainer -> "false",
+                        formatPropertyName(MINIO_ACCESS_KEY, minioClientName), minioContainer -> config.accessKey,
+                        formatPropertyName(MINIO_SECRET_KEY, minioClientName), minioContainer -> config.secretKey))
+                .forEach(result::putAll);
+        result.put(MINIO_CONSOLE,
+                minioContainer -> "http://%s:%s".formatted(minioContainer.getEffectiveHost(),
+                        minioContainer.getConsolePort()));
         return result;
     }
 
@@ -336,10 +259,7 @@ public class DevServicesMinioProcessor {
         }
     }
 
-    /**
-     * Container configuring and starting the Minio server.
-     */
-    private static final class MinioContainer extends GenericContainer<MinioContainer> {
+    private static final class MinioContainer extends GenericContainer<MinioContainer> implements Startable {
 
         private final int port;
         private final boolean useSharedNetwork;
@@ -356,7 +276,7 @@ public class DevServicesMinioProcessor {
                     .withEnv("MINIO_SECRET_KEY", secretKey)
                     .withEnv(containerEnv)
                     .withCommand("server", "/data", "--console-address", ":9001")
-                    .waitingFor(new HttpWaitStrategy().forPort(9000).forPath("/minio/health/live"));
+                    .waitingFor(new HttpWaitStrategy().forPort(DEVSERVICE_MINIO_PORT).forPath("/minio/health/live"));
         }
 
         @Override
@@ -378,7 +298,6 @@ public class DevServicesMinioProcessor {
             if (useSharedNetwork) {
                 return hostName;
             }
-
             return getHost();
         }
 
@@ -386,7 +305,6 @@ public class DevServicesMinioProcessor {
             if (useSharedNetwork) {
                 return DEVSERVICE_MINIO_PORT;
             }
-
             return getMappedPort(DEVSERVICE_MINIO_PORT);
         }
 
@@ -394,17 +312,15 @@ public class DevServicesMinioProcessor {
             // console port is meant to be exposed only
             return getMappedPort(DEVSERVICE_MINIO_CONSOLE_PORT);
         }
-    }
 
-    public static final class MinioConsoleURLBuildItem extends SimpleBuildItem {
-        private final String url;
-
-        public MinioConsoleURLBuildItem(String url) {
-            this.url = url;
+        @Override
+        public String getConnectionInfo() {
+            return getHost() + ":" + getPort();
         }
 
-        public String getUrl() {
-            return url;
+        @Override
+        public void close() {
+            super.close();
         }
     }
 }

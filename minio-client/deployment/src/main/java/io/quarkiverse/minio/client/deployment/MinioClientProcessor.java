@@ -26,9 +26,9 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.metrics.MetricsCapabilityBuildItem;
 import io.quarkus.runtime.metrics.MetricsFactory;
 
-class MinioClientProcessor {
+public class MinioClientProcessor {
 
-    private static final String FEATURE = "minio-client";
+    public static final String FEATURE = "minio-client";
 
     @BuildStep
     FeatureBuildItem feature() {
