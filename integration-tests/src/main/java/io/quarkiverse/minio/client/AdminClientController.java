@@ -1,19 +1,16 @@
 package io.quarkiverse.minio.client;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
-import org.bouncycastle.crypto.InvalidCipherTextException;
-
 import io.micrometer.core.annotation.Timed;
 import io.minio.admin.MinioAdminClient;
 import io.minio.admin.Status;
 import io.minio.admin.UserInfo;
+import io.minio.errors.MinioException;
 
 @Path("/adminClient")
 public class AdminClientController {
@@ -38,7 +35,7 @@ public class AdminClientController {
 
     @GET
     @Timed(histogram = true)
-    public String getServerInfo() throws IOException, GeneralSecurityException {
+    public String getServerInfo() throws MinioException {
 
         return minioAdminClient.getServerInfo().toString();
 
@@ -47,13 +44,13 @@ public class AdminClientController {
     @GET
     @Path("/user")
     @Timed(histogram = true)
-    public String createAndGetUser() throws IOException, GeneralSecurityException, InvalidCipherTextException {
-        minioAdminClient.addUser("testuser", UserInfo.Status.ENABLED, "secretKey", null, List.of());
+    public String createAndGetUser() throws MinioException {
+        minioAdminClient.addUser("testuser", Status.ENABLED, "secretKey", null, List.of());
         UserInfo userInfo = minioAdminClient.getUserInfo("testuser");
         if (userInfo == null) {
             throw new IllegalStateException("User should not be null");
         }
-        if (!userInfo.status().equals(UserInfo.Status.ENABLED)) {
+        if (!userInfo.status().equals(Status.ENABLED)) {
             throw new IllegalStateException("User should be enabled");
         }
         minioAdminClient.deleteUser("testuser");
@@ -63,8 +60,8 @@ public class AdminClientController {
     @GET
     @Path("/user-policy")
     @Timed(histogram = true)
-    public String createAndAssignPolicyToUser() throws IOException, GeneralSecurityException, InvalidCipherTextException {
-        minioAdminClient.addUser("test-user-policy", UserInfo.Status.ENABLED, "secretKey", null, List.of());
+    public String createAndAssignPolicyToUser() throws MinioException {
+        minioAdminClient.addUser("test-user-policy", Status.ENABLED, "secretKey", null, List.of());
         minioAdminClient.addCannedPolicy("test-policy-user", TEST_POLICY);
         minioAdminClient.setPolicy("test-user-policy", false, "test-policy-user");
         return "added assigned policy to user";
@@ -73,7 +70,7 @@ public class AdminClientController {
     @GET
     @Path("/group-policy")
     @Timed(histogram = true)
-    public String createAndAssignPolicyToGroup() throws IOException, GeneralSecurityException, InvalidCipherTextException {
+    public String createAndAssignPolicyToGroup() throws MinioException {
         minioAdminClient.addUpdateGroup("test-group-policy", Status.ENABLED, List.of());
         minioAdminClient.addCannedPolicy("test-policy-group", TEST_POLICY);
         minioAdminClient.setPolicy("test-group-policy", true, "test-policy-group");

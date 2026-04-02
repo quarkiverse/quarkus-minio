@@ -3,7 +3,6 @@ package io.quarkiverse.minio.client;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
@@ -34,7 +33,7 @@ public class AnOtherMinioResource {
     String minioHost;
 
     @POST
-    public String addObject(@QueryParam("name") String fileName) throws IOException, MinioException, GeneralSecurityException {
+    public String addObject(@QueryParam("name") String fileName) throws MinioException {
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build())) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
         }
@@ -44,10 +43,10 @@ public class AnOtherMinioResource {
                             .bucket(BUCKET_NAME)
                             .object(fileName)
                             .contentType("text/xml") // TODO : Parametrize
-                            .stream(is, -1, PART_SIZE)
+                            .stream(is, -1l, PART_SIZE)
                             .build());
             return response.bucket() + "/" + response.object();
-        } catch (MinioException | GeneralSecurityException | IOException e) {
+        } catch (MinioException | IOException e) {
             throw new IllegalStateException(e);
         }
     }
