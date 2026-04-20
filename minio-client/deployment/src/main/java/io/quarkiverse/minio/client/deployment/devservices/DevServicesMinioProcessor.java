@@ -16,7 +16,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
 import io.quarkiverse.minio.client.deployment.MinioClientProcessor;
-import io.quarkus.deployment.IsNormal;
+import io.quarkus.deployment.IsProduction;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.DevServicesResultBuildItem;
 import io.quarkus.deployment.builditem.DevServicesSharedNetworkBuildItem;
@@ -50,7 +50,7 @@ public class DevServicesMinioProcessor {
     private static final ContainerLocator minioContainerLocator = new ContainerLocator(DEV_SERVICE_LABEL,
             DEVSERVICE_MINIO_PORT);
 
-    @BuildStep(onlyIfNot = IsNormal.class, onlyIf = DevServicesConfig.Enabled.class)
+    @BuildStep(onlyIfNot = IsProduction.class, onlyIf = DevServicesConfig.Enabled.class)
     public DevServicesResultBuildItem startMinioDevService(
             DockerStatusBuildItem dockerStatusBuildItem,
             MinioBuildTimeConfig minioBuildTimeConfig,
@@ -73,8 +73,7 @@ public class DevServicesMinioProcessor {
                 launchMode.getLaunchMode(), 9001);
 
         return maybeContainerAddress.map(containerAddress -> DevServicesResultBuildItem.discovered()
-                //.feature(MinioClientProcessor.FEATURE) FIXME when released
-                .name(MinioClientProcessor.FEATURE)
+                .feature(MinioClientProcessor.FEATURE)
                 .containerId(containerAddress.getId())
                 .config(getRunningDevServicesConfig(maybeConsolePort, config,
                         containerAddress.getHost(), containerAddress.getPort(), buildTimeConfiguration))
@@ -96,13 +95,13 @@ public class DevServicesMinioProcessor {
         LOGGER.infof("Dev Services for Minio started on %s", container.getEffectiveHost());
 
         LOGGER.infof("Console for Minio is available on %s", container.getConsolePort());
-
+        // /Users/j.tama/projects/github/quarkiverse/quarkus-minio/integration-tests/target/quarkus-minio-integration-tests-9.9.9-SNAPSHOT-runner -Dquarkus.http.port=8081 -Dquarkus.http.ssl-port=8444 -Dquarkus.log.file.path=/Users/j.tama/projects/github/quarkiverse/quarkus-minio/integration-tests/target/quarkus.log -Dquarkus.log.file.enabled=true -Dquarkus.log.category."io.quarkus".level=INFO -Dquarkus.profile=prod -Dquarkus.minio.secret-key=miniosecret -Dquarkus.minio.another.secure=false -Dquarkus.minio.access-key=minioaccess -Dquarkus.minio.another.access-key=minioaccess -Dquarkus.minio.another.host=localhost -Dquarkus.minio.secure=false -Dquarkus.minio.another.port=35613 -Dquarkus.minio.port=35613 -Dquarkus.minio.another.secret-key=miniosecret -Dquarkus.minio.host=localhost
         LOGGER.infof("Other Quarkus applications in dev mode will find the "
                 + "instance automatically. For Quarkus applications in production mode, you can connect to"
                 + " this by starting your application with -D%s=%s -D%s=%s -D%s=%s",
                 formatPropertyName(MINIO_HOST), container.getEffectiveHost(),
                 formatPropertyName(MINIO_SECURE), false,
-                formatPropertyName(MINIO_PORT), DEVSERVICE_MINIO_PORT,
+                formatPropertyName(MINIO_PORT), container.getPort(),
                 formatPropertyName(MINIO_ACCESS_KEY), config.accessKey,
                 formatPropertyName(MINIO_SECRET_KEY), config.secretKey);
     }
@@ -272,8 +271,8 @@ public class DevServicesMinioProcessor {
             this.port = fixedExposedPort;
             this.useSharedNetwork = useSharedNetwork;
             withExposedPorts(DEVSERVICE_MINIO_PORT, DEVSERVICE_MINIO_CONSOLE_PORT)
-                    .withEnv("MINIO_ACCESS_KEY", accessKey)
-                    .withEnv("MINIO_SECRET_KEY", secretKey)
+                    .withEnv("MINIO_ROOT_USER", accessKey)
+                    .withEnv("MINIO_ROOT_PASSWORD", secretKey)
                     .withEnv(containerEnv)
                     .withCommand("server", "/data", "--console-address", ":9001")
                     .waitingFor(new HttpWaitStrategy().forPort(DEVSERVICE_MINIO_PORT).forPath("/minio/health/live"));
