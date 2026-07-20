@@ -26,10 +26,8 @@ public class MinioAdminClientNativeProcessor {
     void registerForReflection(
             CombinedIndexBuildItem index,
             BuildProducer<ReflectiveClassBuildItem> reflectionClasses) {
-        List<String> classes = new ArrayList<>();
-        classes.addAll(getClasses(index, "io.minio.admin.messages"));
-        classes.addAll(getClasses(index, "io.minio.admin.messages.info"));
-        classes.addAll(getClasses(index, "io.minio.admin", ".*Resp$|.*Info$|.*Status$"));
+        List<String> classes = new ArrayList<>(
+                getClasses(index, "io.minio.admin", ".*Response(\\$.*)?|.*Args$|.*UserInfo|.*Status|.*QuotaUnit"));
         reflectionClasses
                 .produce(ReflectiveClassBuildItem.builder(classes.toArray(new String[0])).constructors(true).fields(true)
                         .methods(true).build());

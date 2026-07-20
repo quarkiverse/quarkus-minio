@@ -3,9 +3,7 @@ package io.quarkiverse.minio.client;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -25,18 +23,9 @@ import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
 import io.minio.PutObjectArgs;
 import io.minio.SetBucketLifecycleArgs;
-import io.minio.errors.ErrorResponseException;
-import io.minio.errors.InsufficientDataException;
-import io.minio.errors.InternalException;
-import io.minio.errors.InvalidResponseException;
 import io.minio.errors.MinioException;
-import io.minio.errors.ServerException;
-import io.minio.errors.XmlParserException;
-import io.minio.messages.Expiration;
+import io.minio.messages.Filter;
 import io.minio.messages.LifecycleConfiguration;
-import io.minio.messages.LifecycleRule;
-import io.minio.messages.ResponseDate;
-import io.minio.messages.RuleFilter;
 import io.minio.messages.Status;
 import io.smallrye.mutiny.Uni;
 
@@ -50,39 +39,39 @@ public class MinioController {
     @Inject
     MinioClient minioClient;
 
-    @ConfigProperty(name = "quarkus.minio.url")
-    String minioUrl;
+    @ConfigProperty(name = "quarkus.minio.host")
+    String minioHost;
 
     @POST
     @Timed(histogram = true)
-    public String addObject(@QueryParam("name") String fileName) throws IOException, MinioException, GeneralSecurityException {
+    public String addObject(@QueryParam("name") String fileName) throws MinioException {
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build())) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
         }
-        try (InputStream is = new ByteArrayInputStream((minioUrl.getBytes()))) {
+        try (InputStream is = new ByteArrayInputStream((minioHost.getBytes()))) {
             ObjectWriteResponse response = minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(BUCKET_NAME)
                             .object(fileName)
                             .contentType("text/xml") // TODO : Parametrize
-                            .stream(is, -1, PART_SIZE)
+                            .stream(is, -1l, PART_SIZE)
                             .build());
             return response.bucket() + "/" + response.object();
-        } catch (MinioException | GeneralSecurityException | IOException e) {
+        } catch (IOException e) {
             throw new IllegalStateException(e);
         }
     }
 
     @GET
     public String getObject(@QueryParam("name") String fileName) {
-        try (InputStream is = new ByteArrayInputStream((minioUrl.getBytes()))) {
+        try (InputStream is = new ByteArrayInputStream((minioHost.getBytes()))) {
             GetObjectResponse response = minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(BUCKET_NAME)
                             .object(fileName)
                             .build());
             return response.bucket() + "/" + response.object();
-        } catch (MinioException | GeneralSecurityException | IOException e) {
+        } catch (MinioException | IOException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -90,9 +79,10 @@ public class MinioController {
     @GET
     @Path("/{prefix}")
     public Uni<Void> setBucketLifecycle(String prefix) {
-        final Expiration expiration = new Expiration((ResponseDate) null, 8, null);
-        final LifecycleRule rule = new LifecycleRule(Status.ENABLED, null, expiration,
-                new RuleFilter(prefix),
+        final LifecycleConfiguration.Expiration expiration = new LifecycleConfiguration.Expiration((ZonedDateTime) null, 8,
+                null, true);
+        final LifecycleConfiguration.Rule rule = new LifecycleConfiguration.Rule(Status.ENABLED, null, expiration,
+                new Filter(prefix),
                 "ExpirationObjectsRule", null, null, null);
         final LifecycleConfiguration lifecycleConfiguration = new LifecycleConfiguration(List.of(rule));
         final SetBucketLifecycleArgs setBucketLifecycleArgs = SetBucketLifecycleArgs.builder()
@@ -100,11 +90,9 @@ public class MinioController {
                 .config(lifecycleConfiguration)
                 .build();
         try {
-            this.minioClient.setBucketLifecycle(setBucketLifecycleArgs); // $$$$$$$ ERROR HERE ON NATIVE MODE $$$$$$$
+            this.minioClient.setBucketLifecycle(setBucketLifecycleArgs);
             return Uni.createFrom().voidItem();
-        } catch (final InsufficientDataException | InternalException | InvalidKeyException | IOException
-                | NoSuchAlgorithmException | XmlParserException | ErrorResponseException | InvalidResponseException
-                | ServerException e) {
+        } catch (final MinioException e) {
             e.printStackTrace();
             return Uni.createFrom().voidItem();
         }

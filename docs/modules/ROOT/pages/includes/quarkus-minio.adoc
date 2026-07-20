@@ -7,7 +7,7 @@ h|[.header-title]##Configuration property##
 h|Type
 h|Default
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-enabled[`quarkus.minio.devservices.enabled`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-enabled[`+++quarkus.minio.devservices.enabled+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.enabled+++[]
 endif::add-copy-button-to-config-props[]
@@ -28,7 +28,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-port]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-port[`quarkus.minio.devservices.port`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-port]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-port[`+++quarkus.minio.devservices.port+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.port+++[]
 endif::add-copy-button-to-config-props[]
@@ -51,7 +51,7 @@ endif::add-copy-button-to-env-var[]
 |int
 |`+++0+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-image-name]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-image-name[`quarkus.minio.devservices.image-name`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-image-name]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-image-name[`+++quarkus.minio.devservices.image-name+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.image-name+++[]
 endif::add-copy-button-to-config-props[]
@@ -72,7 +72,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |`+++minio/minio:RELEASE.2025-04-22T22-12-26Z+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-shared]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-shared[`quarkus.minio.devservices.shared`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-shared]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-shared[`+++quarkus.minio.devservices.shared+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.shared+++[]
 endif::add-copy-button-to-config-props[]
@@ -97,7 +97,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-reuse-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-reuse-enabled[`quarkus.minio.devservices.reuse-enabled`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-reuse-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-reuse-enabled[`+++quarkus.minio.devservices.reuse-enabled+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.reuse-enabled+++[]
 endif::add-copy-button-to-config-props[]
@@ -120,7 +120,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-service-name]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-service-name[`quarkus.minio.devservices.service-name`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-service-name]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-service-name[`+++quarkus.minio.devservices.service-name+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.service-name+++[]
 endif::add-copy-button-to-config-props[]
@@ -143,7 +143,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |`+++minio+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-access-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-access-key[`quarkus.minio.devservices.access-key`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-access-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-access-key[`+++quarkus.minio.devservices.access-key+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.access-key+++[]
 endif::add-copy-button-to-config-props[]
@@ -164,7 +164,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |`+++minioaccess+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-secret-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-secret-key[`quarkus.minio.devservices.secret-key`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-secret-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-secret-key[`+++quarkus.minio.devservices.secret-key+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.secret-key+++[]
 endif::add-copy-button-to-config-props[]
@@ -185,7 +185,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |`+++miniosecret+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-container-env-environment-variable-name]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-container-env-environment-variable-name[`quarkus.minio.devservices.container-env."environment-variable-name"`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-container-env-environment-variable-name]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-container-env-environment-variable-name[`+++quarkus.minio.devservices.container-env."environment-variable-name"+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.devservices.container-env."environment-variable-name"+++[]
 endif::add-copy-button-to-config-props[]
@@ -206,7 +206,7 @@ endif::add-copy-button-to-env-var[]
 |Map<String,String>
 |
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-enabled[`quarkus.minio.enabled`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-enabled[`+++quarkus.minio.enabled+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.enabled+++[]
 endif::add-copy-button-to-config-props[]
@@ -227,7 +227,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a| [[quarkus-minio_quarkus-minio-produce-metrics]] [.property-path]##link:#quarkus-minio_quarkus-minio-produce-metrics[`quarkus.minio.produce-metrics`]##
+a| [[quarkus-minio_quarkus-minio-produce-metrics]] [.property-path]##link:#quarkus-minio_quarkus-minio-produce-metrics[`+++quarkus.minio.produce-metrics+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.produce-metrics+++[]
 endif::add-copy-button-to-config-props[]
@@ -251,7 +251,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a| [[quarkus-minio_quarkus-minio-maximum-allowed-tag]] [.property-path]##link:#quarkus-minio_quarkus-minio-maximum-allowed-tag[`quarkus.minio.maximum-allowed-tag`]##
+a| [[quarkus-minio_quarkus-minio-maximum-allowed-tag]] [.property-path]##link:#quarkus-minio_quarkus-minio-maximum-allowed-tag[`+++quarkus.minio.maximum-allowed-tag+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.maximum-allowed-tag+++[]
 endif::add-copy-button-to-config-props[]
@@ -272,7 +272,7 @@ endif::add-copy-button-to-env-var[]
 |int
 |`+++100+++`
 
-a| [[quarkus-minio_quarkus-minio-host]] [.property-path]##link:#quarkus-minio_quarkus-minio-host[`quarkus.minio.host`]##
+a| [[quarkus-minio_quarkus-minio-host]] [.property-path]##link:#quarkus-minio_quarkus-minio-host[`+++quarkus.minio.host+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.host+++[]
 endif::add-copy-button-to-config-props[]
@@ -295,7 +295,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |required icon:exclamation-circle[title=Configuration property is required]
 
-a| [[quarkus-minio_quarkus-minio-access-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-access-key[`quarkus.minio.access-key`]##
+a| [[quarkus-minio_quarkus-minio-access-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-access-key[`+++quarkus.minio.access-key+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.access-key+++[]
 endif::add-copy-button-to-config-props[]
@@ -316,7 +316,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |required icon:exclamation-circle[title=Configuration property is required]
 
-a| [[quarkus-minio_quarkus-minio-secret-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-secret-key[`quarkus.minio.secret-key`]##
+a| [[quarkus-minio_quarkus-minio-secret-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-secret-key[`+++quarkus.minio.secret-key+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.secret-key+++[]
 endif::add-copy-button-to-config-props[]
@@ -337,7 +337,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |required icon:exclamation-circle[title=Configuration property is required]
 
-a| [[quarkus-minio_quarkus-minio-region]] [.property-path]##link:#quarkus-minio_quarkus-minio-region[`quarkus.minio.region`]##
+a| [[quarkus-minio_quarkus-minio-region]] [.property-path]##link:#quarkus-minio_quarkus-minio-region[`+++quarkus.minio.region+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.region+++[]
 endif::add-copy-button-to-config-props[]
@@ -358,7 +358,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |
 
-a| [[quarkus-minio_quarkus-minio-port]] [.property-path]##link:#quarkus-minio_quarkus-minio-port[`quarkus.minio.port`]##
+a| [[quarkus-minio_quarkus-minio-port]] [.property-path]##link:#quarkus-minio_quarkus-minio-port[`+++quarkus.minio.port+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.port+++[]
 endif::add-copy-button-to-config-props[]
@@ -380,7 +380,7 @@ endif::add-copy-button-to-env-var[]
 |int
 |
 
-a| [[quarkus-minio_quarkus-minio-secure]] [.property-path]##link:#quarkus-minio_quarkus-minio-secure[`quarkus.minio.secure`]##
+a| [[quarkus-minio_quarkus-minio-secure]] [.property-path]##link:#quarkus-minio_quarkus-minio-secure[`+++quarkus.minio.secure+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.secure+++[]
 endif::add-copy-button-to-config-props[]
@@ -402,7 +402,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-named-minio-clients-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-enabled[`quarkus.minio."named-minio-clients".enabled`]##
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-named-minio-clients-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-enabled[`+++quarkus.minio."named-minio-clients".enabled+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".enabled+++[]
 endif::add-copy-button-to-config-props[]
@@ -423,7 +423,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a| [[quarkus-minio_quarkus-minio-named-minio-clients-host]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-host[`quarkus.minio."named-minio-clients".host`]##
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-host]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-host[`+++quarkus.minio."named-minio-clients".host+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".host+++[]
 endif::add-copy-button-to-config-props[]
@@ -446,7 +446,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |required icon:exclamation-circle[title=Configuration property is required]
 
-a| [[quarkus-minio_quarkus-minio-named-minio-clients-access-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-access-key[`quarkus.minio."named-minio-clients".access-key`]##
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-access-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-access-key[`+++quarkus.minio."named-minio-clients".access-key+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".access-key+++[]
 endif::add-copy-button-to-config-props[]
@@ -467,7 +467,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |required icon:exclamation-circle[title=Configuration property is required]
 
-a| [[quarkus-minio_quarkus-minio-named-minio-clients-secret-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-secret-key[`quarkus.minio."named-minio-clients".secret-key`]##
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-secret-key]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-secret-key[`+++quarkus.minio."named-minio-clients".secret-key+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".secret-key+++[]
 endif::add-copy-button-to-config-props[]
@@ -488,7 +488,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |required icon:exclamation-circle[title=Configuration property is required]
 
-a| [[quarkus-minio_quarkus-minio-named-minio-clients-region]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-region[`quarkus.minio."named-minio-clients".region`]##
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-region]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-region[`+++quarkus.minio."named-minio-clients".region+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".region+++[]
 endif::add-copy-button-to-config-props[]
@@ -509,7 +509,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |
 
-a| [[quarkus-minio_quarkus-minio-named-minio-clients-port]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-port[`quarkus.minio."named-minio-clients".port`]##
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-port]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-port[`+++quarkus.minio."named-minio-clients".port+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".port+++[]
 endif::add-copy-button-to-config-props[]
@@ -531,7 +531,7 @@ endif::add-copy-button-to-env-var[]
 |int
 |
 
-a| [[quarkus-minio_quarkus-minio-named-minio-clients-secure]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-secure[`quarkus.minio."named-minio-clients".secure`]##
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-secure]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-secure[`+++quarkus.minio."named-minio-clients".secure+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".secure+++[]
 endif::add-copy-button-to-config-props[]
@@ -553,7 +553,7 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
-a| [[quarkus-minio_quarkus-minio-url]] [.property-path]##link:#quarkus-minio_quarkus-minio-url[[.line-through]#`quarkus.minio.url`#]##
+a| [[quarkus-minio_quarkus-minio-url]] [.property-path]##link:#quarkus-minio_quarkus-minio-url[[.line-through]#`+++quarkus.minio.url+++`#]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.url+++[]
 endif::add-copy-button-to-config-props[]
@@ -583,7 +583,7 @@ endif::add-copy-button-to-env-var[]
 |string
 |required icon:exclamation-circle[title=Configuration property is required]
 
-a| [[quarkus-minio_quarkus-minio-named-minio-clients-url]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-url[[.line-through]#`quarkus.minio."named-minio-clients".url`#]##
+a| [[quarkus-minio_quarkus-minio-named-minio-clients-url]] [.property-path]##link:#quarkus-minio_quarkus-minio-named-minio-clients-url[[.line-through]#`+++quarkus.minio."named-minio-clients".url+++`#]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio."named-minio-clients".url+++[]
 endif::add-copy-button-to-config-props[]

@@ -6,8 +6,8 @@ import java.util.function.Predicate;
 
 import jakarta.inject.Singleton;
 
+import io.minio.Utils;
 import io.minio.admin.MinioAdminClient;
-import io.minio.http.HttpUtils;
 import io.quarkiverse.minio.client.MinioRuntimeConfiguration;
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
 import io.quarkiverse.minio.client.MiniosConfiguration;
@@ -61,7 +61,7 @@ public class MinioAdminClients {
                 .ifPresentOrElse(
                         port -> builder.endpoint(configuration.host(), port, configuration.secure()),
                         () -> builder.endpoint(
-                                HttpUtils.getBaseUrl(configuration.host()).newBuilder()
+                                Utils.getBaseUrl(configuration.host()).newBuilder()
                                         .scheme(configuration.secure() ? "https" : "http").build()));
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());

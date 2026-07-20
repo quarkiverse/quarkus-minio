@@ -8,7 +8,7 @@ import jakarta.inject.Singleton;
 
 import io.minio.MinioAsyncClient;
 import io.minio.MinioClient;
-import io.minio.http.HttpUtils;
+import io.minio.Utils;
 import io.quarkus.arc.Arc;
 import io.quarkus.runtime.configuration.ConfigurationException;
 
@@ -84,7 +84,7 @@ public class MinioClients {
                 .ifPresentOrElse(
                         port -> builder.endpoint(configuration.host(), port, configuration.secure()),
                         () -> builder.endpoint(
-                                HttpUtils.getBaseUrl(configuration.host()).newBuilder()
+                                Utils.getBaseUrl(configuration.host()).newBuilder()
                                         .scheme(configuration.secure() ? "https" : "http").build()));
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
@@ -103,7 +103,7 @@ public class MinioClients {
                 .ifPresentOrElse(
                         port -> builder.endpoint(configuration.host(), port, configuration.secure()),
                         () -> builder.endpoint(
-                                HttpUtils.getBaseUrl(configuration.host()).newBuilder()
+                                Utils.getBaseUrl(configuration.host()).newBuilder()
                                         .scheme(configuration.secure() ? "https" : "http").build()));
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
