@@ -93,9 +93,7 @@ public class DevServicesMinioProcessor {
 
     private static void logStarted(MinioContainer container, MinioDevServiceCfg config) {
         LOGGER.infof("Dev Services for Minio started on %s", container.getEffectiveHost());
-
         LOGGER.infof("Console for Minio is available on %s", container.getConsolePort());
-        // /Users/j.tama/projects/github/quarkiverse/quarkus-minio/integration-tests/target/quarkus-minio-integration-tests-9.9.9-SNAPSHOT-runner -Dquarkus.http.port=8081 -Dquarkus.http.ssl-port=8444 -Dquarkus.log.file.path=/Users/j.tama/projects/github/quarkiverse/quarkus-minio/integration-tests/target/quarkus.log -Dquarkus.log.file.enabled=true -Dquarkus.log.category."io.quarkus".level=INFO -Dquarkus.profile=prod -Dquarkus.minio.secret-key=miniosecret -Dquarkus.minio.another.secure=false -Dquarkus.minio.access-key=minioaccess -Dquarkus.minio.another.access-key=minioaccess -Dquarkus.minio.another.host=localhost -Dquarkus.minio.secure=false -Dquarkus.minio.another.port=35613 -Dquarkus.minio.port=35613 -Dquarkus.minio.another.secret-key=miniosecret -Dquarkus.minio.host=localhost
         LOGGER.infof("Other Quarkus applications in dev mode will find the "
                 + "instance automatically. For Quarkus applications in production mode, you can connect to"
                 + " this by starting your application with -D%s=%s -D%s=%s -D%s=%s",
