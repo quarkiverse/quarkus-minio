@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
+import org.simpleframework.xml.convert.Converter;
 
 import io.minio.BaseArgs;
 import io.minio.UploadSnowballObjectsArgs;
@@ -45,6 +46,10 @@ class MinioNativeProcessor {
         classes.addAll(getClasses(index, "io.minio.messages"));
         classes.addAll(getClasses(index, "org.simpleframework.xml.core", ".*Label$|.*Parameter$"));
         classes.addAll(index.getIndex().getAllKnownSubclasses(DotName.createSimple(BaseArgs.class.getName())).stream()
+                .map(ClassInfo::name)
+                .map(DotName::toString)
+                .toList());
+        classes.addAll(index.getIndex().getAllKnownImplementors(DotName.createSimple(Converter.class.getName())).stream()
                 .map(ClassInfo::name)
                 .map(DotName::toString)
                 .toList());
