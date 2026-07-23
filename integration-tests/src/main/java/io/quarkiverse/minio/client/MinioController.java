@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -18,13 +20,16 @@ import io.micrometer.core.annotation.Timed;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.GetObjectResponse;
+import io.minio.ListObjectsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
 import io.minio.PutObjectArgs;
+import io.minio.Result;
 import io.minio.SetBucketLifecycleArgs;
 import io.minio.errors.MinioException;
 import io.minio.messages.Filter;
+import io.minio.messages.Item;
 import io.minio.messages.LifecycleConfiguration;
 import io.minio.messages.Status;
 import io.smallrye.mutiny.Uni;
@@ -74,6 +79,23 @@ public class MinioController {
         } catch (MinioException | IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    @GET
+    @Path("/list")
+    public String listObjects() {
+        Iterable<Result<Item>> results = minioClient.listObjects(
+                ListObjectsArgs.builder().bucket(BUCKET_NAME).build());
+        return StreamSupport.stream(results.spliterator(), false)
+                .map(result -> {
+                    try {
+                        Item item = result.get();
+                        return item.objectName() + ":" + item.lastModified();
+                    } catch (Exception e) {
+                        throw new IllegalStateException(e);
+                    }
+                })
+                .collect(Collectors.joining(";"));
     }
 
     @GET

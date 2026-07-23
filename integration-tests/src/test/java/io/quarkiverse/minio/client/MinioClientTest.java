@@ -50,6 +50,20 @@ public class MinioClientTest {
     }
 
     @Test
+    public void testListObjects() {
+        given()
+                .when().post("/minio?name=list-test.txt")
+                .then()
+                .statusCode(200);
+
+        given()
+                .when().get("/minio/list")
+                .then()
+                .statusCode(200)
+                .body(CoreMatchers.containsString("list-test.txt"));
+    }
+
+    @Test
     public void testInsertAsync() {
         String response = given()
                 .when().get("/async-minio?name=dummy-bucket")
