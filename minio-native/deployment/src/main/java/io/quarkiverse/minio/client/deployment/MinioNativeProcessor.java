@@ -49,7 +49,7 @@ class MinioNativeProcessor {
                 .map(ClassInfo::name)
                 .map(DotName::toString)
                 .toList());
-        classes.addAll(index.getIndex().getAllKnownImplementors(DotName.createSimple(Converter.class.getName())).stream()
+        classes.addAll(index.getIndex().getKnownDirectImplementations(DotName.createSimple(Converter.class.getName())).stream()
                 .map(ClassInfo::name)
                 .map(DotName::toString)
                 .toList());
