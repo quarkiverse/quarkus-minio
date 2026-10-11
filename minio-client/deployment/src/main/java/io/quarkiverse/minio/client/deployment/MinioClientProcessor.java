@@ -8,16 +8,19 @@ import jakarta.inject.Singleton;
 
 import io.minio.MinioAsyncClient;
 import io.minio.MinioClient;
-import io.quarkiverse.minio.client.EmptyHttpClientProducer;
+import io.quarkiverse.minio.client.MetricsHttpClientCustomizer;
 import io.quarkiverse.minio.client.MinioBuildTimeConfiguration;
 import io.quarkiverse.minio.client.MinioClients;
+import io.quarkiverse.minio.client.MinioHttpClientProducer;
 import io.quarkiverse.minio.client.MinioQualifier;
 import io.quarkiverse.minio.client.MinioRecorder;
 import io.quarkiverse.minio.client.MiniosBuildTimeConfiguration;
-import io.quarkiverse.minio.client.WithMetricsHttpClientProducer;
+import io.quarkiverse.minio.client.TelemetryHttpClientCustomizer;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
+import io.quarkus.deployment.Capabilities;
+import io.quarkus.deployment.Capability;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -41,7 +44,8 @@ public class MinioClientProcessor {
             MinioRecorder minioRecorder,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
             BuildProducer<AdditionalBeanBuildItem> additionalBeans,
-            Optional<MetricsCapabilityBuildItem> metricsCapability) {
+            Optional<MetricsCapabilityBuildItem> metricsCapability,
+            Capabilities capabilities) {
         if (miniosBuildTimeConfiguration.getMinioClients().isEmpty()) {
             //No minio client needed
             return;
@@ -67,12 +71,12 @@ public class MinioClientProcessor {
                             minioRecorder.minioAsyncClientSupplier(minioClientName)));
         }
 
-        // add default bean based on whether or not micrometer is enabled
+        additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(MinioHttpClientProducer.class));
         if (metricsCapability.map(m -> m.metricsSupported(MetricsFactory.MICROMETER)).orElse(false)) {
-            // we use the class name to not import any micrometer-related dependencies to prevent activation
-            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(WithMetricsHttpClientProducer.class));
-        } else {
-            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(EmptyHttpClientProducer.class));
+            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(MetricsHttpClientCustomizer.class));
+        }
+        if (capabilities.isPresent(Capability.OPENTELEMETRY_TRACER) && miniosBuildTimeConfiguration.telemetry().enabled()) {
+            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(TelemetryHttpClientCustomizer.class));
         }
     }
 

@@ -1,7 +1,6 @@
 package io.quarkiverse.minio.admin.client.deployment;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import jakarta.inject.Singleton;
@@ -18,8 +17,6 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
-import io.quarkus.deployment.metrics.MetricsCapabilityBuildItem;
-import io.quarkus.runtime.metrics.MetricsFactory;
 
 public class MinioAdminClientProcessor {
     private static final String FEATURE = "minio-admin-client";
@@ -34,8 +31,7 @@ public class MinioAdminClientProcessor {
     void produce(MiniosBuildTimeConfiguration miniosBuildTimeConfiguration,
             MinioRecorder minioRecorder,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
-            BuildProducer<AdditionalBeanBuildItem> additionalBeans,
-            Optional<MetricsCapabilityBuildItem> metricsCapability) {
+            BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
         if (miniosBuildTimeConfiguration.getMinioClients().isEmpty()) {
             //No minio Admin client needed
             return;
@@ -52,14 +48,7 @@ public class MinioAdminClientProcessor {
                             minioRecorder.minioAdminClientSupplier(minioAdminClientName)));
 
         }
-
-        // add default bean based on whether or not micrometer is enabled
-        if (metricsCapability.map(m -> m.metricsSupported(MetricsFactory.MICROMETER)).orElse(false)) {
-            // we use the class name to not import any micrometer-related dependencies to prevent activation
-            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(WithMetricsHttpClientProducer.class));
-        } else {
-            additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(EmptyHttpClientProducer.class));
-        }
+        // the http client producer is registered by the minio client extension
     }
 
     private static SyntheticBeanBuildItem createMinioBeanBuildItem(String minioAdminClientName,

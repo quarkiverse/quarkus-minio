@@ -89,9 +89,7 @@ public class MinioClients {
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
         configuration.region().ifPresent(builder::region);
-        if (miniosConfiguration.produceMetrics()) {
-            httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
-        }
+        httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         return builder.build();
     }
 
@@ -108,9 +106,7 @@ public class MinioClients {
 
         builder.credentials(configuration.accessKey(), configuration.secretKey());
         configuration.region().ifPresent(builder::region);
-        if (miniosConfiguration.produceMetrics()) {
-            httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
-        }
+        httpClientProducer.apply(minioClientName).ifPresent(builder::httpClient);
         return builder.build();
     }
 

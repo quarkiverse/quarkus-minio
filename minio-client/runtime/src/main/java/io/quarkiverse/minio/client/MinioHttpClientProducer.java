@@ -21,51 +21,39 @@ import javax.net.ssl.X509TrustManager;
 
 import jakarta.inject.Singleton;
 
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.okhttp3.OkHttpMetricsEventListener;
-import io.micrometer.core.instrument.config.MeterFilter;
-import io.micrometer.core.instrument.internal.OnlyOnceLoggingDenyMeterFilter;
+import io.quarkus.arc.All;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
+/**
+ * Produces a custom {@link OkHttpClient} when at least one {@link MinioHttpClientCustomizer} is enabled.
+ * Otherwise, the minio client falls back to its own default http client.
+ */
 @Singleton
-public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer {
+public class MinioHttpClientProducer implements OptionalHttpClientProducer {
 
     protected static final long DEFAULT_CONNECTION_TIMEOUT = 5;
 
-    private MeterRegistry meterRegistry;
+    private final List<MinioHttpClientCustomizer> customizers;
 
-    private MiniosConfiguration configuration;
-
-    public WithMetricsHttpClientProducer(MeterRegistry meterRegistry, MiniosConfiguration configuration) {
-        this.meterRegistry = meterRegistry;
-        this.configuration = configuration;
+    public MinioHttpClientProducer(@All List<MinioHttpClientCustomizer> customizers) {
+        this.customizers = customizers.stream().filter(MinioHttpClientCustomizer::isEnabled).toList();
     }
 
     @Override
     public Optional<OkHttpClient> apply(String minioClientName) {
-        if (!configuration.produceMetrics()) {
+        if (customizers.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(getHttpClientWithInterceptor(meterRegistry, minioClientName));
-    }
-
-    private OkHttpClient getHttpClientWithInterceptor(MeterRegistry meterRegistry, String minioClientName) {
-        var metricKey = MiniosBuildTimeConfiguration.isDefault(minioClientName) ? "minio.client"
-                : "minio." + minioClientName + ".client";
-        meterRegistry.config().meterFilter(maximumAllowedTag(metricKey));
         //Copy from io.minio.MinioClient#2860
-        var httpClient = new OkHttpClient()
+        var builder = new OkHttpClient()
                 .newBuilder()
                 .connectTimeout(DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MINUTES)
                 .writeTimeout(DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MINUTES)
                 .readTimeout(DEFAULT_CONNECTION_TIMEOUT, TimeUnit.MINUTES)
-                .protocols(List.of(Protocol.HTTP_1_1))
-                .eventListener(
-                        OkHttpMetricsEventListener.builder(meterRegistry, metricKey)
-                                .uriMapper(request -> String.join("/", request.url().pathSegments()))
-                                .build())
-                .build();
+                .protocols(List.of(Protocol.HTTP_1_1));
+        customizers.forEach(customizer -> customizer.customize(minioClientName, builder));
+        var httpClient = builder.build();
         String filename = System.getenv("SSL_CERT_FILE");
         if (filename != null && !filename.isEmpty()) {
             try {
@@ -74,15 +62,7 @@ public class WithMetricsHttpClientProducer implements OptionalHttpClientProducer
                 throw new RuntimeException(e);
             }
         }
-        return httpClient;
-    }
-
-    private MeterFilter maximumAllowedTag(String metricName) {
-        MeterFilter denyFilter = new OnlyOnceLoggingDenyMeterFilter(() -> String
-                .format("Reached the maximum number (%s) of URI tags for '%s'. Are you using path parameters?",
-                        configuration.maximumAllowedTag(), metricName));
-
-        return MeterFilter.maximumAllowableTags(metricName, "uri", configuration.maximumAllowedTag(), denyFilter);
+        return Optional.of(httpClient);
     }
 
     /**

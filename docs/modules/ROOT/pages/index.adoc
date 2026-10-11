@@ -216,6 +216,41 @@ MinioClient publicMinioClient;
 MinioClient otherMinioClient;
 ----
 
+== Observability
+
+=== Metrics
+
+If the `quarkus-micrometer` extension is present, the minio clients produced by the extension will record HTTP client metrics
+(`minio.client` for the default client, `minio.<name>.client` for named clients).
+This can be disabled with `quarkus.minio.produce-metrics=false`.
+
+=== Tracing
+
+If the `quarkus-opentelemetry` extension is present, the minio clients produced by the extension (including the async and admin clients)
+will create an OpenTelemetry `CLIENT` span for each request sent to the minio server, following the HTTP client semantic conventions
+(`http.request.method`, `url.full`, `server.address`, `server.port`, `http.response.status_code`...).
+The `minio.client.name` attribute holds the name of the minio client which sent the request.
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-opentelemetry</artifactId>
+</dependency>
+----
+
+Tracing can be disabled with:
+
+[source,properties]
+----
+quarkus.minio.telemetry.enabled=false
+----
+
+[NOTE]
+====
+The trace context is not propagated to the minio server, as the requests are signed before reaching the tracing interceptor.
+====
+
 == Configuration Reference
 
 include::includes/quarkus-minio.adoc[]

@@ -2,6 +2,7 @@ package io.quarkiverse.minio.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import io.quarkus.runtime.annotations.ConfigPhase;
@@ -16,10 +17,20 @@ public interface MiniosBuildTimeConfiguration {
     String DEFAULT_MINIOCLIENT_NAME = "<default>";
 
     /**
+     * Configuration groups sharing the `quarkus.minio` prefix, which must not be mistaken for named clients
+     */
+    Set<String> RESERVED_NAMES = Set.of("telemetry", "devservices");
+
+    /**
      * The default client
      */
     @WithParentName()
     MinioBuildTimeConfiguration minio();
+
+    /**
+     * Telemetry configuration
+     */
+    MinioTelemetryBuildTimeConfiguration telemetry();
 
     /**
      * Additional named client
@@ -33,6 +44,7 @@ public interface MiniosBuildTimeConfiguration {
             minioClients.put(DEFAULT_MINIOCLIENT_NAME, minio());
         }
         minioClients.putAll(namedMinioClients().entrySet().stream()
+                .filter(entry -> !RESERVED_NAMES.contains(entry.getKey()))
                 .filter(entry -> entry.getValue().enabled())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
         return minioClients;
