@@ -75,7 +75,7 @@ public class MinioClientProcessor {
         if (metricsCapability.map(m -> m.metricsSupported(MetricsFactory.MICROMETER)).orElse(false)) {
             additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(MetricsHttpClientCustomizer.class));
         }
-        if (capabilities.isPresent(Capability.OPENTELEMETRY_TRACER) && miniosBuildTimeConfiguration.telemetry().enabled()) {
+        if (capabilities.isPresent(Capability.OPENTELEMETRY_TRACER)) {
             additionalBeans.produce(AdditionalBeanBuildItem.unremovableOf(TelemetryHttpClientCustomizer.class));
         }
     }

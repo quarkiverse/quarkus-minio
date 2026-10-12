@@ -8,6 +8,7 @@ import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 
+import io.quarkus.test.QuarkusExtensionTest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
@@ -40,7 +41,7 @@ class MinioTelemetryTest {
     static final HttpServer SERVER = startServer();
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(jar -> jar.addClass(InMemorySpanExporterProducer.class))
             .overrideConfigKey("quarkus.minio.devservices.enabled", "false")
             .overrideConfigKey("quarkus.minio.host", "localhost")

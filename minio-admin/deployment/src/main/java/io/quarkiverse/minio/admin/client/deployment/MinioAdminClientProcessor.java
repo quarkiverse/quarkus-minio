@@ -48,7 +48,6 @@ public class MinioAdminClientProcessor {
                             minioRecorder.minioAdminClientSupplier(minioAdminClientName)));
 
         }
-        // the http client producer is registered by the minio client extension
     }
 
     private static SyntheticBeanBuildItem createMinioBeanBuildItem(String minioAdminClientName,

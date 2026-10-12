@@ -2,6 +2,7 @@ package io.quarkiverse.minio.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.quarkus.test.QuarkusExtensionTest;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
@@ -13,7 +14,7 @@ import io.quarkus.test.QuarkusUnitTest;
 class MinioTelemetryDisabledTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withConfigurationResource("application-valid.properties")
             .overrideConfigKey("quarkus.minio.telemetry.enabled", "false")
             .overrideConfigKey("quarkus.otel.traces.exporter", "none");
@@ -25,8 +26,8 @@ class MinioTelemetryDisabledTest {
     OptionalHttpClientProducer httpClientProducer;
 
     @Test
-    void shouldNotRegisterTelemetryWhenDisabled() {
-        assertThat(telemetryCustomizer.isResolvable()).isFalse();
+    void shouldNotApplyTelemetryWhenDisabled() {
+        assertThat(telemetryCustomizer.get().isEnabled()).isFalse();
         assertThat(httpClientProducer.apply(MiniosBuildTimeConfiguration.DEFAULT_MINIOCLIENT_NAME)).isEmpty();
     }
 }

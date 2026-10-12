@@ -13,16 +13,24 @@ import okhttp3.OkHttpClient;
 
 /**
  * Adds OpenTelemetry tracing to the minio http client.
- * Only registered when the `quarkus-opentelemetry` extension is present and `quarkus.minio.telemetry.enabled` is
- * `true`.
+ * Only registered when the `quarkus-opentelemetry` extension is present, and only applied when
+ * `quarkus.minio.telemetry.enabled` is `true`.
  */
 @Singleton
 public class TelemetryHttpClientCustomizer implements MinioHttpClientCustomizer {
 
     private final OpenTelemetry openTelemetry;
 
-    public TelemetryHttpClientCustomizer(OpenTelemetry openTelemetry) {
+    private final MiniosBuildTimeConfiguration configuration;
+
+    public TelemetryHttpClientCustomizer(OpenTelemetry openTelemetry, MiniosBuildTimeConfiguration configuration) {
         this.openTelemetry = openTelemetry;
+        this.configuration = configuration;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return configuration.telemetry().enabled();
     }
 
     @Override
