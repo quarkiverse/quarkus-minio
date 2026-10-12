@@ -61,6 +61,8 @@ endif::add-copy-button-to-config-props[]
 --
 The Minio container image to use.
 
+Defaults to the community maintained `pgsty/minio` build, as official `minio/minio` images are no longer published.
+
 
 ifdef::add-copy-button-to-env-var[]
 Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_DEVSERVICES_IMAGE_NAME+++[]
@@ -70,7 +72,7 @@ Environment variable: `+++QUARKUS_MINIO_DEVSERVICES_IMAGE_NAME+++`
 endif::add-copy-button-to-env-var[]
 --
 |string
-|`+++minio/minio:RELEASE.2025-04-22T22-12-26Z+++`
+|`+++pgsty/minio:RELEASE.2026-08-04T00-00-00Z+++`
 
 a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-devservices-shared]] [.property-path]##link:#quarkus-minio_quarkus-minio-devservices-shared[`+++quarkus.minio.devservices.shared+++`]##
 ifdef::add-copy-button-to-config-props[]
@@ -222,6 +224,30 @@ Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_ENABLED+++[]
 endif::add-copy-button-to-env-var[]
 ifndef::add-copy-button-to-env-var[]
 Environment variable: `+++QUARKUS_MINIO_ENABLED+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`+++true+++`
+
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-telemetry-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-telemetry-enabled[`+++quarkus.minio.telemetry.enabled+++`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.minio.telemetry.enabled+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+If value is `true` (default) and the `io.quarkus:quarkus-opentelemetry` extension is present in the class path,
+then the minio clients will produce an OpenTelemetry `CLIENT` span for each request sent to the minio server.
+
+Only true for clients produced by the extension
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_TELEMETRY_ENABLED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_TELEMETRY_ENABLED+++`
 endif::add-copy-button-to-env-var[]
 --
 |boolean

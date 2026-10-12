@@ -26,8 +26,10 @@ public interface MinioDevServicesBuildTimeConfig {
 
     /**
      * The Minio container image to use.
+     * <p>
+     * Defaults to the community maintained `pgsty/minio` build, as official `minio/minio` images are no longer published.
      */
-    @WithDefault("minio/minio:RELEASE.2025-04-22T22-12-26Z")
+    @WithDefault("pgsty/minio:RELEASE.2026-08-04T00-00-00Z")
     String imageName();
 
     /**

@@ -21,7 +21,8 @@ class MinioValidConfigurationTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
-            .withConfigurationResource("application-valid-deprecated.properties");
+            .withConfigurationResource("application-valid-deprecated.properties")
+            .overrideConfigKey("quarkus.minio.telemetry.enabled", "false");
 
     @Test
     public void testDefaultMinioClientInjection() {
