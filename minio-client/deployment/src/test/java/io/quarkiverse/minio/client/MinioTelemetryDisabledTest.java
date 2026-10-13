@@ -2,14 +2,13 @@ package io.quarkiverse.minio.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.quarkus.test.QuarkusExtensionTest;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 class MinioTelemetryDisabledTest {
 
