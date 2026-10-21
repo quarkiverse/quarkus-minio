@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.minio.MinioClient;
 import io.quarkus.runtime.configuration.ConfigurationException;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 class MissingNamedRuntimeConfigTest {
 
@@ -19,7 +19,7 @@ class MissingNamedRuntimeConfigTest {
     Instance<MinioClient> minioClient;
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withConfigurationResource("missing-named-runtime-conf.properties");
 
     @Test

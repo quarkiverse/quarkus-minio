@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.minio.MinioClient;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 class NamedMinioUnexpectedTest {
 
@@ -16,7 +16,7 @@ class NamedMinioUnexpectedTest {
     MinioClient minioClient;
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withConfigurationResource("application-valid-deprecated.properties")
             .setExpectedException(UnsatisfiedResolutionException.class);
 
