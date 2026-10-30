@@ -19,7 +19,7 @@ public interface MiniosBuildTimeConfiguration {
     /**
      * Configuration groups sharing the `quarkus.minio` prefix, which must not be mistaken for named clients
      */
-    Set<String> RESERVED_NAMES = Set.of("telemetry", "devservices");
+    Set<String> RESERVED_NAMES = Set.of("telemetry", "health", "devservices");
 
     /**
      * The default client
@@ -31,6 +31,11 @@ public interface MiniosBuildTimeConfiguration {
      * Telemetry configuration
      */
     MinioTelemetryBuildTimeConfiguration telemetry();
+
+    /**
+     * Health check configuration
+     */
+    MinioHealthBuildTimeConfiguration health();
 
     /**
      * Additional named client
