@@ -28,6 +28,7 @@ import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.metrics.MetricsCapabilityBuildItem;
 import io.quarkus.runtime.metrics.MetricsFactory;
+import io.quarkus.smallrye.health.deployment.spi.HealthBuildItem;
 
 public class MinioClientProcessor {
 
@@ -36,6 +37,12 @@ public class MinioClientProcessor {
     @BuildStep
     FeatureBuildItem feature() {
         return new FeatureBuildItem(FEATURE);
+    }
+
+    @BuildStep
+    HealthBuildItem addHealthCheck(MiniosBuildTimeConfiguration miniosBuildTimeConfiguration) {
+        return new HealthBuildItem("io.quarkiverse.minio.client.health.MinioHealthCheck",
+                miniosBuildTimeConfiguration.health().enabled());
     }
 
     @Record(ExecutionTime.RUNTIME_INIT)
