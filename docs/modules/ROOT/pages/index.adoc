@@ -251,6 +251,27 @@ quarkus.minio.telemetry.enabled=false
 The trace context is not propagated to the minio server, as the requests are signed before reaching the tracing interceptor.
 ====
 
+=== Health check
+
+If the `quarkus-smallrye-health` extension is present, the extension publishes a readiness health check named
+`Minio health check`. It probes every minio client produced by the extension with a `listBuckets` call and reports
+one entry per client (`default` for the default client, the client name otherwise).
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-smallrye-health</artifactId>
+</dependency>
+----
+
+The health check can be disabled with:
+
+[source,properties]
+----
+quarkus.minio.health.enabled=false
+----
+
 == Configuration Reference
 
 include::includes/quarkus-minio.adoc[]

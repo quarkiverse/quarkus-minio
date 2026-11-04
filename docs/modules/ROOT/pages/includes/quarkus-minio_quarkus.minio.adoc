@@ -253,6 +253,28 @@ endif::add-copy-button-to-env-var[]
 |boolean
 |`+++true+++`
 
+a|icon:lock[title=Fixed at build time] [[quarkus-minio_quarkus-minio-health-enabled]] [.property-path]##link:#quarkus-minio_quarkus-minio-health-enabled[`+++quarkus.minio.health.enabled+++`]##
+ifdef::add-copy-button-to-config-props[]
+config_property_copy_button:+++quarkus.minio.health.enabled+++[]
+endif::add-copy-button-to-config-props[]
+
+
+[.description]
+--
+If value is `true` (default) and the `io.quarkus:quarkus-smallrye-health` extension is present in the class path,
+then a readiness health check is published for the minio clients produced by the extension.
+
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MINIO_HEALTH_ENABLED+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MINIO_HEALTH_ENABLED+++`
+endif::add-copy-button-to-env-var[]
+--
+|boolean
+|`+++true+++`
+
 a| [[quarkus-minio_quarkus-minio-produce-metrics]] [.property-path]##link:#quarkus-minio_quarkus-minio-produce-metrics[`+++quarkus.minio.produce-metrics+++`]##
 ifdef::add-copy-button-to-config-props[]
 config_property_copy_button:+++quarkus.minio.produce-metrics+++[]
