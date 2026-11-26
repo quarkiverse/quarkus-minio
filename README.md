@@ -57,7 +57,5 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## WARNING
 
-This project is still in its early stage.
-
-Contributions are always welcome, but this repository is not really ready for external contributions yet, better create an issue
+Contributions are always welcome, but please create an issue
 to discuss them prior to any contributions.
